@@ -1,0 +1,6 @@
+.settings/
+.project
+*.classpath
+service/logs/
+.metadata/
+web/logs/
