@@ -6,3 +6,4 @@ service/logs/
 web/logs/
 init/*
 data/*
+*.class
