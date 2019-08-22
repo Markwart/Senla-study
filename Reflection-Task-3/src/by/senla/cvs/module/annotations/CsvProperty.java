@@ -15,6 +15,6 @@ public @interface CsvProperty {
 
 	public int columnNumber();
 
-	public String keyField() default "id";
+	public int keyField();
 
 }
