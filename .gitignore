@@ -4,3 +4,4 @@
 service/logs/
 .metadata/
 web/logs/
+.init/
