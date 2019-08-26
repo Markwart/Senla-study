@@ -11,7 +11,7 @@ public @interface CsvEntity {
 
 	public String fileName();
 
-	public String valuesSeparator() default ",";
+	public String valuesSeparator() default ";";
 
 	public String entityId() default "id";
 

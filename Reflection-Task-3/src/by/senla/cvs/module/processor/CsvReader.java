@@ -5,32 +5,36 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CsvReader {
 
-	public static void readFromCsv(String className) throws FileNotFoundException, IOException {
+	public static Map<String, List<String[]>> readFromCsv(File folder) throws FileNotFoundException, IOException,
+			InstantiationException, IllegalAccessException, ClassNotFoundException {
 
-		File folder = new File("./data/");
+		Map<String, List<String[]>> strObjMap = new HashMap<String, List<String[]>>();
+
 		if (folder.exists()) {
 
-			File[] listOfFiles = folder.listFiles();
-			for (File file : listOfFiles) {
+			File[] filesList = folder.listFiles();
+			for (File file : filesList) {
+
+				List<String[]> strList = new ArrayList<>();
 
 				try (BufferedReader br = new BufferedReader(new FileReader(file));) {
 
 					String strLine;
 					while ((strLine = br.readLine()) != null) {
-
-						if (strLine.contains(className)) {
-							String[] wordsArray = strLine.split(",");
-							for (String str : wordsArray) {
-								System.out.print(new StringBuilder(str).append(","));
-							}
-							System.out.print(System.getProperty("line.separator"));
-						}
+						String[] wordsArray = strLine.split(";");
+						strList.add(wordsArray);
 					}
 				}
+				strObjMap.put(file.getName().split(".csv", 2)[0], strList);
 			}
 		}
+		return strObjMap;
 	}
 }

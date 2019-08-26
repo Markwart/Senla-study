@@ -4,48 +4,102 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import by.senla.cvs.module.annotations.CsvEntity;
 import by.senla.cvs.module.annotations.CsvProperty;
+import by.senla.cvs.module.enums.PropertyType;
 
 public class CsvWriter {
 
-	public static void writeToCsv(List<Object> annObjects)
-			throws IOException, IllegalArgumentException, IllegalAccessException {
+	public static void writeToCsv(List<Object> annObjects) throws IOException {
+
+		writeFieldName(annObjects);
 
 		for (Object someObject : annObjects) {
-			CsvEntity annClass = someObject.getClass().getAnnotation(CsvEntity.class);
 
-			List<Field> annFields = findAnnFields(someObject);
+			CsvEntity annClass = someObject.getClass().getAnnotation(CsvEntity.class);
+			Map<Integer, Field> annFieldsMap = findAnnFields(someObject);
 
 			try (BufferedWriter wr = new BufferedWriter(new FileWriter("./data/" + annClass.fileName(), true));) {
 
-				wr.write(new StringBuilder().append(someObject.getClass().getSimpleName())
-						.append(annClass.valuesSeparator()).toString());
+				annFieldsMap.forEach((key, field) -> {
+					try {
+						CsvProperty annField = field.getAnnotation(CsvProperty.class);
+						Object csvField = defineTypeField(someObject, field, annField, annObjects);
 
-				for (Field field : annFields) {
-					wr.write(new StringBuilder().append(field.get(someObject)).append(annClass.valuesSeparator())
-							.toString());
-				}
+						wr.write(new StringBuilder().append(csvField).append(annClass.valuesSeparator()).toString());
+					} catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+						e.printStackTrace();
+					}
+				});
 				wr.write(System.getProperty("line.separator"));
 			}
 		}
 	}
 
-	private static List<Field> findAnnFields(Object someObject) {
+	private static void writeFieldName(List<Object> annObjects) throws IOException {
+
+		for (Object someObject : annObjects) {
+
+			CsvEntity annClass = someObject.getClass().getAnnotation(CsvEntity.class);
+			Map<Integer, Field> annFieldsMap = findAnnFields(someObject);
+
+			try (BufferedWriter wr = new BufferedWriter(new FileWriter("./data/" + annClass.fileName(), false));) {
+
+				annFieldsMap.forEach((key, field) -> {
+					try {
+						List<String> lines = Files.readAllLines(Paths.get("./data/" + annClass.fileName()));
+						if (!lines.contains(field.getName())) {
+							wr.write(new StringBuilder(field.getName()).append(annClass.valuesSeparator()).toString());
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				});
+				wr.write(System.getProperty("line.separator"));
+			}
+		}
+	}
+
+	private static Object defineTypeField(Object someObject, Field field, CsvProperty annField, List<Object> annObjects)
+			throws NoSuchFieldException, IllegalAccessException {
+
+		Object csvField;
+
+		if (annField.propertyType() == PropertyType.CompositeProperty) {
+			Object compositeField = field.get(someObject);
+			String keyFieldValue = null;
+
+			for (Object relatedObj : annObjects) {
+				if (relatedObj.equals(compositeField)) {
+					Field relatedObjField = relatedObj.getClass().getDeclaredField(annField.keyField());
+					relatedObjField.setAccessible(true);
+					keyFieldValue = relatedObjField.get(relatedObj).toString();
+				}
+			}
+			csvField = new StringBuilder().append(compositeField.getClass().getSimpleName()).append("::")
+					.append(keyFieldValue);
+		} else {
+			csvField = field.get(someObject);
+		}
+		return csvField;
+	}
+
+	private static Map<Integer, Field> findAnnFields(Object someObject) {
 		Field[] fields = someObject.getClass().getDeclaredFields();
-		List<Field> annFields = new ArrayList<>();
+		Map<Integer, Field> annFieldsMap = new HashMap<Integer, Field>();
 
 		for (Field field : fields) {
 			field.setAccessible(true);
-
 			if (field.isAnnotationPresent(CsvProperty.class)) {
-				annFields.add(field);
-				// System.out.println(field.get(someObject));
+				annFieldsMap.put(field.getAnnotation(CsvProperty.class).columnNumber(), field);
 			}
 		}
-		return annFields;
+		return annFieldsMap;
 	}
 }
