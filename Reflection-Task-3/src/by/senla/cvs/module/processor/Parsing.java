@@ -11,10 +11,9 @@ import by.senla.cvs.module.enums.PropertyType;
 
 public class Parsing {
 
-	public static List<Object> parseToEntity(Map<String, List<String[]>> strObjMap)
-			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	public static List<Object> parseToEntity(Map<String, List<String[]>> strObjMap) {
 
-		List<Object> objList = new ArrayList<>();
+		List<Object> newObjList = new ArrayList<>();
 
 		strObjMap.forEach((key, strList) -> {
 
@@ -24,9 +23,10 @@ public class Parsing {
 			for (String[] fieldsArray : strList) {
 
 				try {
-					Object someObject = createObject(key, title, fieldsArray, strObjMap, objList);
-					if (!objList.contains(someObject)) {
-						objList.add(someObject);
+					Object someObject = createObject(key, title, fieldsArray, strObjMap, newObjList);
+					if (!newObjList.contains(someObject)) {
+						newObjList.add(someObject);
+						// System.out.println("ADD" + someObject);
 					}
 
 				} catch (ClassNotFoundException | IllegalArgumentException | InstantiationException
@@ -35,29 +35,29 @@ public class Parsing {
 				}
 			}
 		});
-		return objList;
+		return newObjList;
 	}
 
 	private static Object createObject(String key, String[] title, String[] fieldsArray,
-			Map<String, List<String[]>> strObjMap, List<Object> objList)
-			throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+			Map<String, List<String[]>> strObjMap, List<Object> newObjList)
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		String className = key;
 		Class<?> someObject = Class.forName(className);
 		Field[] fields = someObject.getDeclaredFields();
-
+		Object newObject = someObject.newInstance();
 		for (Field field : fields) {
 			field.setAccessible(true);
 			if (field.isAnnotationPresent(CsvProperty.class)) {
 				CsvProperty annField = field.getAnnotation(CsvProperty.class);
-				setFieldValue(field, someObject.newInstance(), title, fieldsArray, annField, strObjMap, objList);
+				setFieldValue(field, newObject, title, fieldsArray, annField, strObjMap, newObjList);
 			}
 		}
-		return someObject.newInstance();
+		// System.out.println("CREATE" + someObject);
+		return newObject;
 	}
 
 	private static void setFieldValue(Field field, Object someObject, String[] title, String[] fieldsArray,
-			CsvProperty annField, Map<String, List<String[]>> strObjMap, List<Object> objList)
-			throws IllegalArgumentException, IllegalAccessException {
+			CsvProperty annField, Map<String, List<String[]>> strObjMap, List<Object> newObjList) {
 
 		try {
 			String fieldType = field.getType().getSimpleName();
@@ -92,19 +92,16 @@ public class Parsing {
 				field.set(someObject, Byte.parseByte(fieldValue));
 				break;
 			default:
-				setObjectField(field, fieldValue, someObject, annField, fieldsArray, strObjMap, title, objList);
+				setObjectField(field, fieldValue, someObject, annField, fieldsArray, strObjMap, title, newObjList);
 				break;
 			}
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
-		} /*
-			 * finally { System.out.println(field.get(someObject)); }
-			 */
+		}
 	}
 
 	private static void setObjectField(Field field, String fieldValue, Object someObject, CsvProperty annField,
-			String[] fieldsArray, Map<String, List<String[]>> strObjMap, String[] title, List<Object> objList)
-			throws IllegalAccessException {
+			String[] fieldsArray, Map<String, List<String[]>> strObjMap, String[] title, List<Object> newObjList) {
 
 		String className = fieldValue.split("::", 2)[0];
 		String keyField = fieldValue.split("::", 2)[1];
@@ -118,10 +115,10 @@ public class Parsing {
 					if (key.contains(className) & Arrays.asList(array).get(indexArray).equals(keyField)) {
 
 						try {
-							Object newObject = createObject(key, title, array, strObjMap, objList);
+							Object newObject = createObject(key, title, array, strObjMap, newObjList);
 
-							if (!objList.contains(newObject)) {
-								objList.add(newObject);
+							if (!newObjList.contains(newObject)) {
+								newObjList.add(newObject);
 							}
 
 							field.set(someObject, newObject);

@@ -16,7 +16,7 @@ public class ClassOne {
 	@CsvProperty(columnNumber = 1, propertyType = PropertyType.SimpleProperty)
 	private int someInt;
 
-	@CsvProperty(columnNumber = 3, propertyType = PropertyType.CompositeProperty, keyField = "id")
+	//@CsvProperty(columnNumber = 3, propertyType = PropertyType.CompositeProperty, keyField = "id")
 	private ClassTwo someObject;
 
 	public String getSomeField() {

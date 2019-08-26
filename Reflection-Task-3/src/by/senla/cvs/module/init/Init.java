@@ -51,7 +51,7 @@ public class Init {
 
 		File folder = new File("./data/");
 		CsvWriter.writeToCsv(annObjects);
-		Parsing.parseToEntity(CsvReader.readFromCsv(folder));
+		CsvWriter.writeToCsv(Parsing.parseToEntity(CsvReader.readFromCsv(folder)));
 
 		System.out.println();
 		System.out.println("start");
