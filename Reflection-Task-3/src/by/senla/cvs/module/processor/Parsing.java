@@ -31,7 +31,7 @@ public class Parsing {
 
 				} catch (ClassNotFoundException | IllegalArgumentException | InstantiationException
 						| IllegalAccessException e) {
-					e.printStackTrace();
+					throw new RuntimeException(e);
 				}
 			}
 		});
@@ -45,6 +45,7 @@ public class Parsing {
 		Class<?> someObject = Class.forName(className);
 		Field[] fields = someObject.getDeclaredFields();
 		Object newObject = someObject.newInstance();
+
 		for (Field field : fields) {
 			field.setAccessible(true);
 			if (field.isAnnotationPresent(CsvProperty.class)) {
@@ -57,47 +58,19 @@ public class Parsing {
 	}
 
 	private static void setFieldValue(Field field, Object someObject, String[] title, String[] fieldsArray,
-			CsvProperty annField, Map<String, List<String[]>> strObjMap, List<Object> newObjList) {
+			CsvProperty annField, Map<String, List<String[]>> strObjMap, List<Object> newObjList)
+			throws IllegalArgumentException, IllegalAccessException {
 
-		try {
-			String fieldType = field.getType().getSimpleName();
-			String fieldValue = defineValueField(field, fieldsArray, title);
+		String fieldType = field.getType().getSimpleName();
+		String fieldValue = defineValueField(field, fieldsArray, title);
+		Object convertedValue = null;
 
-			switch (fieldType) {
-			case "int":
-				field.set(someObject, Integer.parseInt(fieldValue));
-				break;
-			case "String":
-				field.set(someObject, fieldValue);
-				break;
-			case "double":
-				field.set(someObject, Double.parseDouble(fieldValue));
-				break;
-			case "long":
-				field.set(someObject, Long.parseLong(fieldValue));
-				break;
-			case "boolean":
-				field.set(someObject, Boolean.parseBoolean(fieldValue));
-				break;
-			case "short":
-				field.set(someObject, Short.parseShort(fieldValue));
-				break;
-			case "float":
-				field.set(someObject, Float.parseFloat(fieldValue));
-				break;
-			case "char":
-				field.set(someObject, fieldValue.chars());
-				break;
-			case "byte":
-				field.set(someObject, Byte.parseByte(fieldValue));
-				break;
-			default:
-				setObjectField(field, fieldValue, someObject, annField, fieldsArray, strObjMap, title, newObjList);
-				break;
-			}
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
+		if (annField.propertyType() == PropertyType.CompositeProperty) {
+			setObjectField(field, fieldValue, someObject, annField, fieldsArray, strObjMap, title, newObjList);
+		} else {
+			convertedValue = Сonverting.convertField(fieldType, fieldValue);
 		}
+		field.set(someObject, convertedValue);
 	}
 
 	private static void setObjectField(Field field, String fieldValue, Object someObject, CsvProperty annField,
@@ -107,29 +80,25 @@ public class Parsing {
 		String keyField = fieldValue.split("::", 2)[1];
 		int indexArray = Arrays.asList(title).indexOf(annField.keyField());
 
-		if (annField.propertyType() == PropertyType.CompositeProperty) {
+		strObjMap.forEach((key, strList) -> {
+			for (String[] array : strList) {
 
-			strObjMap.forEach((key, strList) -> {
-				for (String[] array : strList) {
+				if (key.contains(className) & Arrays.asList(array).get(indexArray).equals(keyField)) {
 
-					if (key.contains(className) & Arrays.asList(array).get(indexArray).equals(keyField)) {
+					try {
+						Object newObject = createObject(key, title, array, strObjMap, newObjList);
 
-						try {
-							Object newObject = createObject(key, title, array, strObjMap, newObjList);
-
-							if (!newObjList.contains(newObject)) {
-								newObjList.add(newObject);
-							}
-
-							field.set(someObject, newObject);
-
-						} catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-							e.printStackTrace();
+						if (!newObjList.contains(newObject)) {
+							newObjList.add(newObject);
 						}
+						field.set(someObject, newObject);
+
+					} catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+						throw new RuntimeException(e);
 					}
 				}
-			});
-		}
+			}
+		});
 	}
 
 	private static String defineValueField(Field field, String[] fieldsArray, String[] title) {

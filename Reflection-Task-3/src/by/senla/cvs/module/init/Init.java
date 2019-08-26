@@ -13,7 +13,7 @@ import by.senla.cvs.module.processor.Parsing;
 public class Init {
 
 	public static void main(String[] args) throws IOException, IllegalArgumentException, IllegalAccessException,
-			NoSuchFieldException, SecurityException, InstantiationException, ClassNotFoundException {
+			NoSuchFieldException, InstantiationException, ClassNotFoundException {
 
 		createFolder();
 

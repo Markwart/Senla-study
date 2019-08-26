@@ -34,7 +34,7 @@ public class CsvWriter {
 
 						wr.write(new StringBuilder().append(csvField).append(annClass.valuesSeparator()).toString());
 					} catch (IOException | NoSuchFieldException | IllegalAccessException e) {
-						e.printStackTrace();
+						throw new RuntimeException(e);
 					}
 				});
 				wr.write(System.getProperty("line.separator"));
@@ -58,7 +58,7 @@ public class CsvWriter {
 							wr.write(new StringBuilder(field.getName()).append(annClass.valuesSeparator()).toString());
 						}
 					} catch (IOException e) {
-						e.printStackTrace();
+						throw new RuntimeException(e);
 					}
 				});
 				wr.write(System.getProperty("line.separator"));
