@@ -11,28 +11,28 @@ public class ClassOne {
 	private int id;
 
 	@CsvProperty(columnNumber = 2, propertyType = PropertyType.SimpleProperty)
-	private String someField;
+	private String name;
 
 	@CsvProperty(columnNumber = 1, propertyType = PropertyType.SimpleProperty)
-	private int someInt;
+	private int number;
 
-	//@CsvProperty(columnNumber = 3, propertyType = PropertyType.CompositeProperty, keyField = "id")
+	@CsvProperty(columnNumber = 3, propertyType = PropertyType.CompositeProperty, keyField = "id")
 	private ClassTwo someObject;
 
 	public String getSomeField() {
-		return someField;
+		return name;
 	}
 
-	public void setSomeField(String someField) {
-		this.someField = someField;
+	public void setSomeField(String name) {
+		this.name = name;
 	}
 
 	public int getSomeInt() {
-		return someInt;
+		return number;
 	}
 
-	public void setSomeInt(int someInt) {
-		this.someInt = someInt;
+	public void setSomeInt(int number) {
+		this.number = number;
 	}
 
 	public int getId() {

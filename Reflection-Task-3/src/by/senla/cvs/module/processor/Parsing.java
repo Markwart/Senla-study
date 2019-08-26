@@ -26,9 +26,7 @@ public class Parsing {
 					Object someObject = createObject(key, title, fieldsArray, strObjMap, newObjList);
 					if (!newObjList.contains(someObject)) {
 						newObjList.add(someObject);
-						// System.out.println("ADD" + someObject);
 					}
-
 				} catch (ClassNotFoundException | IllegalArgumentException | InstantiationException
 						| IllegalAccessException e) {
 					throw new RuntimeException(e);
@@ -41,9 +39,13 @@ public class Parsing {
 	private static Object createObject(String key, String[] title, String[] fieldsArray,
 			Map<String, List<String[]>> strObjMap, List<Object> newObjList)
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+		
+		System.out.println(Arrays.toString(title) + " " + Arrays.toString(fieldsArray));
+
 		String className = key;
 		Class<?> someObject = Class.forName(className);
 		Field[] fields = someObject.getDeclaredFields();
+
 		Object newObject = someObject.newInstance();
 
 		for (Field field : fields) {
@@ -53,11 +55,10 @@ public class Parsing {
 				setFieldValue(field, newObject, title, fieldsArray, annField, strObjMap, newObjList);
 			}
 		}
-		// System.out.println("CREATE" + someObject);
 		return newObject;
 	}
 
-	private static void setFieldValue(Field field, Object someObject, String[] title, String[] fieldsArray,
+	private static void setFieldValue(Field field, Object newObject, String[] title, String[] fieldsArray,
 			CsvProperty annField, Map<String, List<String[]>> strObjMap, List<Object> newObjList)
 			throws IllegalArgumentException, IllegalAccessException {
 
@@ -66,14 +67,14 @@ public class Parsing {
 		Object convertedValue = null;
 
 		if (annField.propertyType() == PropertyType.CompositeProperty) {
-			setObjectField(field, fieldValue, someObject, annField, fieldsArray, strObjMap, title, newObjList);
+			setObjectField(field, fieldValue, newObject, annField, fieldsArray, strObjMap, title, newObjList);
 		} else {
 			convertedValue = Сonverting.convertField(fieldType, fieldValue);
 		}
-		field.set(someObject, convertedValue);
+		field.set(newObject, convertedValue);
 	}
 
-	private static void setObjectField(Field field, String fieldValue, Object someObject, CsvProperty annField,
+	private static void setObjectField(Field field, String fieldValue, Object newObject, CsvProperty annField,
 			String[] fieldsArray, Map<String, List<String[]>> strObjMap, String[] title, List<Object> newObjList) {
 
 		String className = fieldValue.split("::", 2)[0];
@@ -86,12 +87,12 @@ public class Parsing {
 				if (key.contains(className) & Arrays.asList(array).get(indexArray).equals(keyField)) {
 
 					try {
-						Object newObject = createObject(key, title, array, strObjMap, newObjList);
+						Object relatedObject = createObject(key, title, array, strObjMap, newObjList);
 
-						if (!newObjList.contains(newObject)) {
-							newObjList.add(newObject);
+						if (!newObjList.contains(relatedObject)) {
+							newObjList.add(relatedObject);
 						}
-						field.set(someObject, newObject);
+						field.set(newObject, relatedObject);
 
 					} catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
 						throw new RuntimeException(e);
@@ -103,7 +104,9 @@ public class Parsing {
 
 	private static String defineValueField(Field field, String[] fieldsArray, String[] title) {
 		String fieldValue = null;
+
 		for (String fieldName : title) {
+
 			if (field.getName().equals(fieldName)) {
 				int indexFieldArray = Arrays.asList(title).indexOf(fieldName);
 				fieldValue = fieldsArray[indexFieldArray];
