@@ -22,7 +22,7 @@ import by.senla.cvs.module.enums.PropertyType;
 
 public class CsvWriter {
 
-	private static final Logger LOGGER = Logger.getLogger(Parsing.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(CsvWriter.class.getName());
 	private static final String PATH_TO_PROPERTIES = "resources/config.properties";
 
 	public void writeToCsv(List<Object> annObjects) throws IOException {

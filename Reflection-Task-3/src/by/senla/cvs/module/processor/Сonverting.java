@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 public class Сonverting {
 	
-	private static final Logger LOGGER = Logger.getLogger(Parsing.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(Сonverting.class.getName());
 
 	public static Object convertField(String fieldType, String fieldValue) {
 		Object convertedValue;
