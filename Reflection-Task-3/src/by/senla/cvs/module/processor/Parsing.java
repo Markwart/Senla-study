@@ -20,7 +20,7 @@ public class Parsing {
 	public List<Object> parseToEntity(Map<String, List<String[]>> strObjMap) {
 
 		List<Object> newObjList = new ArrayList<>();
-		Map<String, String[]> fieldsNameMap = createTitleMap(strObjMap);
+		Map<String, String[]> fieldsNameMap = createFieldsMap(strObjMap);
 		Map<String, String> classNameMap = createClassNameMap(strObjMap);
 
 		strObjMap.forEach((className, strList) -> {
@@ -43,7 +43,7 @@ public class Parsing {
 		return newObjList;
 	}
 
-	private Map<String, String[]> createTitleMap(Map<String, List<String[]>> strObjMap) {
+	private Map<String, String[]> createFieldsMap(Map<String, List<String[]>> strObjMap) {
 		Map<String, String[]> fieldsNameMap = new HashMap<String, String[]>();
 
 		strObjMap.forEach((className, strList) -> {
