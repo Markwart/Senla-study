@@ -14,7 +14,7 @@ public class CsvReader {
 
 	public Map<String, List<String[]>> readFromCsv(File folder) throws FileNotFoundException, IOException {
 
-		Map<String, List<String[]>> strObjMap = new HashMap<String, List<String[]>>();
+		Map<String, List<String[]>> strObjectsMap = new HashMap<String, List<String[]>>();
 
 		if (folder.exists()) {
 
@@ -22,19 +22,19 @@ public class CsvReader {
 			for (File file : filesList) {
 
 				String className = file.getName().split(".csv", 2)[0];
-				List<String[]> strList = new ArrayList<>();
+				List<String[]> strObjectsList = new ArrayList<>();
 
 				try (BufferedReader br = new BufferedReader(new FileReader(file));) {
 
 					String strLine;
 					while ((strLine = br.readLine()) != null) {
-						String[] wordsArray = strLine.split(";");
-						strList.add(wordsArray);
+						String[] fieldsArray = strLine.split(";");
+						strObjectsList.add(fieldsArray);
 					}
 				}
-				strObjMap.put(className, strList);
+				strObjectsMap.put(className, strObjectsList);
 			}
 		}
-		return strObjMap;
+		return strObjectsMap;
 	}
 }

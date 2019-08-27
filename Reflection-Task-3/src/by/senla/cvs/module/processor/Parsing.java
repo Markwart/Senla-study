@@ -17,21 +17,21 @@ public class Parsing {
 
 	private static final Logger LOGGER = Logger.getLogger(Parsing.class.getName());
 
-	public List<Object> parseToEntity(Map<String, List<String[]>> strObjMap) {
+	public List<Object> parseToEntity(Map<String, List<String[]>> strObjectsMap) {
 
-		List<Object> newObjList = new ArrayList<>();
-		Map<String, String[]> fieldsNameMap = createFieldsMap(strObjMap);
-		Map<String, String> classNameMap = createClassNameMap(strObjMap);
+		List<Object> newObjectsList = new ArrayList<>();
+		Map<String, String[]> fieldsNameMap = createFieldsMap(strObjectsMap);
+		Map<String, String> classNameMap = createClassNameMap(strObjectsMap);
 
-		strObjMap.forEach((className, strList) -> {
+		strObjectsMap.forEach((className, strList) -> {
 			for (String[] fieldsArray : strList) {
 				try {
-					Object someObject = createObject(classNameMap, className, fieldsNameMap, fieldsArray, strObjMap,
-							newObjList);
+					Object someObject = createObject(classNameMap, className, fieldsNameMap, fieldsArray, strObjectsMap,
+							newObjectsList);
 
-					someObject = checkExistenceObj(newObjList, someObject);
-					if (!isExistObj(newObjList, someObject)) {
-						newObjList.add(someObject);
+					someObject = checkExistenceObj(newObjectsList, someObject);
+					if (!isExistObj(newObjectsList, someObject)) {
+						newObjectsList.add(someObject);
 					}
 				} catch (ClassNotFoundException | IllegalArgumentException | InstantiationException
 						| IllegalAccessException | NoSuchFieldException e) {
@@ -40,23 +40,23 @@ public class Parsing {
 				}
 			}
 		});
-		return newObjList;
+		return newObjectsList;
 	}
 
-	private Map<String, String[]> createFieldsMap(Map<String, List<String[]>> strObjMap) {
+	private Map<String, String[]> createFieldsMap(Map<String, List<String[]>> strObjectsMap) {
 		Map<String, String[]> fieldsNameMap = new HashMap<String, String[]>();
 
-		strObjMap.forEach((className, strList) -> {
+		strObjectsMap.forEach((className, strList) -> {
 			fieldsNameMap.put(className, strList.get(0));
 			strList.remove(0);
 		});
 		return fieldsNameMap;
 	}
 
-	private Map<String, String> createClassNameMap(Map<String, List<String[]>> strObjMap) {
+	private Map<String, String> createClassNameMap(Map<String, List<String[]>> strObjectsMap) {
 		Map<String, String> classNameMap = new HashMap<String, String>();
 
-		strObjMap.forEach((className, strList) -> {
+		strObjectsMap.forEach((className, strList) -> {
 			classNameMap.put(className, Arrays.asList(strList.get(strList.size() - 1)).get(0));
 			strList.remove(strList.size() - 1);
 		});
@@ -64,7 +64,7 @@ public class Parsing {
 	}
 
 	private Object createObject(Map<String, String> classNameMap, String className, Map<String, String[]> fieldsNameMap,
-			String[] fieldsArray, Map<String, List<String[]>> strObjMap, List<Object> newObjList)
+			String[] fieldsArray, Map<String, List<String[]>> strObjectsMap, List<Object> newObjectsList)
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 
 		Class<?> someObject = Class.forName(classNameMap.get(className));
@@ -73,25 +73,25 @@ public class Parsing {
 
 		for (Field field : fields) {
 			field.setAccessible(true);
-			CsvProperty annField = field.getAnnotation(CsvProperty.class);
+			CsvProperty annotatedField = field.getAnnotation(CsvProperty.class);
 			if (field.isAnnotationPresent(CsvProperty.class)) {
-				setFieldValue(classNameMap, field, newObject, fieldsNameMap, fieldsArray, annField, strObjMap,
-						newObjList);
+				setFieldValue(classNameMap, field, newObject, fieldsNameMap, fieldsArray, annotatedField, strObjectsMap,
+						newObjectsList);
 			}
 		}
 		return newObject;
 	}
 
-	private boolean isExistObj(List<Object> newObjList, Object someObject)
+	private boolean isExistObj(List<Object> newObjectsList, Object someObject)
 			throws IllegalAccessException, NoSuchFieldException {
 		boolean existence = false;
 
-		for (Object object : newObjList) {
-			CsvEntity annClass = someObject.getClass().getAnnotation(CsvEntity.class);
+		for (Object object : newObjectsList) {
+			CsvEntity annotatedClass = someObject.getClass().getAnnotation(CsvEntity.class);
 			if (someObject.getClass().getName().equals(object.getClass().getName())) {
 
-				Field someObjectField = someObject.getClass().getDeclaredField(annClass.entityId());
-				Field objectField = object.getClass().getDeclaredField(annClass.entityId());
+				Field someObjectField = someObject.getClass().getDeclaredField(annotatedClass.entityId());
+				Field objectField = object.getClass().getDeclaredField(annotatedClass.entityId());
 				someObjectField.setAccessible(true);
 				objectField.setAccessible(true);
 
@@ -105,10 +105,10 @@ public class Parsing {
 		return existence;
 	}
 
-	private Object checkExistenceObj(List<Object> newObjList, Object someObject)
+	private Object checkExistenceObj(List<Object> newObjectsList, Object someObject)
 			throws IllegalAccessException, NoSuchFieldException {
 
-		for (Object object : newObjList) {
+		for (Object object : newObjectsList) {
 			CsvEntity annClass = someObject.getClass().getAnnotation(CsvEntity.class);
 			if (someObject.getClass().getName().equals(object.getClass().getName())) {
 
@@ -126,42 +126,45 @@ public class Parsing {
 	}
 
 	private void setFieldValue(Map<String, String> classNameMap, Field field, Object newObject,
-			Map<String, String[]> fieldsNameMap, String[] fieldsArray, CsvProperty annField,
-			Map<String, List<String[]>> strObjMap, List<Object> newObjList)
+			Map<String, String[]> fieldsNameMap, String[] fieldsArray, CsvProperty annotatedField,
+			Map<String, List<String[]>> strObjectsMap, List<Object> newObjectsList)
 			throws IllegalArgumentException, IllegalAccessException {
 
 		String fieldType = field.getType().getSimpleName();
 		String fieldValue = defineValueField(field, fieldsArray, fieldsNameMap, newObject);
 
-		if (annField.propertyType() == PropertyType.CompositeProperty) {
-			setObjectField(classNameMap, field, fieldValue, newObject, annField, fieldsArray, strObjMap, fieldsNameMap,
-					newObjList);
+		if (annotatedField.propertyType() == PropertyType.CompositeProperty) {
+			setObjectField(classNameMap, field, fieldValue, newObject, annotatedField, fieldsArray, strObjectsMap,
+					fieldsNameMap, newObjectsList);
 		} else {
-			field.set(newObject, Сonverting.convertField(fieldType, fieldValue));
+			Object convertedField = (fieldType.substring(0, 1).matches("[A-Z]"))
+					? Сonverting.convertWrapperField(fieldType, fieldValue)
+					: Сonverting.convertPrimitiveField(fieldType, fieldValue);
+			field.set(newObject, convertedField);
 		}
 	}
 
 	private void setObjectField(Map<String, String> classNameMap, Field field, String fieldValue, Object newObject,
-			CsvProperty annField, String[] fieldsArray, Map<String, List<String[]>> strObjMap,
-			Map<String, String[]> fieldsNameMap, List<Object> newObjList) {
+			CsvProperty annotatedField, String[] fieldsArray, Map<String, List<String[]>> strObjectsMap,
+			Map<String, String[]> fieldsNameMap, List<Object> newObjectsList) {
 
 		String className = fieldValue.split("::", 2)[0];
 		String keyField = fieldValue.split("::", 2)[1];
 
-		int indexArray = Arrays.asList(fieldsNameMap.get(className)).indexOf(annField.keyField());
+		int indexArray = Arrays.asList(fieldsNameMap.get(className)).indexOf(annotatedField.keyField());
 
-		strObjMap.forEach((key, strList) -> {
+		strObjectsMap.forEach((key, strList) -> {
 			for (String[] array : strList) {
 
 				if (key.contains(className) & Arrays.asList(array).get(indexArray).equals(keyField)) {
 					try {
-						Object relatedObject = createObject(classNameMap, key, fieldsNameMap, array, strObjMap,
-								newObjList);
+						Object relatedObject = createObject(classNameMap, key, fieldsNameMap, array, strObjectsMap,
+								newObjectsList);
 
-						relatedObject = checkExistenceObj(newObjList, relatedObject);
+						relatedObject = checkExistenceObj(newObjectsList, relatedObject);
 						field.set(newObject, relatedObject);
-						if (!isExistObj(newObjList, relatedObject)) {
-							newObjList.add(relatedObject);
+						if (!isExistObj(newObjectsList, relatedObject)) {
+							newObjectsList.add(relatedObject);
 						}
 					} catch (ClassNotFoundException | IllegalAccessException | InstantiationException
 							| NoSuchFieldException e) {
