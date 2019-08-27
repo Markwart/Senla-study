@@ -4,7 +4,7 @@ import by.senla.cvs.module.annotations.CsvEntity;
 import by.senla.cvs.module.annotations.CsvProperty;
 import by.senla.cvs.module.enums.PropertyType;
 
-@CsvEntity(fileName = "by.senla.cvs.module.init.ClassOne.csv")
+@CsvEntity(fileName = "ClassOne.csv")
 public class ClassOne {
 
 	@CsvProperty(columnNumber = 0, propertyType = PropertyType.SimpleProperty)

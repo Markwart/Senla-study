@@ -1,6 +1,9 @@
 package by.senla.cvs.module.processor;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -9,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,8 +21,9 @@ import by.senla.cvs.module.annotations.CsvProperty;
 import by.senla.cvs.module.enums.PropertyType;
 
 public class CsvWriter {
-	
+
 	private static final Logger LOGGER = Logger.getLogger(Parsing.class.getName());
+	private static final String PATH_TO_PROPERTIES = "resources/config.properties";
 
 	public void writeToCsv(List<Object> annObjects) throws IOException {
 
@@ -29,7 +34,7 @@ public class CsvWriter {
 			CsvEntity annClass = someObject.getClass().getAnnotation(CsvEntity.class);
 			Map<Integer, Field> annFieldsMap = findAnnFields(someObject);
 
-			try (BufferedWriter wr = new BufferedWriter(new FileWriter("./data/" + annClass.fileName(), true));) {
+			try (BufferedWriter wr = new BufferedWriter(new FileWriter(getPath() + annClass.fileName(), true));) {
 
 				annFieldsMap.forEach((key, field) -> {
 					try {
@@ -45,6 +50,29 @@ public class CsvWriter {
 				wr.write(System.getProperty("line.separator"));
 			}
 		}
+		writeClassName(annObjects);
+	}
+
+	private String getPath() throws IOException, FileNotFoundException {
+		String path;
+		try (BufferedReader br = new BufferedReader(new FileReader(PATH_TO_PROPERTIES));) {
+			Properties prop = new Properties();
+			prop.load(br);
+			path = prop.getProperty("file_folder");
+		}
+		return path;
+	}
+
+	private void writeClassName(List<Object> annObjects) throws IOException, FileNotFoundException {
+		for (Object someObject : annObjects) {
+			CsvEntity annClass = someObject.getClass().getAnnotation(CsvEntity.class);
+			try (BufferedWriter wr = new BufferedWriter(new FileWriter(getPath() + annClass.fileName(), true));) {
+				List<String> lines = Files.readAllLines(Paths.get(getPath() + annClass.fileName()));
+				if (!lines.contains(someObject.getClass().getName())) {
+					wr.write(someObject.getClass().getName());
+				}
+			}
+		}
 	}
 
 	private void writeFieldName(List<Object> annObjects) throws IOException {
@@ -54,11 +82,12 @@ public class CsvWriter {
 			CsvEntity annClass = someObject.getClass().getAnnotation(CsvEntity.class);
 			Map<Integer, Field> annFieldsMap = findAnnFields(someObject);
 
-			try (BufferedWriter wr = new BufferedWriter(new FileWriter("./data/" + annClass.fileName(), false));) {
+			try (BufferedWriter wr = new BufferedWriter(new FileWriter(getPath() + annClass.fileName(), false));) {
 
 				annFieldsMap.forEach((key, field) -> {
 					try {
-						List<String> lines = Files.readAllLines(Paths.get("./data/" + annClass.fileName()));
+						List<String> lines = Files.readAllLines(Paths.get(getPath() + annClass.fileName()));
+
 						if (!lines.contains(field.getName())) {
 							wr.write(new StringBuilder(field.getName()).append(annClass.valuesSeparator()).toString());
 						}

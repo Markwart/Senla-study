@@ -20,12 +20,14 @@ public class Parsing {
 	public List<Object> parseToEntity(Map<String, List<String[]>> strObjMap) {
 
 		List<Object> newObjList = new ArrayList<>();
-		Map<String, String[]> titleMap = createTitleMap(strObjMap);
+		Map<String, String[]> fieldsNameMap = createTitleMap(strObjMap);
+		Map<String, String> classNameMap = createClassNameMap(strObjMap);
 
 		strObjMap.forEach((className, strList) -> {
 			for (String[] fieldsArray : strList) {
 				try {
-					Object someObject = createObject(className, titleMap, fieldsArray, strObjMap, newObjList);
+					Object someObject = createObject(classNameMap, className, fieldsNameMap, fieldsArray, strObjMap,
+							newObjList);
 
 					someObject = checkExistenceObj(newObjList, someObject);
 					if (!isExistObj(newObjList, someObject)) {
@@ -42,20 +44,30 @@ public class Parsing {
 	}
 
 	private Map<String, String[]> createTitleMap(Map<String, List<String[]>> strObjMap) {
-		Map<String, String[]> titleMap = new HashMap<String, String[]>();
+		Map<String, String[]> fieldsNameMap = new HashMap<String, String[]>();
 
 		strObjMap.forEach((className, strList) -> {
-			titleMap.put(className, strList.get(0));
+			fieldsNameMap.put(className, strList.get(0));
 			strList.remove(0);
 		});
-		return titleMap;
+		return fieldsNameMap;
 	}
 
-	private Object createObject(String className, Map<String, String[]> titleMap, String[] fieldsArray,
-			Map<String, List<String[]>> strObjMap, List<Object> newObjList)
+	private Map<String, String> createClassNameMap(Map<String, List<String[]>> strObjMap) {
+		Map<String, String> classNameMap = new HashMap<String, String>();
+
+		strObjMap.forEach((className, strList) -> {
+			classNameMap.put(className, Arrays.asList(strList.get(strList.size() - 1)).get(0));
+			strList.remove(strList.size() - 1);
+		});
+		return classNameMap;
+	}
+
+	private Object createObject(Map<String, String> classNameMap, String className, Map<String, String[]> fieldsNameMap,
+			String[] fieldsArray, Map<String, List<String[]>> strObjMap, List<Object> newObjList)
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 
-		Class<?> someObject = Class.forName(className);
+		Class<?> someObject = Class.forName(classNameMap.get(className));
 		Field[] fields = someObject.getDeclaredFields();
 		Object newObject = someObject.newInstance();
 
@@ -63,7 +75,8 @@ public class Parsing {
 			field.setAccessible(true);
 			CsvProperty annField = field.getAnnotation(CsvProperty.class);
 			if (field.isAnnotationPresent(CsvProperty.class)) {
-				setFieldValue(field, newObject, titleMap, fieldsArray, annField, strObjMap, newObjList);
+				setFieldValue(classNameMap, field, newObject, fieldsNameMap, fieldsArray, annField, strObjMap,
+						newObjList);
 			}
 		}
 		return newObject;
@@ -112,36 +125,38 @@ public class Parsing {
 		return someObject;
 	}
 
-	private void setFieldValue(Field field, Object newObject, Map<String, String[]> titleMap, String[] fieldsArray,
-			CsvProperty annField, Map<String, List<String[]>> strObjMap, List<Object> newObjList)
+	private void setFieldValue(Map<String, String> classNameMap, Field field, Object newObject,
+			Map<String, String[]> fieldsNameMap, String[] fieldsArray, CsvProperty annField,
+			Map<String, List<String[]>> strObjMap, List<Object> newObjList)
 			throws IllegalArgumentException, IllegalAccessException {
 
 		String fieldType = field.getType().getSimpleName();
-		String fieldValue = defineValueField(field, fieldsArray, titleMap, newObject);
+		String fieldValue = defineValueField(field, fieldsArray, fieldsNameMap, newObject);
 
 		if (annField.propertyType() == PropertyType.CompositeProperty) {
-			setObjectField(field, fieldValue, newObject, annField, fieldsArray, strObjMap, titleMap, newObjList);
+			setObjectField(classNameMap, field, fieldValue, newObject, annField, fieldsArray, strObjMap, fieldsNameMap,
+					newObjList);
 		} else {
 			field.set(newObject, Сonverting.convertField(fieldType, fieldValue));
 		}
 	}
 
-	private void setObjectField(Field field, String fieldValue, Object newObject, CsvProperty annField,
-			String[] fieldsArray, Map<String, List<String[]>> strObjMap, Map<String, String[]> titleMap,
-			List<Object> newObjList) {
+	private void setObjectField(Map<String, String> classNameMap, Field field, String fieldValue, Object newObject,
+			CsvProperty annField, String[] fieldsArray, Map<String, List<String[]>> strObjMap,
+			Map<String, String[]> fieldsNameMap, List<Object> newObjList) {
 
 		String className = fieldValue.split("::", 2)[0];
 		String keyField = fieldValue.split("::", 2)[1];
 
-		Map<String, String[]> oneTitle = mapWithOneTitle(titleMap, newObject);
-		int indexArray = Arrays.asList(oneTitle.get("title")).indexOf(annField.keyField());
+		int indexArray = Arrays.asList(fieldsNameMap.get(className)).indexOf(annField.keyField());
 
 		strObjMap.forEach((key, strList) -> {
 			for (String[] array : strList) {
 
 				if (key.contains(className) & Arrays.asList(array).get(indexArray).equals(keyField)) {
 					try {
-						Object relatedObject = createObject(key, titleMap, array, strObjMap, newObjList);
+						Object relatedObject = createObject(classNameMap, key, fieldsNameMap, array, strObjMap,
+								newObjList);
 
 						relatedObject = checkExistenceObj(newObjList, relatedObject);
 						field.set(newObject, relatedObject);
@@ -158,28 +173,18 @@ public class Parsing {
 		});
 	}
 
-	private String defineValueField(Field field, String[] fieldsArray, Map<String, String[]> titleMap,
+	private String defineValueField(Field field, String[] fieldsArray, Map<String, String[]> fieldsNameMap,
 			Object newObject) {
 		String fieldValue = null;
-		Map<String, String[]> oneTitle = mapWithOneTitle(titleMap, newObject);
+		String className = newObject.getClass().getSimpleName();
 
-		for (String fieldName : oneTitle.get("title")) {
+		for (String fieldName : fieldsNameMap.get(className)) {
 			if (field.getName().equals(fieldName)) {
-				int indexFieldArray = Arrays.asList(oneTitle.get("title")).indexOf(fieldName);
+				int indexFieldArray = Arrays.asList(fieldsNameMap.get(newObject.getClass().getSimpleName()))
+						.indexOf(fieldName);
 				fieldValue = fieldsArray[indexFieldArray];
 			}
 		}
 		return fieldValue;
-	}
-
-	private Map<String, String[]> mapWithOneTitle(Map<String, String[]> titleMap, Object newObject) {
-		Map<String, String[]> oneTitle = new HashMap<>();
-
-		titleMap.forEach((className, titleArray) -> {
-			if (className.equals(newObject.getClass().getName())) {
-				oneTitle.put("title", titleArray);
-			}
-		});
-		return oneTitle;
 	}
 }
