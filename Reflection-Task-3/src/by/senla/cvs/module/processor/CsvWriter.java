@@ -9,14 +9,18 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import by.senla.cvs.module.annotations.CsvEntity;
 import by.senla.cvs.module.annotations.CsvProperty;
 import by.senla.cvs.module.enums.PropertyType;
 
 public class CsvWriter {
+	
+	private static final Logger LOGGER = Logger.getLogger(Parsing.class.getName());
 
-	public static void writeToCsv(List<Object> annObjects) throws IOException {
+	public void writeToCsv(List<Object> annObjects) throws IOException {
 
 		writeFieldName(annObjects);
 
@@ -34,6 +38,7 @@ public class CsvWriter {
 
 						wr.write(new StringBuilder().append(csvField).append(annClass.valuesSeparator()).toString());
 					} catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+						LOGGER.log(Level.SEVERE, "Exception", e);
 						throw new RuntimeException(e);
 					}
 				});
@@ -42,7 +47,7 @@ public class CsvWriter {
 		}
 	}
 
-	private static void writeFieldName(List<Object> annObjects) throws IOException {
+	private void writeFieldName(List<Object> annObjects) throws IOException {
 
 		for (Object someObject : annObjects) {
 
@@ -58,6 +63,7 @@ public class CsvWriter {
 							wr.write(new StringBuilder(field.getName()).append(annClass.valuesSeparator()).toString());
 						}
 					} catch (IOException e) {
+						LOGGER.log(Level.SEVERE, "Exception", e);
 						throw new RuntimeException(e);
 					}
 				});
@@ -66,7 +72,7 @@ public class CsvWriter {
 		}
 	}
 
-	private static Object defineTypeField(Object someObject, Field field, CsvProperty annField, List<Object> annObjects)
+	private Object defineTypeField(Object someObject, Field field, CsvProperty annField, List<Object> annObjects)
 			throws NoSuchFieldException, IllegalAccessException {
 
 		Object csvField;
@@ -90,7 +96,7 @@ public class CsvWriter {
 		return csvField;
 	}
 
-	private static Map<Integer, Field> findAnnFields(Object someObject) {
+	private Map<Integer, Field> findAnnFields(Object someObject) {
 		Field[] fields = someObject.getClass().getDeclaredFields();
 		Map<Integer, Field> annFieldsMap = new HashMap<Integer, Field>();
 

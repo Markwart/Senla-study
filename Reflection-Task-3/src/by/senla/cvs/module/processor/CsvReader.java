@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class CsvReader {
 
-	public static Map<String, List<String[]>> readFromCsv(File folder) throws FileNotFoundException, IOException {
+	public Map<String, List<String[]>> readFromCsv(File folder) throws FileNotFoundException, IOException {
 
 		Map<String, List<String[]>> strObjMap = new HashMap<String, List<String[]>>();
 
@@ -21,7 +21,7 @@ public class CsvReader {
 			File[] filesList = folder.listFiles();
 			for (File file : filesList) {
 
-				String key = file.getName().split(".csv", 2)[0];
+				String className = file.getName().split(".csv", 2)[0];
 				List<String[]> strList = new ArrayList<>();
 
 				try (BufferedReader br = new BufferedReader(new FileReader(file));) {
@@ -32,7 +32,7 @@ public class CsvReader {
 						strList.add(wordsArray);
 					}
 				}
-				strObjMap.put(key, strList);
+				strObjMap.put(className, strList);
 			}
 		}
 		return strObjMap;

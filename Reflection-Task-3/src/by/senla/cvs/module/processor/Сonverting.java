@@ -1,6 +1,11 @@
 package by.senla.cvs.module.processor;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Сonverting {
+	
+	private static final Logger LOGGER = Logger.getLogger(Parsing.class.getName());
 
 	public static Object convertField(String fieldType, String fieldValue) {
 		Object convertedValue;
@@ -38,6 +43,7 @@ public class Сonverting {
 				break;
 			}
 		} catch (IllegalArgumentException e) {
+			LOGGER.log(Level.SEVERE, "Exception", e);
 			throw new RuntimeException(e);
 		}
 		return convertedValue;

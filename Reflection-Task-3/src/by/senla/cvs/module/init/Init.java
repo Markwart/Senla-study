@@ -2,6 +2,7 @@ package by.senla.cvs.module.init;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,12 +51,26 @@ public class Init {
 		}
 
 		File folder = new File("./data/");
-		CsvWriter.writeToCsv(annObjects);
-		CsvWriter.writeToCsv(Parsing.parseToEntity(CsvReader.readFromCsv(folder)));
+		CsvWriter writer = new CsvWriter();
+		CsvReader reader = new CsvReader();
+		Parsing parsing = new Parsing();
 
-		System.out.println();
-		System.out.println("start");
+		writer.writeToCsv(annObjects);
+		List<Object> good = parsing.parseToEntity(reader.readFromCsv(folder));
 
+		System.out.println(good.size());
+		for (Object object : good) {
+			String fieldName = null;
+			Object fieldValue = null;
+
+			Field[] fields = object.getClass().getDeclaredFields();
+			for (Field field : fields) {
+				field.setAccessible(true);
+				fieldName = field.getName();
+				fieldValue = field.get(object);
+				System.out.println(object.getClass().getSimpleName() + " " + fieldName + ";" + fieldValue);
+			}
+		}
 	}
 
 	private static void createFolder() {
