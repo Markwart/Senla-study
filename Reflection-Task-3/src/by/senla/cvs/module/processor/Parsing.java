@@ -17,9 +17,10 @@ public class Parsing {
 
 	private static final Logger LOGGER = Logger.getLogger(Parsing.class.getName());
 
-	public List<Object> parseToEntity(Map<String, List<String[]>> strObjectsMap) {
+	public List<Object> parseToEntity(Map<String, List<String[]>> strObjectsMap, String requiredClassName) {
 
 		List<Object> newObjectsList = new ArrayList<>();
+		List<Object> relatedbjectsList = new ArrayList<>();
 		Map<String, String[]> fieldsNameMap = createFieldsMap(strObjectsMap);
 		Map<String, String> classNameMap = createClassNameMap(strObjectsMap);
 
@@ -27,14 +28,13 @@ public class Parsing {
 			for (String[] fieldsArray : strList) {
 				try {
 					Object someObject = createObject(classNameMap, className, fieldsNameMap, fieldsArray, strObjectsMap,
-							newObjectsList);
+							relatedbjectsList);
 
-					someObject = checkExistenceObj(newObjectsList, someObject);
-					if (!isExistObj(newObjectsList, someObject)) {
+					if (className.equals(requiredClassName)) {
 						newObjectsList.add(someObject);
 					}
 				} catch (ClassNotFoundException | IllegalArgumentException | InstantiationException
-						| IllegalAccessException | NoSuchFieldException e) {
+						| IllegalAccessException e) {
 					LOGGER.log(Level.SEVERE, "Exception", e);
 					throw new RuntimeException(e);
 				}
@@ -64,7 +64,7 @@ public class Parsing {
 	}
 
 	private Object createObject(Map<String, String> classNameMap, String className, Map<String, String[]> fieldsNameMap,
-			String[] fieldsArray, Map<String, List<String[]>> strObjectsMap, List<Object> newObjectsList)
+			String[] fieldsArray, Map<String, List<String[]>> strObjectsMap, List<Object> relatedbjectsList)
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 
 		Class<?> someObject = Class.forName(classNameMap.get(className));
@@ -76,7 +76,7 @@ public class Parsing {
 			CsvProperty annotatedField = field.getAnnotation(CsvProperty.class);
 			if (field.isAnnotationPresent(CsvProperty.class)) {
 				setFieldValue(classNameMap, field, newObject, fieldsNameMap, fieldsArray, annotatedField, strObjectsMap,
-						newObjectsList);
+						relatedbjectsList);
 			}
 		}
 		return newObject;
@@ -95,11 +95,7 @@ public class Parsing {
 				someObjectField.setAccessible(true);
 				objectField.setAccessible(true);
 
-				if (someObjectField.get(someObject).equals(objectField.get(object))) {
-					existence = true;
-				} else {
-					existence = false;
-				}
+				existence = (someObjectField.get(someObject).equals(objectField.get(object))) ? true : false;
 			}
 		}
 		return existence;
@@ -127,26 +123,23 @@ public class Parsing {
 
 	private void setFieldValue(Map<String, String> classNameMap, Field field, Object newObject,
 			Map<String, String[]> fieldsNameMap, String[] fieldsArray, CsvProperty annotatedField,
-			Map<String, List<String[]>> strObjectsMap, List<Object> newObjectsList)
+			Map<String, List<String[]>> strObjectsMap, List<Object> relatedbjectsList)
 			throws IllegalArgumentException, IllegalAccessException {
 
 		String fieldType = field.getType().getSimpleName();
 		String fieldValue = defineValueField(field, fieldsArray, fieldsNameMap, newObject);
 
-		if (annotatedField.propertyType() == PropertyType.CompositeProperty) {
+		if (annotatedField.propertyType() == PropertyType.COMPOSITE) {
 			setObjectField(classNameMap, field, fieldValue, newObject, annotatedField, fieldsArray, strObjectsMap,
-					fieldsNameMap, newObjectsList);
+					fieldsNameMap, relatedbjectsList);
 		} else {
-			Object convertedField = (fieldType.substring(0, 1).matches("[A-Z]"))
-					? Сonverting.convertWrapperField(fieldType, fieldValue)
-					: Сonverting.convertPrimitiveField(fieldType, fieldValue);
-			field.set(newObject, convertedField);
+			field.set(newObject, Сonverting.convertField(fieldType, fieldValue));
 		}
 	}
 
 	private void setObjectField(Map<String, String> classNameMap, Field field, String fieldValue, Object newObject,
 			CsvProperty annotatedField, String[] fieldsArray, Map<String, List<String[]>> strObjectsMap,
-			Map<String, String[]> fieldsNameMap, List<Object> newObjectsList) {
+			Map<String, String[]> fieldsNameMap, List<Object> relatedbjectsList) {
 
 		String className = fieldValue.split("::", 2)[0];
 		String keyField = fieldValue.split("::", 2)[1];
@@ -159,12 +152,12 @@ public class Parsing {
 				if (key.contains(className) & Arrays.asList(array).get(indexArray).equals(keyField)) {
 					try {
 						Object relatedObject = createObject(classNameMap, key, fieldsNameMap, array, strObjectsMap,
-								newObjectsList);
+								relatedbjectsList);
 
-						relatedObject = checkExistenceObj(newObjectsList, relatedObject);
+						relatedObject = checkExistenceObj(relatedbjectsList, relatedObject);
 						field.set(newObject, relatedObject);
-						if (!isExistObj(newObjectsList, relatedObject)) {
-							newObjectsList.add(relatedObject);
+						if (!isExistObj(relatedbjectsList, relatedObject)) {
+							relatedbjectsList.add(relatedObject);
 						}
 					} catch (ClassNotFoundException | IllegalAccessException | InstantiationException
 							| NoSuchFieldException e) {

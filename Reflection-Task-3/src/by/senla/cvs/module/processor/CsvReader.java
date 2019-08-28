@@ -12,12 +12,13 @@ import java.util.Map;
 
 public class CsvReader {
 
-	public Map<String, List<String[]>> readFromCsv(File folder) throws FileNotFoundException, IOException {
+	public List<Object> readFromCsv(File folder, Class<?> someClass) throws FileNotFoundException, IOException {
+		
+		Parsing parsing = new Parsing();
 
 		Map<String, List<String[]>> strObjectsMap = new HashMap<String, List<String[]>>();
 
 		if (folder.exists()) {
-
 			File[] filesList = folder.listFiles();
 			for (File file : filesList) {
 
@@ -35,6 +36,6 @@ public class CsvReader {
 				strObjectsMap.put(className, strObjectsList);
 			}
 		}
-		return strObjectsMap;
+		return parsing.parseToEntity(strObjectsMap, someClass.getSimpleName());
 	}
 }

@@ -1,18 +1,16 @@
 package by.senla.cvs.module.processor;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +21,7 @@ import by.senla.cvs.module.enums.PropertyType;
 public class CsvWriter {
 
 	private static final Logger LOGGER = Logger.getLogger(CsvWriter.class.getName());
-	private static final String PATH_TO_PROPERTIES = "resources/config.properties";
+	private static final String PATH_TO_FILES = "./data/";
 
 	public void writeToCsv(List<Object> annotatedObjects) throws IOException {
 
@@ -34,7 +32,7 @@ public class CsvWriter {
 			CsvEntity annClass = someObject.getClass().getAnnotation(CsvEntity.class);
 			Map<Integer, Field> annFieldsMap = findAnnFields(someObject);
 
-			try (BufferedWriter wr = new BufferedWriter(new FileWriter(getPath() + annClass.fileName(), true));) {
+			try (BufferedWriter wr = new BufferedWriter(new FileWriter(PATH_TO_FILES + annClass.fileName(), true));) {
 
 				annFieldsMap.forEach((key, field) -> {
 					try {
@@ -53,21 +51,12 @@ public class CsvWriter {
 		writeClassName(annotatedObjects);
 	}
 
-	private String getPath() throws IOException, FileNotFoundException {
-		String path;
-		try (BufferedReader br = new BufferedReader(new FileReader(PATH_TO_PROPERTIES));) {
-			Properties property = new Properties();
-			property.load(br);
-			path = property.getProperty("file_folder");
-		}
-		return path;
-	}
-
 	private void writeClassName(List<Object> annObjects) throws IOException, FileNotFoundException {
 		for (Object someObject : annObjects) {
 			CsvEntity annotatedClass = someObject.getClass().getAnnotation(CsvEntity.class);
-			try (BufferedWriter wr = new BufferedWriter(new FileWriter(getPath() + annotatedClass.fileName(), true));) {
-				List<String> lines = Files.readAllLines(Paths.get(getPath() + annotatedClass.fileName()));
+			try (BufferedWriter wr = new BufferedWriter(
+					new FileWriter(PATH_TO_FILES + annotatedClass.fileName(), true));) {
+				List<String> lines = Files.readAllLines(Paths.get(PATH_TO_FILES + annotatedClass.fileName()));
 				if (!lines.contains(someObject.getClass().getName())) {
 					wr.write(someObject.getClass().getName());
 				}
@@ -83,11 +72,11 @@ public class CsvWriter {
 			Map<Integer, Field> annotatedFieldsMap = findAnnFields(someObject);
 
 			try (BufferedWriter wr = new BufferedWriter(
-					new FileWriter(getPath() + annotatedClass.fileName(), false));) {
+					new FileWriter(PATH_TO_FILES + annotatedClass.fileName(), false));) {
 
 				annotatedFieldsMap.forEach((key, field) -> {
 					try {
-						List<String> lines = Files.readAllLines(Paths.get(getPath() + annotatedClass.fileName()));
+						List<String> lines = Files.readAllLines(Paths.get(PATH_TO_FILES + annotatedClass.fileName()));
 
 						if (!lines.contains(field.getName())) {
 							wr.write(new StringBuilder(field.getName()).append(annotatedClass.valuesSeparator())
@@ -104,15 +93,19 @@ public class CsvWriter {
 	}
 
 	private Object defineTypeField(Object someObject, Field field, CsvProperty annotatedField,
-			List<Object> annotatedObjects) throws NoSuchFieldException, IllegalAccessException {
+			List<Object> annotatedObjects) throws NoSuchFieldException, IllegalAccessException, IOException {
 
 		Object csvField;
 
-		if (annotatedField.propertyType() == PropertyType.CompositeProperty) {
+		if (annotatedField.propertyType() == PropertyType.COMPOSITE) {
 			Object compositeField = field.get(someObject);
 			String keyFieldValue = null;
 
-			for (Object relatedObject : annotatedObjects) {
+			List<Object> relatedObjectsList = new ArrayList<>();
+			relatedObjectsList.add(compositeField);
+			writeToCsv(relatedObjectsList);
+
+			for (Object relatedObject : relatedObjectsList) {
 				if (relatedObject.equals(compositeField)) {
 					Field relatedObjectField = relatedObject.getClass().getDeclaredField(annotatedField.keyField());
 					relatedObjectField.setAccessible(true);
