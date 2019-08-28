@@ -18,24 +18,31 @@ public class Init {
 
 		createFolder();
 
-		ClassTwo classTwo = new ClassTwo();
-		classTwo.setId(3);
-		classTwo.setName("Good name");
-		classTwo.setNumber(34);
-		classTwo.setCharacter('g');
-		classTwo.setFl(11.6F);
+		ClassTwo classTwo1 = new ClassTwo();
+		classTwo1.setId(3);
+		classTwo1.setName("Good name");
+		classTwo1.setNumber(34);
+		classTwo1.setCharacter('g');
+		classTwo1.setFl(11.6F);
+		
+		ClassTwo classTwo2 = new ClassTwo();
+		classTwo2.setId(5);
+		classTwo2.setName("Bad name");
+		classTwo2.setNumber(6578);
+		classTwo2.setCharacter('u');
+		classTwo2.setFl(15.3F);
 
 		ClassOne classOne1 = new ClassOne();
 		classOne1.setSomeField("Value1");
 		classOne1.setSomeInt(51557);
 		classOne1.setId(5);
-		classOne1.setSomeObject(classTwo);
+		classOne1.setSomeObject(classTwo1);
 
 		ClassOne classOne2 = new ClassOne();
 		classOne2.setSomeField("Value2");
 		classOne2.setSomeInt(48456);
 		classOne2.setId(88);
-		classOne2.setSomeObject(classTwo);
+		classOne2.setSomeObject(classTwo2);
 
 		ClassThree classThree = new ClassThree();
 

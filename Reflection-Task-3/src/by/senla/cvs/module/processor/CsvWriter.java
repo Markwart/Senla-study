@@ -26,6 +26,7 @@ public class CsvWriter {
 	public void writeToCsv(List<Object> annotatedObjects) throws IOException {
 
 		writeFieldName(annotatedObjects);
+		List<Object> relatedObjectsList = new ArrayList<>();
 
 		for (Object someObject : annotatedObjects) {
 
@@ -37,7 +38,8 @@ public class CsvWriter {
 				annFieldsMap.forEach((key, field) -> {
 					try {
 						CsvProperty annotatedField = field.getAnnotation(CsvProperty.class);
-						Object csvField = defineTypeField(someObject, field, annotatedField, annotatedObjects);
+						Object csvField = defineTypeField(someObject, field, annotatedField, annotatedObjects,
+								relatedObjectsList);
 
 						wr.write(new StringBuilder().append(csvField).append(annClass.valuesSeparator()).toString());
 					} catch (IOException | NoSuchFieldException | IllegalAccessException e) {
@@ -49,6 +51,10 @@ public class CsvWriter {
 			}
 		}
 		writeClassName(annotatedObjects);
+		
+		if (!(relatedObjectsList.size() == 0)) {
+			writeToCsv(relatedObjectsList);
+		}
 	}
 
 	private void writeClassName(List<Object> annObjects) throws IOException, FileNotFoundException {
@@ -93,7 +99,8 @@ public class CsvWriter {
 	}
 
 	private Object defineTypeField(Object someObject, Field field, CsvProperty annotatedField,
-			List<Object> annotatedObjects) throws NoSuchFieldException, IllegalAccessException, IOException {
+			List<Object> annotatedObjects, List<Object> relatedObjectsList)
+			throws NoSuchFieldException, IllegalAccessException, IOException {
 
 		Object csvField;
 
@@ -101,9 +108,9 @@ public class CsvWriter {
 			Object compositeField = field.get(someObject);
 			String keyFieldValue = null;
 
-			List<Object> relatedObjectsList = new ArrayList<>();
-			relatedObjectsList.add(compositeField);
-			writeToCsv(relatedObjectsList);
+			if (!relatedObjectsList.contains(compositeField)) {
+				relatedObjectsList.add(compositeField);
+			}
 
 			for (Object relatedObject : relatedObjectsList) {
 				if (relatedObject.equals(compositeField)) {
