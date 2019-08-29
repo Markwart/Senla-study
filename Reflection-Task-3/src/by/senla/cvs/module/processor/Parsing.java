@@ -29,7 +29,6 @@ public class Parsing {
 				try {
 					Object someObject = createObject(classNameMap, className, fieldsNameMap, fieldsArray, strObjectsMap,
 							relatedbjectsList);
-
 					if (className.equals(requiredClassName)) {
 						newObjectsList.add(someObject);
 					}
@@ -82,41 +81,26 @@ public class Parsing {
 		return newObject;
 	}
 
-	private boolean isExistObj(List<Object> newObjectsList, Object someObject)
-			throws IllegalAccessException, NoSuchFieldException {
-		boolean existence = false;
-
-		for (Object object : newObjectsList) {
-			CsvEntity annotatedClass = someObject.getClass().getAnnotation(CsvEntity.class);
-			if (someObject.getClass().getName().equals(object.getClass().getName())) {
-
-				Field someObjectField = someObject.getClass().getDeclaredField(annotatedClass.entityId());
-				Field objectField = object.getClass().getDeclaredField(annotatedClass.entityId());
-				someObjectField.setAccessible(true);
-				objectField.setAccessible(true);
-
-				existence = (someObjectField.get(someObject).equals(objectField.get(object))) ? true : false;
-			}
-		}
-		return existence;
-	}
-
-	private Object checkExistenceObj(List<Object> newObjectsList, Object someObject)
+	private Object checkExistenceObj(List<Object> relatedbjectsList, Object someObject)
 			throws IllegalAccessException, NoSuchFieldException {
 
-		for (Object object : newObjectsList) {
-			CsvEntity annClass = someObject.getClass().getAnnotation(CsvEntity.class);
-			if (someObject.getClass().getName().equals(object.getClass().getName())) {
+		if (!(relatedbjectsList.size() == 0)) {
+			for (Object object : relatedbjectsList) {
+				CsvEntity annClass = someObject.getClass().getAnnotation(CsvEntity.class);
+				if (someObject.getClass().getName().equals(object.getClass().getName())) {
 
-				Field someObjectField = someObject.getClass().getDeclaredField(annClass.entityId());
-				Field objectField = object.getClass().getDeclaredField(annClass.entityId());
-				someObjectField.setAccessible(true);
-				objectField.setAccessible(true);
+					Field someObjectField = someObject.getClass().getDeclaredField(annClass.entityId());
+					Field objectField = object.getClass().getDeclaredField(annClass.entityId());
+					someObjectField.setAccessible(true);
+					objectField.setAccessible(true);
 
-				if (someObjectField.get(someObject).equals(objectField.get(object))) {
-					someObject = object;
+					if (someObjectField.get(someObject).equals(objectField.get(object))) {
+						someObject = object;
+					}
 				}
 			}
+		} else {
+			relatedbjectsList.add(someObject);
 		}
 		return someObject;
 	}
@@ -156,9 +140,7 @@ public class Parsing {
 
 						relatedObject = checkExistenceObj(relatedbjectsList, relatedObject);
 						field.set(newObject, relatedObject);
-						if (!isExistObj(relatedbjectsList, relatedObject)) {
-							relatedbjectsList.add(relatedObject);
-						}
+						
 					} catch (ClassNotFoundException | IllegalAccessException | InstantiationException
 							| NoSuchFieldException e) {
 						LOGGER.log(Level.SEVERE, "Exception", e);
