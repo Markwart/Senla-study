@@ -11,8 +11,20 @@ import by.senla.study.project.service.IPrinterService;
 
 public class PrinterServiceImpl implements IPrinterService {
 
-	PrinterDaoImpl dao = new PrinterDaoImpl();
-	ProductDaoImpl daoProduct = new ProductDaoImpl();
+	private static PrinterServiceImpl instance;
+
+	private PrinterServiceImpl() {
+	}
+
+	public static PrinterServiceImpl getInstance() {
+		if (instance != null) {
+			instance = new PrinterServiceImpl();
+		}
+		return instance;
+	}
+
+	PrinterDaoImpl dao = PrinterDaoImpl.getInstance();
+	ProductDaoImpl daoProduct = ProductDaoImpl.getInstance();
 
 	@Override
 	public Printer createEntity() {

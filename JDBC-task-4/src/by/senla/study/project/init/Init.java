@@ -1,10 +1,16 @@
 package by.senla.study.project.init;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Scanner;
+
+import by.senla.study.project.dao.jdbc.impl.util.ConnectionManager;
 
 public class Init {
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args)
+			throws InterruptedException, FileNotFoundException, SQLException, IOException {
 
 		Scanner scanner = new Scanner(System.in);
 
@@ -12,6 +18,7 @@ public class Init {
 
 		Common.chooseOperation(scanner);
 
+		ConnectionManager.closeConnection();
 		scanner.close();
 	}
 

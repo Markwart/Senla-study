@@ -15,6 +15,17 @@ import by.senla.study.project.dao.jdbc.impl.parser.LaptopParser;
 public class LaptopDaoImpl extends AbstractDaoImpl<Laptop, Integer> implements ILaptopDao {
 
 	private static final Logger LOGGER = Logger.getLogger(LaptopDaoImpl.class.getName());
+	private static LaptopDaoImpl instance;
+
+	private LaptopDaoImpl() {
+	}
+
+	public static LaptopDaoImpl getInstance() {
+		if (instance != null) {
+			instance = new LaptopDaoImpl();
+		}
+		return instance;
+	}
 
 	@Override
 	public void update(Laptop entity) {

@@ -52,4 +52,8 @@ public class ConnectionManager {
 		}
 		return connection;
 	}
+
+	public static void closeConnection() throws FileNotFoundException, SQLException, IOException {
+		getInstance().getConnection().close();
+	}
 }

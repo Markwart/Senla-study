@@ -12,8 +12,20 @@ import by.senla.study.project.service.ILaptopService;
 
 public class LaptopServiceImpl implements ILaptopService {
 
-	LaptopDaoImpl dao = new LaptopDaoImpl();
-	ProductDaoImpl daoProduct = new ProductDaoImpl();
+	private static LaptopServiceImpl instance;
+
+	private LaptopServiceImpl() {
+	}
+
+	public static LaptopServiceImpl getInstance() {
+		if (instance != null) {
+			instance = new LaptopServiceImpl();
+		}
+		return instance;
+	}
+
+	LaptopDaoImpl dao = LaptopDaoImpl.getInstance();
+	ProductDaoImpl daoProduct = ProductDaoImpl.getInstance();
 
 	@Override
 	public Laptop createEntity() {

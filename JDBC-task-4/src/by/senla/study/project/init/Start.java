@@ -19,7 +19,7 @@ public class Start {
 	public static void main(String[] args)
 			throws ClassNotFoundException, SQLException, FileNotFoundException, IOException {
 
-		ProductServiceImpl daoProduct = new ProductServiceImpl();
+		ProductServiceImpl daoProduct = ProductServiceImpl.getInstance();
 
 		Product entity1 = daoProduct.get("L-A2");
 		System.out.println(entity1.getMaker() + " " + entity1.getModel() + " " + entity1.getType());
@@ -39,7 +39,7 @@ public class Start {
 		List<Product> entityList = daoProduct.getAll();
 		System.out.println(entityList.size());
 		
-		PrinterServiceImpl daoPrinter = new PrinterServiceImpl();
+		PrinterServiceImpl daoPrinter = PrinterServiceImpl.getInstance();
 		
 		/*Map<String, String> dataPrinter = new HashMap<String, String>();
 		dataPrinter.put("model", "PR-S2");
@@ -56,7 +56,7 @@ public class Start {
 		daoPrinter.update(dataPrinter, 2);
 		System.out.println(printer.getModel().getModel() + " " + printer.getType() + " " + printer.getPrice() + " " + printer.getColor() + " " + printer.getId());
 		
-		LaptopDaoImpl daoLaptop = new LaptopDaoImpl();
+		LaptopDaoImpl daoLaptop = LaptopDaoImpl.getInstance();
 		
 		List<Laptop> laptopList = daoLaptop.selectAll();
 		System.out.println(laptopList.size());

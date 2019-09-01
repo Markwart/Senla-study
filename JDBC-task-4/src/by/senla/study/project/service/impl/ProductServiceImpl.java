@@ -9,7 +9,19 @@ import by.senla.study.project.service.IProductService;
 
 public class ProductServiceImpl implements IProductService {
 
-	ProductDaoImpl dao = new ProductDaoImpl();
+	private static ProductServiceImpl instance;
+
+	private ProductServiceImpl() {
+	}
+
+	public static ProductServiceImpl getInstance() {
+		if (instance != null) {
+			instance = new ProductServiceImpl();
+		}
+		return instance;
+	}
+
+	ProductDaoImpl dao = ProductDaoImpl.getInstance();
 
 	@Override
 	public Product createEntity() {
@@ -35,6 +47,9 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public void save(Map<String, String> data) {
+		
+		System.out.println("SAVE");
+		
 		Product product = createEntity();
 		product.setMaker(data.get("maker"));
 		product.setType(data.get("type"));

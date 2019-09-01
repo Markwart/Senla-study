@@ -15,6 +15,17 @@ import by.senla.study.project.dao.jdbc.impl.parser.PrinterParcer;
 public class PrinterDaoImpl extends AbstractDaoImpl<Printer, Integer> implements IPrinterDao {
 
 	private static final Logger LOGGER = Logger.getLogger(PrinterDaoImpl.class.getName());
+	private static PrinterDaoImpl instance;
+
+	private PrinterDaoImpl() {
+	}
+
+	public static PrinterDaoImpl getInstance() {
+		if (instance != null) {
+			instance = new PrinterDaoImpl();
+		}
+		return instance;
+	}
 
 	@Override
 	public void update(Printer entity) {

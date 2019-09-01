@@ -15,6 +15,17 @@ import by.senla.study.project.dao.jdbc.impl.parser.PCParcer;
 public class PCDaoImpl extends AbstractDaoImpl<PC, Integer> implements IPCDao {
 
 	private static final Logger LOGGER = Logger.getLogger(PCDaoImpl.class.getName());
+	private static PCDaoImpl instance;
+
+	private PCDaoImpl() {
+	}
+
+	public static PCDaoImpl getInstance() {
+		if (instance != null) {
+			instance = new PCDaoImpl();
+		}
+		return instance;
+	}
 
 	@Override
 	public void update(PC entity) {

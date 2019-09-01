@@ -15,6 +15,17 @@ import by.senla.study.project.dao.jdbc.impl.parser.ProductParcer;
 public class ProductDaoImpl extends AbstractDaoImpl<Product, String> implements IProductDao {
 
 	private static final Logger LOGGER = Logger.getLogger(ProductDaoImpl.class.getName());
+	private static ProductDaoImpl instance;
+
+	private ProductDaoImpl() {
+	}
+
+	public static ProductDaoImpl getInstance() {
+		if (instance != null) {
+			instance = new ProductDaoImpl();
+		}
+		return instance;
+	}
 
 	@Override
 	public void update(Product entity) {

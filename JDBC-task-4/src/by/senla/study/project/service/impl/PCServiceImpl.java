@@ -12,8 +12,20 @@ import by.senla.study.project.service.IPCService;
 
 public class PCServiceImpl implements IPCService {
 
-	PCDaoImpl dao = new PCDaoImpl();
-	ProductDaoImpl daoProduct = new ProductDaoImpl();
+	private static PCServiceImpl instance;
+
+	private PCServiceImpl() {
+	}
+
+	public static PCServiceImpl getInstance() {
+		if (instance != null) {
+			instance = new PCServiceImpl();
+		}
+		return instance;
+	}
+
+	PCDaoImpl dao = PCDaoImpl.getInstance();
+	ProductDaoImpl daoProduct = ProductDaoImpl.getInstance();
 
 	@Override
 	public PC createEntity() {

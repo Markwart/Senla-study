@@ -1,10 +1,14 @@
 package by.senla.study.project.init;
 
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class Common {
 
+	private static final Logger LOGGER = Logger.getLogger(Common.class.getName());
+
 	public static void chooseOperation(Scanner scanner) {
+
 		System.out.println("What operation do you want to perform? \n");
 		StringBuilder options = new StringBuilder("1. Insert record to database \n")
 				.append("2. Delete record from database \n").append("3. Update record in database \n")
@@ -37,6 +41,7 @@ public class Common {
 				break;
 			case 7:
 				System.out.println("Goodbye!");
+				break;
 			default:
 				System.out.println("Incorrectly entered operation number! Try again.\n");
 				chooseOperation(scanner);
@@ -79,6 +84,7 @@ public class Common {
 				break;
 			case 4:
 				PrinterOperation.enterPrinterData(scanner);
+				break;
 			default:
 				System.out.println("Incorrectly entered table number! Try again.\n");
 				chooseTable(scanner);
@@ -105,6 +111,7 @@ public class Common {
 				break;
 			case 4:
 				PrinterOperation.deletePrinterRecord(scanner);
+				break;
 			default:
 				System.out.println("Incorrectly entered table number! Try again.\n");
 				chooseTable(scanner);
@@ -115,7 +122,7 @@ public class Common {
 			chooseTable(scanner);
 		}
 	}
-	
+
 	private static void updateRecord(Scanner scanner) {
 		int tableNumber = chooseTable(scanner);
 		try {
@@ -131,6 +138,7 @@ public class Common {
 				break;
 			case 4:
 				PrinterOperation.updatePrinterRecord(scanner);
+				break;
 			default:
 				System.out.println("Incorrectly entered table number! Try again.\n");
 				chooseTable(scanner);
@@ -157,6 +165,7 @@ public class Common {
 				break;
 			case 4:
 				PrinterOperation.getPrinterRecord(scanner);
+				break;
 			default:
 				System.out.println("Incorrectly entered table number! Try again.\n");
 				chooseTable(scanner);
@@ -167,7 +176,7 @@ public class Common {
 			chooseTable(scanner);
 		}
 	}
-	
+
 	private static void getRecordList(Scanner scanner) {
 		int tableNumber = chooseTable(scanner);
 		try {
@@ -183,6 +192,7 @@ public class Common {
 				break;
 			case 4:
 				PrinterOperation.getPrinterRecordList(scanner);
+				break;
 			default:
 				System.out.println("Incorrectly entered table number! Try again.\n");
 				chooseTable(scanner);
