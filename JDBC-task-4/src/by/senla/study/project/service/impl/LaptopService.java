@@ -1,31 +1,32 @@
 package by.senla.study.project.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import by.senla.study.project.dao.jdbc.impl.LaptopDaoImpl;
-import by.senla.study.project.dao.jdbc.impl.ProductDaoImpl;
+import by.senla.study.project.dao.ILaptopDao;
+import by.senla.study.project.dao.IProductDao;
+import by.senla.study.project.dao.jdbc.impl.LaptopDao;
+import by.senla.study.project.dao.jdbc.impl.ProductDao;
 import by.senla.study.project.dao.jdbc.impl.entity.Laptop;
 import by.senla.study.project.service.ILaptopService;
 
-public class LaptopServiceImpl implements ILaptopService {
+public class LaptopService implements ILaptopService {
 
-	private static LaptopServiceImpl instance;
+	private ILaptopDao dao = LaptopDao.getInstance();
+	private IProductDao daoProduct = ProductDao.getInstance();
+	
+	private static LaptopService instance;
 
-	private LaptopServiceImpl() {
+	private LaptopService() {
 	}
 
-	public static LaptopServiceImpl getInstance() {
-		if (instance != null) {
-			instance = new LaptopServiceImpl();
+	public static LaptopService getInstance() {
+		if (instance == null) {
+			instance = new LaptopService();
 		}
 		return instance;
 	}
-
-	LaptopDaoImpl dao = LaptopDaoImpl.getInstance();
-	ProductDaoImpl daoProduct = ProductDaoImpl.getInstance();
 
 	@Override
 	public Laptop createEntity() {
@@ -40,7 +41,7 @@ public class LaptopServiceImpl implements ILaptopService {
 
 	@Override
 	public List<Laptop> getAll() {
-		List<Laptop> all = new ArrayList<>();
+		List<Laptop> all = dao.selectAll();
 		return all;
 	}
 

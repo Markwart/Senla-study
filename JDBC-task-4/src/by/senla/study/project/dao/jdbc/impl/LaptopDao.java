@@ -12,17 +12,17 @@ import by.senla.study.project.dao.ILaptopDao;
 import by.senla.study.project.dao.jdbc.impl.entity.Laptop;
 import by.senla.study.project.dao.jdbc.impl.parser.LaptopParser;
 
-public class LaptopDaoImpl extends AbstractDaoImpl<Laptop, Integer> implements ILaptopDao {
+public class LaptopDao extends AbstractDao<Laptop, Integer> implements ILaptopDao {
 
-	private static final Logger LOGGER = Logger.getLogger(LaptopDaoImpl.class.getName());
-	private static LaptopDaoImpl instance;
+	private static final Logger LOGGER = Logger.getLogger(LaptopDao.class.getName());
+	private static LaptopDao instance;
 
-	private LaptopDaoImpl() {
+	private LaptopDao() {
 	}
 
-	public static LaptopDaoImpl getInstance() {
-		if (instance != null) {
-			instance = new LaptopDaoImpl();
+	public static LaptopDao getInstance() {
+		if (instance == null) {
+			instance = new LaptopDao();
 		}
 		return instance;
 	}

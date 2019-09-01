@@ -4,27 +4,29 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-import by.senla.study.project.dao.jdbc.impl.PrinterDaoImpl;
-import by.senla.study.project.dao.jdbc.impl.ProductDaoImpl;
+import by.senla.study.project.dao.IPrinterDao;
+import by.senla.study.project.dao.IProductDao;
+import by.senla.study.project.dao.jdbc.impl.PrinterDao;
+import by.senla.study.project.dao.jdbc.impl.ProductDao;
 import by.senla.study.project.dao.jdbc.impl.entity.Printer;
 import by.senla.study.project.service.IPrinterService;
 
-public class PrinterServiceImpl implements IPrinterService {
+public class PrinterService implements IPrinterService {
 
-	private static PrinterServiceImpl instance;
+	private IPrinterDao dao = PrinterDao.getInstance();
+	private IProductDao daoProduct = ProductDao.getInstance();
+	
+	private static PrinterService instance;
 
-	private PrinterServiceImpl() {
+	private PrinterService() {
 	}
 
-	public static PrinterServiceImpl getInstance() {
-		if (instance != null) {
-			instance = new PrinterServiceImpl();
+	public static PrinterService getInstance() {
+		if (instance == null) {
+			instance = new PrinterService();
 		}
 		return instance;
 	}
-
-	PrinterDaoImpl dao = PrinterDaoImpl.getInstance();
-	ProductDaoImpl daoProduct = ProductDaoImpl.getInstance();
 
 	@Override
 	public Printer createEntity() {

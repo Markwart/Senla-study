@@ -8,12 +8,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import by.senla.study.project.dao.jdbc.impl.entity.PC;
-import by.senla.study.project.service.impl.PCServiceImpl;
+import by.senla.study.project.service.IPCService;
+import by.senla.study.project.service.impl.PCService;
 
 public class PCOperation {
 
 	private static final Logger LOGGER = Logger.getLogger(PCOperation.class.getName());
-	static PCServiceImpl service = PCServiceImpl.getInstance();
+	private static IPCService service = PCService.getInstance();
 
 	public static void deletePCRecord(Scanner scanner) {
 		System.out.println("Enter \"pk\"(id) \n");

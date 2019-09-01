@@ -11,11 +11,11 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import by.senla.study.project.dao.jdbc.impl.AbstractDaoImpl;
+import by.senla.study.project.dao.jdbc.impl.AbstractDao;
 
 public class ConnectionManager {
 
-	private static final Logger LOGGER = Logger.getLogger(AbstractDaoImpl.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(AbstractDao.class.getName());
 	private static final String PATH_TO_PROPERTIES = "resources/jdbc.properties";
 
 	private Connection connection;

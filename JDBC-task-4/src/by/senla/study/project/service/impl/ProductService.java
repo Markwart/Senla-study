@@ -3,25 +3,26 @@ package by.senla.study.project.service.impl;
 import java.util.List;
 import java.util.Map;
 
-import by.senla.study.project.dao.jdbc.impl.ProductDaoImpl;
+import by.senla.study.project.dao.IProductDao;
+import by.senla.study.project.dao.jdbc.impl.ProductDao;
 import by.senla.study.project.dao.jdbc.impl.entity.Product;
 import by.senla.study.project.service.IProductService;
 
-public class ProductServiceImpl implements IProductService {
+public class ProductService implements IProductService {
 
-	private static ProductServiceImpl instance;
+	private IProductDao dao = ProductDao.getInstance();
+	
+	private static ProductService instance;
 
-	private ProductServiceImpl() {
+	private ProductService() {
 	}
 
-	public static ProductServiceImpl getInstance() {
-		if (instance != null) {
-			instance = new ProductServiceImpl();
+	public static ProductService getInstance() {
+		if (instance == null) {
+			instance = new ProductService();
 		}
 		return instance;
 	}
-
-	ProductDaoImpl dao = ProductDaoImpl.getInstance();
 
 	@Override
 	public Product createEntity() {
@@ -47,9 +48,6 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public void save(Map<String, String> data) {
-		
-		System.out.println("SAVE");
-		
 		Product product = createEntity();
 		product.setMaker(data.get("maker"));
 		product.setType(data.get("type"));

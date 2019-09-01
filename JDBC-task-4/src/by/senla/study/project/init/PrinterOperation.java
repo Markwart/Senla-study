@@ -8,12 +8,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import by.senla.study.project.dao.jdbc.impl.entity.Printer;
-import by.senla.study.project.service.impl.PrinterServiceImpl;
+import by.senla.study.project.service.IPrinterService;
+import by.senla.study.project.service.impl.PrinterService;
 
 public class PrinterOperation {
 
 	private static final Logger LOGGER = Logger.getLogger(PrinterOperation.class.getName());
-	static PrinterServiceImpl service = PrinterServiceImpl.getInstance();
+	private static IPrinterService service = PrinterService.getInstance();
 
 	public static void deletePrinterRecord(Scanner scanner) {
 		System.out.println("Enter \"pk\"(id) \n");

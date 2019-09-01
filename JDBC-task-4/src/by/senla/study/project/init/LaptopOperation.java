@@ -8,12 +8,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import by.senla.study.project.dao.jdbc.impl.entity.Laptop;
-import by.senla.study.project.service.impl.LaptopServiceImpl;
+import by.senla.study.project.service.ILaptopService;
+import by.senla.study.project.service.impl.LaptopService;
 
 public class LaptopOperation {
 
 	private static final Logger LOGGER = Logger.getLogger(LaptopOperation.class.getName());
-	static LaptopServiceImpl service = LaptopServiceImpl.getInstance();
+	private static ILaptopService service = LaptopService.getInstance();
 
 	public static void deleteLaptopRecord(Scanner scanner) {
 		System.out.println("Enter \"pk\"(id) \n");

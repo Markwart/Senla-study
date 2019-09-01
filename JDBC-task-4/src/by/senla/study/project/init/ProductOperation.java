@@ -8,12 +8,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import by.senla.study.project.dao.jdbc.impl.entity.Product;
-import by.senla.study.project.service.impl.ProductServiceImpl;
+import by.senla.study.project.service.IProductService;
+import by.senla.study.project.service.impl.ProductService;
 
 public class ProductOperation {
 
 	private static final Logger LOGGER = Logger.getLogger(ProductOperation.class.getName());
-	static ProductServiceImpl service = ProductServiceImpl.getInstance();
+	private static IProductService service = ProductService.getInstance();
 
 	public static void deleteProductRecord(Scanner scanner) {
 		System.out.println("Enter \"pk\"(model) \n");

@@ -12,17 +12,17 @@ import by.senla.study.project.dao.IPrinterDao;
 import by.senla.study.project.dao.jdbc.impl.entity.Printer;
 import by.senla.study.project.dao.jdbc.impl.parser.PrinterParcer;
 
-public class PrinterDaoImpl extends AbstractDaoImpl<Printer, Integer> implements IPrinterDao {
+public class PrinterDao extends AbstractDao<Printer, Integer> implements IPrinterDao {
 
-	private static final Logger LOGGER = Logger.getLogger(PrinterDaoImpl.class.getName());
-	private static PrinterDaoImpl instance;
+	private static final Logger LOGGER = Logger.getLogger(PrinterDao.class.getName());
+	private static PrinterDao instance;
 
-	private PrinterDaoImpl() {
+	private PrinterDao() {
 	}
 
-	public static PrinterDaoImpl getInstance() {
-		if (instance != null) {
-			instance = new PrinterDaoImpl();
+	public static PrinterDao getInstance() {
+		if (instance == null) {
+			instance = new PrinterDao();
 		}
 		return instance;
 	}

@@ -12,17 +12,17 @@ import by.senla.study.project.dao.IProductDao;
 import by.senla.study.project.dao.jdbc.impl.entity.Product;
 import by.senla.study.project.dao.jdbc.impl.parser.ProductParcer;
 
-public class ProductDaoImpl extends AbstractDaoImpl<Product, String> implements IProductDao {
+public class ProductDao extends AbstractDao<Product, String> implements IProductDao {
 
-	private static final Logger LOGGER = Logger.getLogger(ProductDaoImpl.class.getName());
-	private static ProductDaoImpl instance;
+	private static final Logger LOGGER = Logger.getLogger(ProductDao.class.getName());
+	private static ProductDao instance;
 
-	private ProductDaoImpl() {
+	private ProductDao() {
 	}
 
-	public static ProductDaoImpl getInstance() {
-		if (instance != null) {
-			instance = new ProductDaoImpl();
+	public static ProductDao getInstance() {
+		if (instance == null) {
+			instance = new ProductDao();
 		}
 		return instance;
 	}

@@ -12,17 +12,17 @@ import by.senla.study.project.dao.IPCDao;
 import by.senla.study.project.dao.jdbc.impl.entity.PC;
 import by.senla.study.project.dao.jdbc.impl.parser.PCParcer;
 
-public class PCDaoImpl extends AbstractDaoImpl<PC, Integer> implements IPCDao {
+public class PCDao extends AbstractDao<PC, Integer> implements IPCDao {
 
-	private static final Logger LOGGER = Logger.getLogger(PCDaoImpl.class.getName());
-	private static PCDaoImpl instance;
+	private static final Logger LOGGER = Logger.getLogger(PCDao.class.getName());
+	private static PCDao instance;
 
-	private PCDaoImpl() {
+	private PCDao() {
 	}
 
-	public static PCDaoImpl getInstance() {
-		if (instance != null) {
-			instance = new PCDaoImpl();
+	public static PCDao getInstance() {
+		if (instance == null) {
+			instance = new PCDao();
 		}
 		return instance;
 	}

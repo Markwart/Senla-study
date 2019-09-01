@@ -1,31 +1,32 @@
 package by.senla.study.project.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import by.senla.study.project.dao.jdbc.impl.PCDaoImpl;
-import by.senla.study.project.dao.jdbc.impl.ProductDaoImpl;
+import by.senla.study.project.dao.IPCDao;
+import by.senla.study.project.dao.IProductDao;
+import by.senla.study.project.dao.jdbc.impl.PCDao;
+import by.senla.study.project.dao.jdbc.impl.ProductDao;
 import by.senla.study.project.dao.jdbc.impl.entity.PC;
 import by.senla.study.project.service.IPCService;
 
-public class PCServiceImpl implements IPCService {
+public class PCService implements IPCService {
 
-	private static PCServiceImpl instance;
+	private IPCDao dao = PCDao.getInstance();
+	private IProductDao daoProduct = ProductDao.getInstance();
+	
+	private static PCService instance;
 
-	private PCServiceImpl() {
+	private PCService() {
 	}
 
-	public static PCServiceImpl getInstance() {
-		if (instance != null) {
-			instance = new PCServiceImpl();
+	public static PCService getInstance() {
+		if (instance == null) {
+			instance = new PCService();
 		}
 		return instance;
 	}
-
-	PCDaoImpl dao = PCDaoImpl.getInstance();
-	ProductDaoImpl daoProduct = ProductDaoImpl.getInstance();
 
 	@Override
 	public PC createEntity() {
@@ -40,7 +41,7 @@ public class PCServiceImpl implements IPCService {
 
 	@Override
 	public List<PC> getAll() {
-		List<PC> all = new ArrayList<>();
+		List<PC> all = dao.selectAll();
 		return all;
 	}
 

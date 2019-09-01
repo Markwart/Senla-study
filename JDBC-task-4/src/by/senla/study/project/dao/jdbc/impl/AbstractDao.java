@@ -14,9 +14,9 @@ import java.util.logging.Logger;
 import by.senla.study.project.dao.IDao;
 import by.senla.study.project.dao.jdbc.impl.util.ConnectionManager;
 
-public abstract class AbstractDaoImpl<T, PK> implements IDao<T, PK> {
+public abstract class AbstractDao<T, PK> implements IDao<T, PK> {
 
-	private static final Logger LOGGER = Logger.getLogger(AbstractDaoImpl.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(AbstractDao.class.getName());
 
 	protected Connection getConnection() throws SQLException, IOException {
 		return ConnectionManager.getInstance().getConnection();
