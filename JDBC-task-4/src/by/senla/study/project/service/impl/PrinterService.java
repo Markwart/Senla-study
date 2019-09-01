@@ -41,8 +41,8 @@ public class PrinterService implements IPrinterService {
 
 	@Override
 	public List<Printer> getAll() {
-		List<Printer> all = dao.selectAll();
-		return all;
+		List<Printer> printerList = dao.selectAll();
+		return printerList;
 	}
 
 	@Override

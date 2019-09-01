@@ -22,10 +22,11 @@ public class LaptopOperation {
 			int id = scanner.nextInt();
 			service.delete(id);
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered id number! Try again.\n");
 			LOGGER.log(Level.SEVERE, "Failed to delete record", e);
+			throw new RuntimeException(e);
 		} finally {
-			Common.chooseOperation(scanner);
+			System.out.println();
+			Common.continueQuestion(scanner);
 		}
 	}
 
@@ -35,16 +36,18 @@ public class LaptopOperation {
 			int id = scanner.nextInt();
 			Laptop entity = service.get(id);
 
-			StringBuilder laptop = new StringBuilder().append(entity.getModel().getModel()).append(" ")
-					.append(entity.getHd()).append(" ").append(entity.getRam()).append(" ").append(entity.getSpeed())
-					.append(" ").append(entity.getScreen()).append(" ").append(entity.getPrice());
+			StringBuilder laptop = new StringBuilder("model=").append(entity.getModel().getModel()).append(" hd=")
+					.append(entity.getHd()).append(" ram=").append(entity.getRam()).append(" speed=")
+					.append(entity.getSpeed()).append(" screen=").append(entity.getScreen()).append(" price=")
+					.append(entity.getPrice());
 			System.out.println(laptop);
 
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered id number! Try again.\n");
 			LOGGER.log(Level.SEVERE, "Failed to get record", e);
+			throw new RuntimeException(e);
 		} finally {
-			Common.chooseOperation(scanner);
+			System.out.println();
+			Common.continueQuestion(scanner);
 		}
 	}
 
@@ -76,19 +79,32 @@ public class LaptopOperation {
 			service.save(data);
 
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered data! Try again.\n");
 			LOGGER.log(Level.SEVERE, "Failed to save data", e);
+			throw new RuntimeException(e);
 		} finally {
-			Common.chooseOperation(scanner);
+			System.out.println();
+			Common.continueQuestion(scanner);
 		}
 	}
 
 	public static void getLaptopRecordList(Scanner scanner) {
-		List<Laptop> laptopList = service.getAll();
+		try {
+			List<Laptop> laptopList = service.getAll();
+			for (Laptop entity : laptopList) {
+				StringBuilder laptop = new StringBuilder("model=").append(entity.getModel().getModel()).append(" hd=")
+						.append(entity.getHd()).append(" ram=").append(entity.getRam()).append(" speed=")
+						.append(entity.getSpeed()).append(" screen=").append(entity.getScreen()).append(" price=")
+						.append(entity.getPrice());
+				System.out.println(laptop);
+			}
 
-		System.out.println(laptopList.size());
-
-		Common.chooseOperation(scanner);
+		} catch (Exception e) {
+			LOGGER.log(Level.SEVERE, "Failed to get list", e);
+			throw new RuntimeException(e);
+		} finally {
+			System.out.println();
+			Common.continueQuestion(scanner);
+		}
 	}
 
 	public static void updateLaptopRecord(Scanner scanner) {
@@ -133,10 +149,11 @@ public class LaptopOperation {
 			service.update(data, id);
 
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered data or id! Try again.\n");
 			LOGGER.log(Level.SEVERE, "Failed to update record", e);
+			throw new RuntimeException(e);
 		} finally {
-			Common.chooseOperation(scanner);
+			System.out.println();
+			Common.continueQuestion(scanner);
 		}
 	}
 }

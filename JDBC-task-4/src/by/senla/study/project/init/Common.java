@@ -1,6 +1,7 @@
 package by.senla.study.project.init;
 
 import java.util.Scanner;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Common {
@@ -10,11 +11,11 @@ public class Common {
 	public static void chooseOperation(Scanner scanner) {
 
 		System.out.println("What operation do you want to perform? \n");
-		StringBuilder options = new StringBuilder("1. Insert record to database \n")
+		StringBuilder operations = new StringBuilder("1. Insert record to database \n")
 				.append("2. Delete record from database \n").append("3. Update record in database \n")
 				.append("4. Get record by \"pk\" from database \n").append("5. Get record list from database \n")
-				.append("6. Find records by some condition \n").append("7. Exit \n");
-		System.out.println(options);
+				.append("6. Find records with some condition \n").append("7. Exit \n");
+		System.out.println(operations);
 
 		int operationNumber = 0;
 		try {
@@ -37,7 +38,7 @@ public class Common {
 				getRecordList(scanner);
 				break;
 			case 6:
-				System.out.println(" ");
+				findRecordWithCondition(scanner);
 				break;
 			case 7:
 				System.out.println("Goodbye!");
@@ -48,8 +49,31 @@ public class Common {
 				break;
 			}
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered operation number! Try again.\n");
+			LOGGER.log(Level.SEVERE, "Incorrectly entered operation number!", e);
 			chooseOperation(scanner);
+		}
+	}
+
+	public static void continueQuestion(Scanner scanner) {
+		System.out.println("Do you want to continue?");
+		System.out.println("1. Yes / 2. No");
+		int choise = scanner.nextInt();
+		try {
+			switch (choise) {
+			case 1:
+				chooseOperation(scanner);
+				break;
+			case 2:
+				System.out.println("Goodbye!");
+				break;
+			default:
+				System.out.println("Incorrectly entered number! Try again.\n");
+				continueQuestion(scanner);
+				break;
+			}
+		} catch (Exception e) {
+			LOGGER.log(Level.SEVERE, "Incorrectly entered number!", e);
+			continueQuestion(scanner);
 		}
 	}
 
@@ -63,7 +87,7 @@ public class Common {
 		try {
 			tableNumber = scanner.nextInt();
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered table number! Try again.\n");
+			LOGGER.log(Level.SEVERE, "Incorrectly entered table number!", e);
 			chooseTable(scanner);
 		}
 		return tableNumber;
@@ -91,7 +115,7 @@ public class Common {
 				break;
 			}
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered table number! Try again.\n");
+			LOGGER.log(Level.SEVERE, "Incorrectly entered table number!", e);
 			chooseTable(scanner);
 		}
 	}
@@ -118,7 +142,7 @@ public class Common {
 				break;
 			}
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered table number! Try again.\n");
+			LOGGER.log(Level.SEVERE, "Incorrectly entered table number!", e);
 			chooseTable(scanner);
 		}
 	}
@@ -145,7 +169,7 @@ public class Common {
 				break;
 			}
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered table number! Try again.\n");
+			LOGGER.log(Level.SEVERE, "Incorrectly entered table number!", e);
 			chooseTable(scanner);
 		}
 	}
@@ -172,7 +196,7 @@ public class Common {
 				break;
 			}
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered table number! Try again.\n");
+			LOGGER.log(Level.SEVERE, "Incorrectly entered table number!", e);
 			chooseTable(scanner);
 		}
 	}
@@ -199,8 +223,43 @@ public class Common {
 				break;
 			}
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered table number! Try again.\n");
+			LOGGER.log(Level.SEVERE, "Incorrectly entered table number!", e);
 			chooseTable(scanner);
+		}
+	}
+
+	private static void findRecordWithCondition(Scanner scanner) {
+		StringBuilder operations = new StringBuilder("1. Find all PC worth less than 500 \n").append(
+				"2. Find makers that would produce both PC with a speed not less than 750 MHz and notebooks with a speed not less than than 750 MHz. \n")
+				.append("3. For each speed value, find the average cost of a PC with the same processor speed \n")
+				.append("4. Find printer makers \n");
+		System.out.println(operations);
+		int operationNumber = scanner.nextInt();
+		try {
+			switch (operationNumber) {
+			case 1:
+				WithConditionOperation.findPCWithCost();
+				break;
+			case 2:
+				WithConditionOperation.findPCAndLaptopMakers();
+				break;
+			case 3:
+				WithConditionOperation.findAverageCostPc();
+				break;
+			case 4:
+				WithConditionOperation.findPrinterMakers();
+				break;
+			default:
+				System.out.println("Incorrectly entered operation number! Try again.\n");
+				findRecordWithCondition(scanner);
+				break;
+			}
+		} catch (Exception e) {
+			LOGGER.log(Level.SEVERE, "Incorrectly entered operation number!", e);
+			findRecordWithCondition(scanner);
+		} finally {
+			System.out.println();
+			continueQuestion(scanner);
 		}
 	}
 }

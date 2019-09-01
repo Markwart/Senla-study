@@ -41,8 +41,8 @@ public class LaptopService implements ILaptopService {
 
 	@Override
 	public List<Laptop> getAll() {
-		List<Laptop> all = dao.selectAll();
-		return all;
+		List<Laptop> laptopList = dao.selectAll();
+		return laptopList;
 	}
 
 	@Override

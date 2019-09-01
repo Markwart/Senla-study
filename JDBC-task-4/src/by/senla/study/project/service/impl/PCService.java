@@ -41,8 +41,8 @@ public class PCService implements IPCService {
 
 	@Override
 	public List<PC> getAll() {
-		List<PC> all = dao.selectAll();
-		return all;
+		List<PC> pcList = dao.selectAll();
+		return pcList;
 	}
 
 	@Override

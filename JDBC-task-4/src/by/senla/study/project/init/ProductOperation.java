@@ -22,10 +22,11 @@ public class ProductOperation {
 			String model = scanner.next();
 			service.delete(model);
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered model! Try again.\n");
 			LOGGER.log(Level.SEVERE, "Failed to delete record", e);
+			throw new RuntimeException(e);
 		} finally {
-			Common.chooseOperation(scanner);
+			System.out.println();
+			Common.continueQuestion(scanner);
 		}
 	}
 
@@ -35,15 +36,16 @@ public class ProductOperation {
 			String model = scanner.next();
 			Product entity = service.get(model);
 
-			StringBuilder product = new StringBuilder().append(entity.getModel()).append(" ").append(entity.getMaker())
-					.append(" ").append(entity.getType());
+			StringBuilder product = new StringBuilder("model=").append(entity.getModel()).append(" maker=")
+					.append(entity.getMaker()).append(" type=").append(entity.getType());
 			System.out.println(product);
 
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered model! Try again.\n");
 			LOGGER.log(Level.SEVERE, "Failed to get record", e);
+			throw new RuntimeException(e);
 		} finally {
-			Common.chooseOperation(scanner);
+			System.out.println();
+			Common.continueQuestion(scanner);
 		}
 	}
 
@@ -63,24 +65,34 @@ public class ProductOperation {
 			data.put("model", model);
 			data.put("maker", maker);
 			data.put("type", type);
-
 			service.save(data);
 
 			System.out.println("Perform");
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered data! Try again.\n");
 			LOGGER.log(Level.SEVERE, "Failed to save data", e);
+			throw new RuntimeException(e);
 		} finally {
-			Common.chooseOperation(scanner);
+			System.out.println();
+			Common.continueQuestion(scanner);
 		}
 	}
 
 	public static void getProductRecordList(Scanner scanner) {
-		List<Product> productList = service.getAll();
+		try {
+			List<Product> productList = service.getAll();
+			for (Product entity : productList) {
+				StringBuilder product = new StringBuilder("model=").append(entity.getModel()).append(" maker=")
+						.append(entity.getMaker()).append(" type=").append(entity.getType());
+				System.out.println(product);
+			}
 
-		System.out.println(productList.size());
-
-		Common.chooseOperation(scanner);
+		} catch (Exception e) {
+			LOGGER.log(Level.SEVERE, "Failed to get list", e);
+			throw new RuntimeException(e);
+		} finally {
+			System.out.println();
+			Common.continueQuestion(scanner);
+		}
 	}
 
 	public static void updateProductRecord(Scanner scanner) {
@@ -103,11 +115,13 @@ public class ProductOperation {
 				data.put("type", type);
 			}
 			service.update(data, model);
+
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered data or model! Try again.\n");
 			LOGGER.log(Level.SEVERE, "Failed to update record", e);
+			throw new RuntimeException(e);
 		} finally {
-			Common.chooseOperation(scanner);
+			System.out.println();
+			Common.continueQuestion(scanner);
 		}
 	}
 }

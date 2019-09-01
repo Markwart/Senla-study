@@ -37,8 +37,8 @@ public class ProductService implements IProductService {
 
 	@Override
 	public List<Product> getAll() {
-		List<Product> all = dao.selectAll();
-		return all;
+		List<Product> productList = dao.selectAll();
+		return productList;
 	}
 
 	@Override

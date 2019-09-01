@@ -1,6 +1,7 @@
 package by.senla.study.project.dao.jdbc.impl;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,15 +47,22 @@ public class ProductDao extends AbstractDao<Product, String> implements IProduct
 
 	@Override
 	public void insert(Product entity) {
-		try (PreparedStatement preparedStatement = getConnection()
-				.prepareStatement(String.format("insert into %s (model, maker, type) values(?,?,?)", getTableName()))) {
-			preparedStatement.setString(1, entity.getModel());
-			preparedStatement.setString(2, entity.getMaker());
-			preparedStatement.setString(3, entity.getType());
-			preparedStatement.executeUpdate();
 
-			LOGGER.log(Level.INFO, "Entity has been created");
-
+		try (Connection connection = getConnection();
+				PreparedStatement preparedStatement = getConnection().prepareStatement(
+						String.format("insert into %s (model, maker, type) values(?,?,?)", getTableName()))) {
+			connection.setAutoCommit(false);
+			try {
+				preparedStatement.setString(1, entity.getModel());
+				preparedStatement.setString(2, entity.getMaker());
+				preparedStatement.setString(3, entity.getType());
+				preparedStatement.executeUpdate();
+				connection.commit();
+				LOGGER.log(Level.INFO, "Entity has been created");
+			} catch (Exception e) {
+				connection.rollback();
+				throw new RuntimeException(e);
+			}
 		} catch (SQLException | IOException e) {
 			LOGGER.log(Level.SEVERE, "Failed to insert entity", e);
 			throw new RuntimeException(e);

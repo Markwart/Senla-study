@@ -22,10 +22,11 @@ public class PrinterOperation {
 			int id = scanner.nextInt();
 			service.delete(id);
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered id number! Try again.\n");
 			LOGGER.log(Level.SEVERE, "Failed to delete record", e);
+			throw new RuntimeException(e);
 		} finally {
-			Common.chooseOperation(scanner);
+			System.out.println();
+			Common.continueQuestion(scanner);
 		}
 	}
 
@@ -35,16 +36,17 @@ public class PrinterOperation {
 			int id = scanner.nextInt();
 			Printer entity = service.get(id);
 
-			StringBuilder printer = new StringBuilder().append(entity.getModel().getModel()).append(" ")
-					.append(entity.getType()).append(" ").append(entity.getColor()).append(" ")
+			StringBuilder printer = new StringBuilder("model=").append(entity.getModel().getModel()).append(" type=")
+					.append(entity.getType()).append(" color=").append(entity.getColor()).append(" price=")
 					.append(entity.getPrice());
 			System.out.println(printer);
 
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered id number! Try again.\n");
 			LOGGER.log(Level.SEVERE, "Failed to get record", e);
+			throw new RuntimeException(e);
 		} finally {
-			Common.chooseOperation(scanner);
+			System.out.println();
+			Common.continueQuestion(scanner);
 		}
 	}
 
@@ -70,19 +72,31 @@ public class PrinterOperation {
 			service.save(data);
 
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered data! Try again.\n");
 			LOGGER.log(Level.SEVERE, "Failed to save data", e);
+			throw new RuntimeException(e);
 		} finally {
-			Common.chooseOperation(scanner);
+			System.out.println();
+			Common.continueQuestion(scanner);
 		}
 	}
 
 	public static void getPrinterRecordList(Scanner scanner) {
-		List<Printer> printerList = service.getAll();
+		try {
+			List<Printer> printerList = service.getAll();
+			for (Printer entity : printerList) {
+				StringBuilder printer = new StringBuilder("model=").append(entity.getModel().getModel())
+						.append(" type=").append(entity.getType()).append(" color=").append(entity.getColor())
+						.append(" price=").append(entity.getPrice());
+				System.out.println(printer);
+			}
 
-		System.out.println(printerList.size());
-
-		Common.chooseOperation(scanner);
+		} catch (Exception e) {
+			LOGGER.log(Level.SEVERE, "Failed to get list", e);
+			throw new RuntimeException(e);
+		} finally {
+			System.out.println();
+			Common.continueQuestion(scanner);
+		}
 	}
 
 	public static void updatePrinterRecord(Scanner scanner) {
@@ -117,10 +131,11 @@ public class PrinterOperation {
 			service.update(data, id);
 
 		} catch (Exception e) {
-			System.out.println("Incorrectly entered data or id! Try again.\n");
 			LOGGER.log(Level.SEVERE, "Failed to update record", e);
+			throw new RuntimeException(e);
 		} finally {
-			Common.chooseOperation(scanner);
+			System.out.println();
+			Common.continueQuestion(scanner);
 		}
 	}
 }
