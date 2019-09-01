@@ -22,6 +22,7 @@ public class ProductOperation {
 			service.delete(model);
 		} catch (Exception e) {
 			System.out.println("Incorrectly entered model! Try again.\n");
+			LOGGER.log(Level.SEVERE, "Failed to delete record", e);
 		} finally {
 			Common.chooseOperation(scanner);
 		}
@@ -39,6 +40,7 @@ public class ProductOperation {
 
 		} catch (Exception e) {
 			System.out.println("Incorrectly entered model! Try again.\n");
+			LOGGER.log(Level.SEVERE, "Failed to get record", e);
 		} finally {
 			Common.chooseOperation(scanner);
 		}
@@ -66,7 +68,7 @@ public class ProductOperation {
 			System.out.println("Perform");
 		} catch (Exception e) {
 			System.out.println("Incorrectly entered data! Try again.\n");
-			LOGGER.log(Level.SEVERE, "InterruptedException", e);
+			LOGGER.log(Level.SEVERE, "Failed to save data", e);
 		} finally {
 			Common.chooseOperation(scanner);
 		}
@@ -102,7 +104,7 @@ public class ProductOperation {
 			service.update(data, model);
 		} catch (Exception e) {
 			System.out.println("Incorrectly entered data or model! Try again.\n");
-
+			LOGGER.log(Level.SEVERE, "Failed to update record", e);
 		} finally {
 			Common.chooseOperation(scanner);
 		}

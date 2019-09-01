@@ -4,12 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import by.senla.study.project.dao.jdbc.impl.entity.Laptop;
 import by.senla.study.project.service.impl.LaptopServiceImpl;
 
 public class LaptopOperation {
 
+	private static final Logger LOGGER = Logger.getLogger(LaptopOperation.class.getName());
 	static LaptopServiceImpl service = LaptopServiceImpl.getInstance();
 
 	public static void deleteLaptopRecord(Scanner scanner) {
@@ -19,6 +22,7 @@ public class LaptopOperation {
 			service.delete(id);
 		} catch (Exception e) {
 			System.out.println("Incorrectly entered id number! Try again.\n");
+			LOGGER.log(Level.SEVERE, "Failed to delete record", e);
 		} finally {
 			Common.chooseOperation(scanner);
 		}
@@ -37,6 +41,7 @@ public class LaptopOperation {
 
 		} catch (Exception e) {
 			System.out.println("Incorrectly entered id number! Try again.\n");
+			LOGGER.log(Level.SEVERE, "Failed to get record", e);
 		} finally {
 			Common.chooseOperation(scanner);
 		}
@@ -71,6 +76,7 @@ public class LaptopOperation {
 
 		} catch (Exception e) {
 			System.out.println("Incorrectly entered data! Try again.\n");
+			LOGGER.log(Level.SEVERE, "Failed to save data", e);
 		} finally {
 			Common.chooseOperation(scanner);
 		}
@@ -127,6 +133,7 @@ public class LaptopOperation {
 
 		} catch (Exception e) {
 			System.out.println("Incorrectly entered data or id! Try again.\n");
+			LOGGER.log(Level.SEVERE, "Failed to update record", e);
 		} finally {
 			Common.chooseOperation(scanner);
 		}
