@@ -3,8 +3,8 @@ package by.senla.study.project.dao.jdbc.impl.parser;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import by.senla.study.project.dao.jdbc.impl.entity.Laptop;
-import by.senla.study.project.dao.jdbc.impl.entity.Product;
+import by.senla.study.project.entity.Laptop;
+import by.senla.study.project.entity.Product;
 
 public class LaptopParser {
 

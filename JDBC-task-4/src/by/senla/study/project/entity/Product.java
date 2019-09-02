@@ -1,4 +1,4 @@
-package by.senla.study.project.dao.jdbc.impl.entity;
+package by.senla.study.project.entity;
 
 public class Product {
 

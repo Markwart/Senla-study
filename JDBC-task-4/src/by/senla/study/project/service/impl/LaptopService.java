@@ -8,7 +8,7 @@ import by.senla.study.project.dao.ILaptopDao;
 import by.senla.study.project.dao.IProductDao;
 import by.senla.study.project.dao.jdbc.impl.LaptopDao;
 import by.senla.study.project.dao.jdbc.impl.ProductDao;
-import by.senla.study.project.dao.jdbc.impl.entity.Laptop;
+import by.senla.study.project.entity.Laptop;
 import by.senla.study.project.service.ILaptopService;
 
 public class LaptopService implements ILaptopService {

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import by.senla.study.project.dao.IProductDao;
 import by.senla.study.project.dao.jdbc.impl.ProductDao;
-import by.senla.study.project.dao.jdbc.impl.entity.Product;
+import by.senla.study.project.entity.Product;
 import by.senla.study.project.service.IProductService;
 
 public class ProductService implements IProductService {
@@ -65,5 +65,17 @@ public class ProductService implements IProductService {
 			product.setType(data.get("type"));
 		}
 		dao.update(product);
+	}
+	
+	@Override
+	public List<Product> getPrinterMakers() {
+		List<Product> pcList = dao.findPrinterMakers();
+		return pcList;
+	}
+	
+	@Override
+	public List<Product> getPCAndLaptopMakers(Integer speed) {
+		List<Product> pcList = dao.findPCAndLaptopMakers(speed);
+		return pcList;
 	}
 }

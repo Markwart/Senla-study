@@ -7,7 +7,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import by.senla.study.project.dao.jdbc.impl.entity.Laptop;
+import by.senla.study.project.entity.Laptop;
 import by.senla.study.project.service.ILaptopService;
 import by.senla.study.project.service.impl.LaptopService;
 

@@ -8,7 +8,7 @@ import by.senla.study.project.dao.IPCDao;
 import by.senla.study.project.dao.IProductDao;
 import by.senla.study.project.dao.jdbc.impl.PCDao;
 import by.senla.study.project.dao.jdbc.impl.ProductDao;
-import by.senla.study.project.dao.jdbc.impl.entity.PC;
+import by.senla.study.project.entity.PC;
 import by.senla.study.project.service.IPCService;
 
 public class PCService implements IPCService {
@@ -84,5 +84,17 @@ public class PCService implements IPCService {
 			pc.setModel(daoProduct.get(data.get("model")));
 		}
 		dao.update(pc);
+	}
+	
+	@Override
+	public List<PC> getPCListWithCost(Integer price) {
+		List<PC> pcList = dao.findPCWithCost(price);
+		return pcList;
+	}
+	
+	@Override
+	public Map<Integer, Integer> getAverageCostPc() {
+		Map<Integer, Integer> pcMap = dao.findAverageCostPc();
+		return pcMap;
 	}
 }

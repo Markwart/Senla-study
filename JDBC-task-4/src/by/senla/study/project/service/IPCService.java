@@ -3,7 +3,7 @@ package by.senla.study.project.service;
 import java.util.List;
 import java.util.Map;
 
-import by.senla.study.project.dao.jdbc.impl.entity.PC;
+import by.senla.study.project.entity.PC;
 
 public interface IPCService {
 	
@@ -18,5 +18,9 @@ public interface IPCService {
 	void save(Map<String, String> data);
 
 	void update(Map<String, String> data, Integer id);
+
+	List<PC> getPCListWithCost(Integer price);
+
+	Map<Integer, Integer> getAverageCostPc();
 
 }

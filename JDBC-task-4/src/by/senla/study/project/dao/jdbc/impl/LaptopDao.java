@@ -9,12 +9,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import by.senla.study.project.dao.ILaptopDao;
-import by.senla.study.project.dao.jdbc.impl.entity.Laptop;
 import by.senla.study.project.dao.jdbc.impl.parser.LaptopParser;
+import by.senla.study.project.entity.Laptop;
 
 public class LaptopDao extends AbstractDao<Laptop, Integer> implements ILaptopDao {
 
 	private static final Logger LOGGER = Logger.getLogger(LaptopDao.class.getName());
+	private static final String TABLE = "laptop";
 	private static LaptopDao instance;
 
 	private LaptopDao() {
@@ -75,7 +76,7 @@ public class LaptopDao extends AbstractDao<Laptop, Integer> implements ILaptopDa
 
 	@Override
 	protected String getTableName() {
-		return "laptop";
+		return TABLE;
 	}
 
 	@Override

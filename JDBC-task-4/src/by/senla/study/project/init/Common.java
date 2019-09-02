@@ -238,16 +238,16 @@ public class Common {
 		try {
 			switch (operationNumber) {
 			case 1:
-				WithConditionOperation.findPCWithCost();
+				PCOperation.findPCWithCost();
 				break;
 			case 2:
-				WithConditionOperation.findPCAndLaptopMakers();
+				ProductOperation.findPCAndLaptopMakers();
 				break;
 			case 3:
-				WithConditionOperation.findAverageCostPc();
+				PCOperation.findAverageCostPc();
 				break;
 			case 4:
-				WithConditionOperation.findPrinterMakers();
+				ProductOperation.findPrinterMakers();
 				break;
 			default:
 				System.out.println("Incorrectly entered operation number! Try again.\n");
@@ -256,7 +256,6 @@ public class Common {
 			}
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, "Incorrectly entered operation number!", e);
-			findRecordWithCondition(scanner);
 		} finally {
 			System.out.println();
 			continueQuestion(scanner);

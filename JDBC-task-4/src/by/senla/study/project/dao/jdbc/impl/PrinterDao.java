@@ -9,12 +9,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import by.senla.study.project.dao.IPrinterDao;
-import by.senla.study.project.dao.jdbc.impl.entity.Printer;
 import by.senla.study.project.dao.jdbc.impl.parser.PrinterParcer;
+import by.senla.study.project.entity.Printer;
 
 public class PrinterDao extends AbstractDao<Printer, Integer> implements IPrinterDao {
 
 	private static final Logger LOGGER = Logger.getLogger(PrinterDao.class.getName());
+	private static final String TABLE = "printer";
 	private static PrinterDao instance;
 
 	private PrinterDao() {
@@ -71,7 +72,7 @@ public class PrinterDao extends AbstractDao<Printer, Integer> implements IPrinte
 
 	@Override
 	protected String getTableName() {
-		return "printer";
+		return TABLE;
 	}
 
 	@Override

@@ -5,16 +5,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import by.senla.study.project.dao.IPCDao;
-import by.senla.study.project.dao.jdbc.impl.entity.PC;
 import by.senla.study.project.dao.jdbc.impl.parser.PCParcer;
+import by.senla.study.project.entity.PC;
 
 public class PCDao extends AbstractDao<PC, Integer> implements IPCDao {
 
 	private static final Logger LOGGER = Logger.getLogger(PCDao.class.getName());
+	private static final String TABLE = "pc";
 	private static PCDao instance;
 
 	private PCDao() {
@@ -75,10 +80,46 @@ public class PCDao extends AbstractDao<PC, Integer> implements IPCDao {
 
 	@Override
 	protected String getTableName() {
-		return "pc";
+		return TABLE;
 	}
 
 	protected PC parseRow(ResultSet resultSet) throws SQLException {
 		return PCParcer.parseRow(resultSet);
+	}
+
+	@Override
+	public List<PC> findPCWithCost(Integer price) {
+		List<PC> resultList = new ArrayList<>();
+		try (Statement statement = getConnection().createStatement()) {
+			ResultSet resultSet = statement
+					.executeQuery((String.format("select * from %s where price < %s", getTableName(), price)));
+
+			while (resultSet.next()) {
+				resultList.add(parseRow(resultSet));
+			}
+		} catch (SQLException | IOException e) {
+			LOGGER.log(Level.SEVERE, "Failed to get result list", e);
+			throw new RuntimeException(e);
+		}
+		return resultList;
+	}
+
+	@Override
+	public Map<Integer, Integer> findAverageCostPc() {
+		Map<Integer, Integer> resultList = new HashMap<Integer, Integer>();
+		try (Statement statement = getConnection().createStatement()) {
+			ResultSet resultSet = statement
+					.executeQuery((String.format("select speed, avg(price) from %s group by speed", getTableName())));
+
+			while (resultSet.next()) {
+				Integer speed = resultSet.getInt(1);
+				Integer price = resultSet.getInt(2);
+				resultList.put(speed, price);
+			}
+		} catch (SQLException | IOException e) {
+			LOGGER.log(Level.SEVERE, "Failed to get result list", e);
+			throw new RuntimeException(e);
+		}
+		return resultList;
 	}
 }

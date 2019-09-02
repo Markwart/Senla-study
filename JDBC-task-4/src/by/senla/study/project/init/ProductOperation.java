@@ -7,7 +7,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import by.senla.study.project.dao.jdbc.impl.entity.Product;
+import by.senla.study.project.entity.Product;
 import by.senla.study.project.service.IProductService;
 import by.senla.study.project.service.impl.ProductService;
 
@@ -15,6 +15,8 @@ public class ProductOperation {
 
 	private static final Logger LOGGER = Logger.getLogger(ProductOperation.class.getName());
 	private static IProductService service = ProductService.getInstance();
+	
+	private static final Integer SPEED = 750;
 
 	public static void deleteProductRecord(Scanner scanner) {
 		System.out.println("Enter \"pk\"(model) \n");
@@ -122,6 +124,21 @@ public class ProductOperation {
 		} finally {
 			System.out.println();
 			Common.continueQuestion(scanner);
+		}
+	}
+
+	public static void findPrinterMakers() {
+		List<Product> pcList = service.getPrinterMakers();
+		for (Product product : pcList) {
+			System.out.println("maker=" + product.getMaker());
+		}
+	}
+	
+	public static void findPCAndLaptopMakers() {
+		List<Product> pcList = service.getPCAndLaptopMakers(SPEED);
+		for (Product product : pcList) {
+			System.out.println("maker=" + product.getMaker());
+			break;
 		}
 	}
 }

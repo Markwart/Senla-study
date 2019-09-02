@@ -1,11 +1,11 @@
-package by.senla.study.project.dao.jdbc.impl.entity;
+package by.senla.study.project.entity;
 
-public class Laptop extends BaseEntity {
+public class PC extends BaseEntity {
 
 	private Integer speed;
 	private Integer ram;
 	private Integer hd;
-	private Integer screen;
+	private String cd;
 
 	public Integer getSpeed() {
 		return speed;
@@ -31,11 +31,11 @@ public class Laptop extends BaseEntity {
 		this.hd = hd;
 	}
 
-	public Integer getScreen() {
-		return screen;
+	public String getCd() {
+		return cd;
 	}
 
-	public void setScreen(Integer screen) {
-		this.screen = screen;
+	public void setCd(String cd) {
+		this.cd = cd;
 	}
 }

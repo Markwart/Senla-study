@@ -3,7 +3,7 @@ package by.senla.study.project.service;
 import java.util.List;
 import java.util.Map;
 
-import by.senla.study.project.dao.jdbc.impl.entity.Laptop;
+import by.senla.study.project.entity.Laptop;
 
 public interface ILaptopService {
 

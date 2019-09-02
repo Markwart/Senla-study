@@ -7,7 +7,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import by.senla.study.project.dao.jdbc.impl.entity.PC;
+import by.senla.study.project.entity.PC;
 import by.senla.study.project.service.IPCService;
 import by.senla.study.project.service.impl.PCService;
 
@@ -15,6 +15,8 @@ public class PCOperation {
 
 	private static final Logger LOGGER = Logger.getLogger(PCOperation.class.getName());
 	private static IPCService service = PCService.getInstance();
+
+	private static final Integer PRICE = 500;
 
 	public static void deletePCRecord(Scanner scanner) {
 		System.out.println("Enter \"pk\"(id) \n");
@@ -155,5 +157,25 @@ public class PCOperation {
 			System.out.println();
 			Common.continueQuestion(scanner);
 		}
+	}
+
+	public static void findPCWithCost() {
+		List<PC> pcList = service.getPCListWithCost(PRICE);
+		for (PC entity : pcList) {
+			StringBuilder pc = new StringBuilder("model=").append(entity.getModel().getModel()).append(" hd=")
+					.append(entity.getHd()).append(" ram=").append(entity.getRam()).append(" speed=")
+					.append(entity.getSpeed()).append(" cd=").append(entity.getCd()).append(" price=")
+					.append(entity.getPrice());
+			System.out.println(pc);
+		}
+	}
+
+	public static void findAverageCostPc() {
+		Map<Integer, Integer> pcMap = service.getAverageCostPc();
+		pcMap.forEach((speed, price) -> {
+			StringBuilder values = new StringBuilder().append("speed=").append(speed).append(" ")
+					.append("average cost=").append(price);
+			System.out.println(values);
+		});
 	}
 }

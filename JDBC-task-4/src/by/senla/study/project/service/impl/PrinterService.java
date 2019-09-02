@@ -8,7 +8,7 @@ import by.senla.study.project.dao.IPrinterDao;
 import by.senla.study.project.dao.IProductDao;
 import by.senla.study.project.dao.jdbc.impl.PrinterDao;
 import by.senla.study.project.dao.jdbc.impl.ProductDao;
-import by.senla.study.project.dao.jdbc.impl.entity.Printer;
+import by.senla.study.project.entity.Printer;
 import by.senla.study.project.service.IPrinterService;
 
 public class PrinterService implements IPrinterService {
