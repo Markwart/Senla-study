@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>by.senla.study</groupId>
+	<artifactId>board</artifactId>
+	<version>1.0.0</version>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>model</module>
+		<module>dao</module>
+		<module>service</module>
+		<module>web</module>
+	</modules>
+
+	<properties>
+		<servlets.version>3.1.0</servlets.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- Project modules -->
+			<dependency>
+				<groupId>by.senla.study</groupId>
+				<artifactId>model</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+			<dependency>
+				<groupId>by.senla.study</groupId>
+				<artifactId>dao</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+			<dependency>
+				<groupId>by.senla.study</groupId>
+				<artifactId>service</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+			<dependency>
+				<groupId>by.senla.study</groupId>
+				<artifactId>web</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+
+			<!-- Servlet Library -->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>${servlets.version}</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>by.senla.study</groupId>
+				<artifactId>service</artifactId>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+</project>
