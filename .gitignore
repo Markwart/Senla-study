@@ -5,5 +5,5 @@ service/logs/
 .metadata/
 web/logs/
 *.class
-/MANIFEST.MF
-/pom.properties
+MANIFEST.MF
+pom.properties
