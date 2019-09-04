@@ -15,7 +15,8 @@
 	
 		<dependency>
 			<groupId>by.senla.study</groupId>
-			<artifactId>model</artifactId>
+			<artifactId>dao-api</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 		
 	</dependencies>

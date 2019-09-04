@@ -11,53 +11,19 @@
 
 	<modules>
 		<module>model</module>
+		<module>dao-api</module>
 		<module>dao</module>
+		<module>service-api</module>
 		<module>service</module>
 		<module>web</module>
 	</modules>
 
 	<properties>
-		<servlets.version>3.1.0</servlets.version>
 		<log4j2.version>2.12.0</log4j2.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
-
-			<!-- Project modules -->
-			<dependency>
-				<groupId>by.senla.study</groupId>
-				<artifactId>model</artifactId>
-				<version>1.0.0</version>
-			</dependency>
-			<dependency>
-				<groupId>by.senla.study</groupId>
-				<artifactId>dao</artifactId>
-				<version>1.0.0</version>
-			</dependency>
-			<dependency>
-				<groupId>by.senla.study</groupId>
-				<artifactId>service</artifactId>
-				<version>1.0.0</version>
-			</dependency>
-			<dependency>
-				<groupId>by.senla.study</groupId>
-				<artifactId>web</artifactId>
-				<version>1.0.0</version>
-			</dependency>
-
-			<!-- Servlet Library -->
-			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>javax.servlet-api</artifactId>
-				<version>${servlets.version}</version>
-				<scope>provided</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>by.senla.study</groupId>
-				<artifactId>service</artifactId>
-			</dependency>
 
 			<!-- Logging libraries -->
 			<dependency>
