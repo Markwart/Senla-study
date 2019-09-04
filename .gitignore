@@ -5,3 +5,5 @@ service/logs/
 .metadata/
 web/logs/
 *.class
+
+target/
