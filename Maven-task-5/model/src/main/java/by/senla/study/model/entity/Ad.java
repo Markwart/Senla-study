@@ -37,13 +37,11 @@ public class Ad extends BaseEntity {
 	private Status status;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
-	@Column(name = "seller_id")
+	@JoinColumn(name = "seller_id")
 	private UserAccount seller;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
-	@Column(name = "category_id")
+	@JoinColumn(name = "category_id")
 	private Category category;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "ad")

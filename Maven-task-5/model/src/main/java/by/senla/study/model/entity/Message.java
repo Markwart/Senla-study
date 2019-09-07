@@ -15,13 +15,11 @@ public class Message extends BaseEntity {
 	private String text;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
-	@Column(name = "user_id")
+	@JoinColumn(name = "user_id")
 	private UserAccount user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
-	@Column(name = "chat_id")
+	@JoinColumn(name = "chat_id")
 	private Chat chat;
 
 	public String getText() {

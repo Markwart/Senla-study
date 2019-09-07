@@ -5,41 +5,51 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import by.senla.study.api.dao.IAdDao;
 import by.senla.study.api.service.IAdService;
+import by.senla.study.dao.impl.AdDao;
 import by.senla.study.model.entity.Ad;
 
 public class AdService implements IAdService {
 
 	private static final Logger LOGGER = LogManager.getLogger(AdService.class);
+	private IAdDao dao = AdDao.getInstance();
+	private static AdService instance;
+
+	private AdService() {
+	}
+
+	public static AdService getInstance() {
+		if (instance == null) {
+			instance = new AdService();
+		}
+		return instance;
+	}
 
 	public Ad createEntity() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Ad();
 	}
 
 	public Ad get(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		Ad entity = dao.get(id);
+		return entity;
 	}
 
 	public void update(Ad entity) {
-		// TODO Auto-generated method stub
-
+		dao.update(entity);
 	}
 
 	public void insert(Ad entity) {
-		// TODO Auto-generated method stub
-
+		dao.insert(entity);
 	}
 
 	public void delete(Integer id) {
-		// TODO Auto-generated method stub
-
+		dao.delete(id);
 	}
 
 	public List<Ad> selectAll() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Ad> all = dao.selectAll();
+		return all;
 	}
 
 }

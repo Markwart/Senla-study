@@ -14,12 +14,13 @@
 		<module>api</module>
 		<module>dao</module>
 		<module>service</module>
-		<module>web</module>
+		<module>controller</module>
 	</modules>
 
 	<properties>
 		<log4j2.version>2.12.0</log4j2.version>
 		<hibernate.version>5.3.11.Final</hibernate.version>
+		<mysql.version>8.0.17</mysql.version>
 	</properties>
 
 	<dependencyManagement>
@@ -35,6 +36,13 @@
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
 				<version>${hibernate.version}</version>
+			</dependency>
+
+			<!-- MySQL JDBC driver -->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.version}</version>
 			</dependency>
 
 			<!-- Logging libraries -->

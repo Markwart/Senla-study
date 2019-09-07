@@ -5,41 +5,51 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import by.senla.study.api.dao.IRankingDao;
 import by.senla.study.api.service.IRankingService;
+import by.senla.study.dao.impl.RankingDao;
 import by.senla.study.model.entity.Ranking;
 
 public class RankingService implements IRankingService {
-	
+
 	private static final Logger LOGGER = LogManager.getLogger(RankingService.class);
+	private IRankingDao dao = RankingDao.getInstance();
+	private static RankingService instance;
+
+	private RankingService() {
+	}
+
+	public static RankingService getInstance() {
+		if (instance == null) {
+			instance = new RankingService();
+		}
+		return instance;
+	}
 
 	public Ranking createEntity() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Ranking();
 	}
 
 	public Ranking get(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		Ranking entity = dao.get(id);
+		return entity;
 	}
 
 	public void update(Ranking entity) {
-		// TODO Auto-generated method stub
-		
+		dao.update(entity);
 	}
 
 	public void insert(Ranking entity) {
-		// TODO Auto-generated method stub
-		
+		dao.insert(entity);
 	}
 
 	public void delete(Integer id) {
-		// TODO Auto-generated method stub
-		
+		dao.delete(id);
 	}
 
 	public List<Ranking> selectAll() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Ranking> all = dao.selectAll();
+		return all;
 	}
 
 }

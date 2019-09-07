@@ -15,13 +15,11 @@ public class Ranking extends BaseEntity {
 	private Integer feedback;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
-	@Column(name = "user_from_id")
+	@JoinColumn(name = "user_from_id")
 	private UserAccount userFrom;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
-	@Column(name = "user_whom_id")
+	@JoinColumn(name = "user_whom_id")
 	private UserAccount userWhom;
 
 	public Integer getFeedback() {

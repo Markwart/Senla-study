@@ -5,41 +5,51 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import by.senla.study.api.dao.IPersonalDataDao;
 import by.senla.study.api.service.IPersonalDataService;
+import by.senla.study.dao.impl.PersonalDataDao;
 import by.senla.study.model.entity.PersonalData;
 
-public class PersonalDataService implements IPersonalDataService{
-	
+public class PersonalDataService implements IPersonalDataService {
+
 	private static final Logger LOGGER = LogManager.getLogger(PersonalDataService.class);
+	private IPersonalDataDao dao = PersonalDataDao.getInstance();
+	private static PersonalDataService instance;
+
+	private PersonalDataService() {
+	}
+
+	public static PersonalDataService getInstance() {
+		if (instance == null) {
+			instance = new PersonalDataService();
+		}
+		return instance;
+	}
 
 	public PersonalData createEntity() {
-		// TODO Auto-generated method stub
-		return null;
+		return new PersonalData();
 	}
 
 	public PersonalData get(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		PersonalData entity = dao.get(id);
+		return entity;
 	}
 
 	public void update(PersonalData entity) {
-		// TODO Auto-generated method stub
-		
+		dao.update(entity);
 	}
 
 	public void insert(PersonalData entity) {
-		// TODO Auto-generated method stub
-		
+		dao.insert(entity);
 	}
 
 	public void delete(Integer id) {
-		// TODO Auto-generated method stub
-		
+		dao.delete(id);
 	}
 
 	public List<PersonalData> selectAll() {
-		// TODO Auto-generated method stub
-		return null;
+		List<PersonalData> all = dao.selectAll();
+		return all;
 	}
 
 }

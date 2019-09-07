@@ -5,41 +5,51 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import by.senla.study.api.dao.ICommentDao;
 import by.senla.study.api.service.ICommentService;
+import by.senla.study.dao.impl.CommentDao;
 import by.senla.study.model.entity.Comment;
 
 public class CommentService implements ICommentService {
-	
+
 	private static final Logger LOGGER = LogManager.getLogger(CommentService.class);
+	private ICommentDao dao = CommentDao.getInstance();
+	private static CommentService instance;
+
+	private CommentService() {
+	}
+
+	public static CommentService getInstance() {
+		if (instance == null) {
+			instance = new CommentService();
+		}
+		return instance;
+	}
 
 	public Comment createEntity() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Comment();
 	}
 
 	public Comment get(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		Comment entity = dao.get(id);
+		return entity;
 	}
 
 	public void update(Comment entity) {
-		// TODO Auto-generated method stub
-		
+		dao.update(entity);
 	}
 
 	public void insert(Comment entity) {
-		// TODO Auto-generated method stub
-		
+		dao.insert(entity);
 	}
 
 	public void delete(Integer id) {
-		// TODO Auto-generated method stub
-		
+		dao.delete(id);
 	}
 
 	public List<Comment> selectAll() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Comment> all = dao.selectAll();
+		return all;
 	}
 
 }

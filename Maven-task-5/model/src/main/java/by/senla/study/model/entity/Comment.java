@@ -15,13 +15,11 @@ public class Comment extends BaseEntity {
 	private String text;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
-	@Column(name = "ad_id")
+	@JoinColumn(name = "ad_id")
 	private Ad ad;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
-	@Column(name = "user_from_id")
+	@JoinColumn(name = "user_from_id")
 	private UserAccount userFrom;
 
 	public String getText() {
