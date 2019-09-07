@@ -18,7 +18,7 @@
 
 		<dependency>
 			<groupId>by.senla.study</groupId>
-			<artifactId>service-api</artifactId>
+			<artifactId>service</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 
