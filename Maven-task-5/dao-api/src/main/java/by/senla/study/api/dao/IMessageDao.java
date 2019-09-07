@@ -1,5 +1,7 @@
 package by.senla.study.api.dao;
 
-public interface IMessageDao {
+import by.senla.study.model.entity.Message;
+
+public interface IMessageDao extends IDao<Message, Integer> {
 
 }

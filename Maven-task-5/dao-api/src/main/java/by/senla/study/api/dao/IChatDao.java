@@ -1,5 +1,7 @@
 package by.senla.study.api.dao;
 
-public interface IChatDao {
+import by.senla.study.model.entity.Chat;
+
+public interface IChatDao extends IDao<Chat, Integer> {
 
 }

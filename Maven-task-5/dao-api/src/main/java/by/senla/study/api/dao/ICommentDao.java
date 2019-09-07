@@ -1,5 +1,7 @@
 package by.senla.study.api.dao;
 
-public interface ICommentDao {
+import by.senla.study.model.entity.Comment;
+
+public interface ICommentDao extends IDao<Comment, Integer> {
 
 }

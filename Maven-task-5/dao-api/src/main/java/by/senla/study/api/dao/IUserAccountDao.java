@@ -1,5 +1,7 @@
 package by.senla.study.api.dao;
 
-public interface IUserAccountDao {
+import by.senla.study.model.entity.UserAccount;
+
+public interface IUserAccountDao extends IDao<UserAccount, Integer> {
 
 }

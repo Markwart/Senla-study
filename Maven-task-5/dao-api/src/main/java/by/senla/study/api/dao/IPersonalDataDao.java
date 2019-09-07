@@ -1,5 +1,7 @@
 package by.senla.study.api.dao;
 
-public interface IPersonalDataDao {
+import by.senla.study.model.entity.PersonalData;
+
+public interface IPersonalDataDao extends IDao<PersonalData, Integer> {
 
 }
