@@ -33,18 +33,14 @@ public abstract class AbstractDao<T, PK> implements IDao<T, PK> {
 
 	@Override
 	public void update(T entity, EntityManager entityManager) {
-		entityManager.getTransaction().begin();
 		entity = entityManager.merge(entity);
 		entityManager.flush();
-		entityManager.getTransaction().commit();
 	}
 
 	@Override
 	public void delete(PK id, EntityManager entityManager) {
-		entityManager.getTransaction().begin();
 		entityManager.remove(get(id, entityManager));
 		entityManager.flush();
-		entityManager.getTransaction().commit();
 	}
 
 	@Override
