@@ -1,7 +1,7 @@
 package by.senla.study.model.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,9 +15,9 @@ public class Chat extends BaseEntity {
 
 	@Column(name = "name")
 	private String name;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chat")
-	private List<Message> messages = new ArrayList<Message>();
+	private Set<Message> messages = new HashSet<Message>();
 
 	public String getName() {
 		return name;
@@ -27,11 +27,11 @@ public class Chat extends BaseEntity {
 		this.name = name;
 	}
 
-	public List<Message> getMessages() {
+	public Set<Message> getMessages() {
 		return messages;
 	}
 
-	public void setMessages(List<Message> messages) {
+	public void setMessages(Set<Message> messages) {
 		this.messages = messages;
 	}
 }

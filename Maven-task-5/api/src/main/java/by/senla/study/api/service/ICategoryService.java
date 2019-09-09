@@ -17,4 +17,6 @@ public interface ICategoryService {
 	void delete(Integer id);
 	
 	List<Category> selectAll();
+
+	Category getFullInfo(Integer id);
 }

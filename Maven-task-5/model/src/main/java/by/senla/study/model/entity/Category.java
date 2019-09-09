@@ -1,7 +1,7 @@
 package by.senla.study.model.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +17,7 @@ public class Category extends BaseEntity {
 	private String name;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
-	private List<Ad> ads = new ArrayList<Ad>();
+	private Set<Ad> ads = new HashSet<Ad>();
 
 	public String getName() {
 		return name;
@@ -27,11 +27,11 @@ public class Category extends BaseEntity {
 		this.name = name;
 	}
 
-	public List<Ad> getAds() {
+	public Set<Ad> getAds() {
 		return ads;
 	}
 
-	public void setAds(List<Ad> ads) {
+	public void setAds(Set<Ad> ads) {
 		this.ads = ads;
 	}
 }

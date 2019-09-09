@@ -8,50 +8,52 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import by.senla.study.api.dao.IDao;
-import by.senla.study.dao.utils.HibernateEntityManagerUtil;
 
 public abstract class AbstractDao<T, PK> implements IDao<T, PK> {
 
-	private EntityManager entityManager = HibernateEntityManagerUtil.getEntityManager();
-
 	private Class<T> entityClass;
 
-	protected EntityManager getEntityManager() {
-		return entityManager;
+	protected AbstractDao(Class<T> entityClass) {
+		this.entityClass = entityClass;
 	}
 
 	public Class<T> getEntityClass() {
 		return entityClass;
 	}
 
-	public T get(PK id) {
+	@Override
+	public T get(PK id, EntityManager entityManager) {
 		return entityManager.find(getEntityClass(), id);
 	}
 
-	public void insert(T entity) {
-		entityManager.getTransaction().begin();
+	@Override
+	public void insert(T entity, EntityManager entityManager) {
 		entityManager.persist(entity);
-		entityManager.getTransaction().commit();
 	}
 
-	public void update(T entity) {
+	@Override
+	public void update(T entity, EntityManager entityManager) {
 		entityManager.getTransaction().begin();
 		entity = entityManager.merge(entity);
 		entityManager.flush();
 		entityManager.getTransaction().commit();
 	}
 
-	public void delete(PK id) {
-		entityManager.createQuery(String.format("delete from %s where id = %s", entityClass.getSimpleName(), id));
+	@Override
+	public void delete(PK id, EntityManager entityManager) {
+		entityManager.getTransaction().begin();
+		entityManager.remove(get(id, entityManager));
+		entityManager.flush();
+		entityManager.getTransaction().commit();
 	}
 
-	public List<T> selectAll() {
+	@Override
+	public List<T> selectAll(EntityManager entityManager) {
 		EntityManager em = entityManager;
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<T> cq = cb.createQuery(getEntityClass());
 		Root<T> from = cq.from(getEntityClass());
 		cq.select(from);
 		return em.createQuery(cq).getResultList();
-
 	}
 }

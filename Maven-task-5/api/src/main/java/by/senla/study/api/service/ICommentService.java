@@ -17,4 +17,6 @@ public interface ICommentService {
 	void delete(Integer id);
 	
 	List<Comment> selectAll();
+
+	Comment getFullInfo(Integer id);
 }

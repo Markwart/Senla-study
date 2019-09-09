@@ -1,8 +1,8 @@
 package by.senla.study.model.entity;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,7 +45,7 @@ public class Ad extends BaseEntity {
 	private Category category;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "ad")
-	private List<Comment> comments = new ArrayList<Comment>();
+	private Set<Comment> comments = new HashSet<Comment>();
 
 	public String getTheme() {
 		return theme;
@@ -103,11 +103,11 @@ public class Ad extends BaseEntity {
 		this.category = category;
 	}
 
-	public List<Comment> getComments() {
+	public Set<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<Comment> comments) {
+	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
 	}
 

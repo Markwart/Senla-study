@@ -17,4 +17,6 @@ public interface IRankingService {
 	void delete(Integer id);
 	
 	List<Ranking> selectAll();
+
+	Ranking getFullInfo(Integer id);
 }

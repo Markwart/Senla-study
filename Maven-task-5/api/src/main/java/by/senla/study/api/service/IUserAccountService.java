@@ -17,4 +17,6 @@ public interface IUserAccountService {
 	void delete(Integer id);
 	
 	List<UserAccount> selectAll();
+
+	UserAccount getFullInfo(Integer id);
 }

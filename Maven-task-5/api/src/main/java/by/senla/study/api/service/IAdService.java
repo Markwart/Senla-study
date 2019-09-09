@@ -17,4 +17,6 @@ public interface IAdService {
 	void delete(Integer id);
 	
 	List<Ad> selectAll();
+
+	Ad getFullInfo(Integer id);
 }

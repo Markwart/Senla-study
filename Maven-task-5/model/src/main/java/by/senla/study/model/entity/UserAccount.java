@@ -1,8 +1,6 @@
 package by.senla.study.model.entity;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -17,7 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "user_account")
-public class UserAccount extends BaseEntity {
+public class UserAccount extends BaseEntity  {
 
 	@Column(name = "name")
 	private String name;
@@ -29,19 +27,19 @@ public class UserAccount extends BaseEntity {
 	private PersonalData personalData;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "seller")
-	private List<Ad> ads = new ArrayList<Ad>();
+	private Set<Ad> ads = new HashSet<Ad>();
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userFrom")
-	private List<Comment> comments = new ArrayList<Comment>();
+	private Set<Comment> comments = new HashSet<Comment>();
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-	private List<Message> messages = new ArrayList<Message>();
+	private Set<Message> messages = new HashSet<Message>();
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userFrom")
-	private List<Ranking> rankingFrom = new ArrayList<Ranking>();
+	private Set<Ranking> rankingFrom = new HashSet<Ranking>();
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userWhom")
-	private List<Ranking> rankingWhom = new ArrayList<Ranking>();
+	private Set<Ranking> rankingWhom = new HashSet<Ranking>();
 
 	@JoinTable(name = "user_2_ad", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "ad_id"))
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -75,46 +73,6 @@ public class UserAccount extends BaseEntity {
 		this.personalData = personalData;
 	}
 
-	public List<Ad> getAds() {
-		return ads;
-	}
-
-	public void setAds(List<Ad> ads) {
-		this.ads = ads;
-	}
-
-	public List<Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
-
-	public List<Message> getMessages() {
-		return messages;
-	}
-
-	public void setMessages(List<Message> messages) {
-		this.messages = messages;
-	}
-
-	public List<Ranking> getRankingFrom() {
-		return rankingFrom;
-	}
-
-	public void setRankingFrom(List<Ranking> rankingFrom) {
-		this.rankingFrom = rankingFrom;
-	}
-
-	public List<Ranking> getRankingWhom() {
-		return rankingWhom;
-	}
-
-	public void setRankingWhom(List<Ranking> rankingWhom) {
-		this.rankingWhom = rankingWhom;
-	}
-
 	public Set<Ad> getWishlist() {
 		return wishlist;
 	}
@@ -131,4 +89,44 @@ public class UserAccount extends BaseEntity {
 		this.chats = chats;
 	}
 
+	public Set<Ad> getAds() {
+		return ads;
+	}
+
+	public void setAds(Set<Ad> ads) {
+		this.ads = ads;
+	}
+
+	public Set<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
+	}
+
+	public Set<Message> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(Set<Message> messages) {
+		this.messages = messages;
+	}
+
+	public Set<Ranking> getRankingFrom() {
+		return rankingFrom;
+	}
+
+	public void setRankingFrom(Set<Ranking> rankingFrom) {
+		this.rankingFrom = rankingFrom;
+	}
+
+	public Set<Ranking> getRankingWhom() {
+		return rankingWhom;
+	}
+
+	public void setRankingWhom(Set<Ranking> rankingWhom) {
+		this.rankingWhom = rankingWhom;
+	}
+	
 }

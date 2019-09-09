@@ -8,6 +8,7 @@ public class PersonalDataDao extends AbstractDao<PersonalData, Integer> implemen
 	private static PersonalDataDao instance;
 
 	private PersonalDataDao() {
+		super(PersonalData.class);
 	}
 
 	public static PersonalDataDao getInstance() {

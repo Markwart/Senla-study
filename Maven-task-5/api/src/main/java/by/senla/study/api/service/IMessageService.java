@@ -17,4 +17,6 @@ public interface IMessageService {
 	void delete(Integer id);
 	
 	List<Message> selectAll();
+
+	Message getFullInfo(Integer id);
 }

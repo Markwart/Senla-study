@@ -18,4 +18,6 @@ public interface IChatService {
 	
 	List<Chat> selectAll();
 
+	Chat getFullInfo(Integer id);
+
 }

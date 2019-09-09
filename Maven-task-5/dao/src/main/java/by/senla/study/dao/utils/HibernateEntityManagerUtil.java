@@ -27,4 +27,8 @@ public class HibernateEntityManagerUtil {
 		return entityManagerFactory.createEntityManager();
 	}
 
+	public static void close() {
+		entityManagerFactory.close();
+	}
+
 }
