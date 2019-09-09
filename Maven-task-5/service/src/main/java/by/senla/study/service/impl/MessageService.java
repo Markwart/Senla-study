@@ -11,13 +11,14 @@ import by.senla.study.api.service.IMessageService;
 import by.senla.study.dao.impl.MessageDao;
 import by.senla.study.model.entity.Message;
 
-public class MessageService extends BaseService implements IMessageService {
+public class MessageService extends BaseService<Message> implements IMessageService {
 
 	private static final Logger LOGGER = LogManager.getLogger(MessageService.class);
 	private IMessageDao dao = MessageDao.getInstance();
 	private static MessageService instance;
 
 	private MessageService() {
+		super(Message.class);
 	}
 
 	public static MessageService getInstance() {
@@ -45,14 +46,12 @@ public class MessageService extends BaseService implements IMessageService {
 			dao.update(entity, entityManager);
 			entityManager.getTransaction().commit();
 
-			LOGGER.log(Level.INFO, String.format("message with id=%s was updated", entity.getId()));
+			LOGGER.log(Level.INFO, String.format(UPDATED, getEntityClassName(), entity.getId()));
 
 		} catch (Exception e) {
 			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, "EntityManager exception", e);
+			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new RuntimeException(e);
-		} finally {
-			entityManager.close();
 		}
 	}
 
@@ -63,14 +62,12 @@ public class MessageService extends BaseService implements IMessageService {
 			dao.insert(entity, entityManager);
 			entityManager.getTransaction().commit();
 
-			LOGGER.log(Level.INFO, String.format("new message with id=%s was created", entity.getId()));
+			LOGGER.log(Level.INFO, String.format(CREATED, getEntityClassName(), entity.getId()));
 
 		} catch (Exception e) {
 			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, "EntityManager exception", e);
+			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new RuntimeException(e);
-		} finally {
-			entityManager.close();
 		}
 	}
 
@@ -81,14 +78,12 @@ public class MessageService extends BaseService implements IMessageService {
 			dao.delete(id, entityManager);
 			entityManager.getTransaction().commit();
 
-			LOGGER.log(Level.INFO, String.format("message with id=%s was deleted", id));
+			LOGGER.log(Level.INFO, String.format(DELETED, getEntityClassName(), id));
 
 		} catch (Exception e) {
 			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, "EntityManager exception", e);
+			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new RuntimeException(e);
-		} finally {
-			entityManager.close();
 		}
 	}
 

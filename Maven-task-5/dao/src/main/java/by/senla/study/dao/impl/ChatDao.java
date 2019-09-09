@@ -34,6 +34,7 @@ public class ChatDao extends AbstractDao<Chat, Integer> implements IChatDao {
 
 		cq.select(from);
 		from.fetch("messages", JoinType.LEFT);
+		cq.distinct(true);
 
 		cq.where(cb.equal(from.get("id"), id));
 		TypedQuery<Chat> tq = em.createQuery(cq);

@@ -11,13 +11,14 @@ import by.senla.study.api.service.IPersonalDataService;
 import by.senla.study.dao.impl.PersonalDataDao;
 import by.senla.study.model.entity.PersonalData;
 
-public class PersonalDataService extends BaseService implements IPersonalDataService {
+public class PersonalDataService extends BaseService<PersonalData> implements IPersonalDataService {
 
 	private static final Logger LOGGER = LogManager.getLogger(PersonalDataService.class);
 	private IPersonalDataDao dao = PersonalDataDao.getInstance();
 	private static PersonalDataService instance;
 
 	private PersonalDataService() {
+		super(PersonalData.class);
 	}
 
 	public static PersonalDataService getInstance() {
@@ -41,20 +42,20 @@ public class PersonalDataService extends BaseService implements IPersonalDataSer
 	@Override
 	public void update(PersonalData entity) {
 		dao.update(entity, entityManager);
-		LOGGER.log(Level.INFO, String.format("personal data with id=%s was updated", entity.getId()));
+		LOGGER.log(Level.INFO, String.format(UPDATED, getEntityClassName(), entity.getId()));
 	}
 
 	@Override
 	public void insert(PersonalData entity) {
 		dao.insert(entity, entityManager);
-		LOGGER.log(Level.INFO, String.format("new personal data with id=%s was created", entity.getId()));
+		LOGGER.log(Level.INFO, String.format(CREATED, getEntityClassName(), entity.getId()));
 	}
 
 	@Override
 
 	public void delete(Integer id) {
 		dao.delete(id, entityManager);
-		LOGGER.log(Level.INFO, String.format("personal data with id=%s was deleted", id));
+		LOGGER.log(Level.INFO, String.format(DELETED, getEntityClassName(), id));
 	}
 
 	@Override

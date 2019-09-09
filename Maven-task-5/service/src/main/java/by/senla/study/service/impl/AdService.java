@@ -11,13 +11,14 @@ import by.senla.study.api.service.IAdService;
 import by.senla.study.dao.impl.AdDao;
 import by.senla.study.model.entity.Ad;
 
-public class AdService extends BaseService implements IAdService {
+public class AdService extends BaseService<Ad> implements IAdService {
 
 	private static final Logger LOGGER = LogManager.getLogger(AdService.class);
 	private IAdDao dao = AdDao.getInstance();
 	private static AdService instance;
 
 	private AdService() {
+		super(Ad.class);
 	}
 
 	public static AdService getInstance() {
@@ -45,14 +46,12 @@ public class AdService extends BaseService implements IAdService {
 			dao.update(entity, entityManager);
 			entityManager.getTransaction().commit();
 
-			LOGGER.log(Level.INFO, String.format("ad with id=%s was updated", entity.getId()));
+			LOGGER.log(Level.INFO, String.format(UPDATED, getEntityClassName(), entity.getId()));
 
 		} catch (Exception e) {
 			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, "EntityManager exception", e);
+			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new RuntimeException(e);
-		} finally {
-			entityManager.close();
 		}
 	}
 
@@ -63,14 +62,12 @@ public class AdService extends BaseService implements IAdService {
 			dao.insert(entity, entityManager);
 			entityManager.getTransaction().commit();
 
-			LOGGER.log(Level.INFO, String.format("new ad with id=%s was created", entity.getId()));
+			LOGGER.log(Level.INFO, String.format(CREATED, getEntityClassName(), entity.getId()));
 
 		} catch (Exception e) {
 			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, "EntityManager exception", e);
+			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new RuntimeException(e);
-		} finally {
-			entityManager.close();
 		}
 	}
 
@@ -81,14 +78,12 @@ public class AdService extends BaseService implements IAdService {
 			dao.delete(id, entityManager);
 			entityManager.getTransaction().commit();
 
-			LOGGER.log(Level.INFO, String.format("ad with id=%s was deleted", id));
+			LOGGER.log(Level.INFO, String.format(DELETED, getEntityClassName(), id));
 
 		} catch (Exception e) {
 			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, "EntityManager exception", e);
+			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new RuntimeException(e);
-		} finally {
-			entityManager.close();
 		}
 	}
 

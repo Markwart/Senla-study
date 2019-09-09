@@ -34,6 +34,7 @@ public class CategoryDao extends AbstractDao<Category, Integer> implements ICate
 
 		cq.select(from);
 		from.fetch("ads", JoinType.LEFT);
+		cq.distinct(true);
 
 		cq.where(cb.equal(from.get("id"), id));
 		TypedQuery<Category> tq = em.createQuery(cq);

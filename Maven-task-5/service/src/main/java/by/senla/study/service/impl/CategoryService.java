@@ -11,13 +11,14 @@ import by.senla.study.api.service.ICategoryService;
 import by.senla.study.dao.impl.CategoryDao;
 import by.senla.study.model.entity.Category;
 
-public class CategoryService extends BaseService implements ICategoryService {
+public class CategoryService extends BaseService<Category> implements ICategoryService {
 
 	private static final Logger LOGGER = LogManager.getLogger(CategoryService.class);
 	private ICategoryDao dao = CategoryDao.getInstance();
 	private static CategoryService instance;
 
 	private CategoryService() {
+		super(Category.class);
 	}
 
 	public static CategoryService getInstance() {
@@ -45,14 +46,12 @@ public class CategoryService extends BaseService implements ICategoryService {
 			dao.update(entity, entityManager);
 			entityManager.getTransaction().commit();
 
-			LOGGER.log(Level.INFO, String.format("category with id=%s was updated", entity.getId()));
+			LOGGER.log(Level.INFO, String.format(UPDATED, getEntityClassName(), entity.getId()));
 
 		} catch (Exception e) {
 			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, "EntityManager exception", e);
+			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new RuntimeException(e);
-		} finally {
-			entityManager.close();
 		}
 	}
 
@@ -63,14 +62,12 @@ public class CategoryService extends BaseService implements ICategoryService {
 			dao.insert(entity, entityManager);
 			entityManager.getTransaction().commit();
 
-			LOGGER.log(Level.INFO, String.format("new category with id=%s was created", entity.getId()));
+			LOGGER.log(Level.INFO, String.format(CREATED, getEntityClassName(), entity.getId()));
 
 		} catch (Exception e) {
 			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, "EntityManager exception", e);
+			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new RuntimeException(e);
-		} finally {
-			entityManager.close();
 		}
 	}
 
@@ -81,14 +78,12 @@ public class CategoryService extends BaseService implements ICategoryService {
 			dao.delete(id, entityManager);
 			entityManager.getTransaction().commit();
 
-			LOGGER.log(Level.INFO, String.format("category with id=%s was deleted", id));
+			LOGGER.log(Level.INFO, String.format(DELETED, getEntityClassName(), id));
 
 		} catch (Exception e) {
 			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, "EntityManager exception", e);
+			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new RuntimeException(e);
-		} finally {
-			entityManager.close();
 		}
 	}
 

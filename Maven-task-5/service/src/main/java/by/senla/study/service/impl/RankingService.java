@@ -11,13 +11,14 @@ import by.senla.study.api.service.IRankingService;
 import by.senla.study.dao.impl.RankingDao;
 import by.senla.study.model.entity.Ranking;
 
-public class RankingService extends BaseService implements IRankingService {
+public class RankingService extends BaseService<Ranking> implements IRankingService {
 
 	private static final Logger LOGGER = LogManager.getLogger(RankingService.class);
 	private IRankingDao dao = RankingDao.getInstance();
 	private static RankingService instance;
 
 	private RankingService() {
+		super(Ranking.class);
 	}
 
 	public static RankingService getInstance() {
@@ -45,15 +46,13 @@ public class RankingService extends BaseService implements IRankingService {
 			dao.update(entity, entityManager);
 			entityManager.getTransaction().commit();
 
-			LOGGER.log(Level.INFO, String.format("ranking with id=%s was updated", entity.getId()));
+			LOGGER.log(Level.INFO, String.format(UPDATED, getEntityClassName(), entity.getId()));
 
 		} catch (Exception e) {
 			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, "EntityManager exception", e);
+			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new RuntimeException(e);
-		} finally {
-			entityManager.close();
-		}
+		} 
 	}
 
 	@Override
@@ -63,15 +62,13 @@ public class RankingService extends BaseService implements IRankingService {
 			dao.insert(entity, entityManager);
 			entityManager.getTransaction().commit();
 
-			LOGGER.log(Level.INFO, String.format("new ranking with id=%s was created", entity.getId()));
+			LOGGER.log(Level.INFO, String.format(CREATED, getEntityClassName(), entity.getId()));
 
 		} catch (Exception e) {
 			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, "EntityManager exception", e);
+			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new RuntimeException(e);
-		} finally {
-			entityManager.close();
-		}
+		} 
 	}
 
 	@Override
@@ -81,15 +78,13 @@ public class RankingService extends BaseService implements IRankingService {
 			dao.delete(id, entityManager);
 			entityManager.getTransaction().commit();
 
-			LOGGER.log(Level.INFO, String.format("ranking with id=%s was deleted", id));
+			LOGGER.log(Level.INFO, String.format(DELETED, getEntityClassName(), id));
 
 		} catch (Exception e) {
 			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, "EntityManager exception", e);
+			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new RuntimeException(e);
-		} finally {
-			entityManager.close();
-		}
+		} 
 	}
 
 	@Override

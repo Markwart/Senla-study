@@ -11,13 +11,14 @@ import by.senla.study.api.service.IUserAccountService;
 import by.senla.study.dao.impl.UserAccountDao;
 import by.senla.study.model.entity.UserAccount;
 
-public class UserAccountService extends BaseService implements IUserAccountService {
+public class UserAccountService extends BaseService<UserAccount> implements IUserAccountService {
 
 	private static final Logger LOGGER = LogManager.getLogger(UserAccountService.class);
 	private IUserAccountDao dao = UserAccountDao.getInstance();
 	private static UserAccountService instance;
 
 	private UserAccountService() {
+		super(UserAccount.class);
 	}
 
 	public static UserAccountService getInstance() {
@@ -45,14 +46,12 @@ public class UserAccountService extends BaseService implements IUserAccountServi
 			dao.update(entity, entityManager);
 			entityManager.getTransaction().commit();
 
-			LOGGER.log(Level.INFO, String.format("user with id=%s was updated", entity.getId()));
+			LOGGER.log(Level.INFO, String.format(UPDATED, getEntityClassName(), entity.getId()));
 
 		} catch (Exception e) {
 			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, "EntityManager exception", e);
+			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new RuntimeException(e);
-		} finally {
-			entityManager.close();
 		}
 	}
 
@@ -63,14 +62,12 @@ public class UserAccountService extends BaseService implements IUserAccountServi
 			dao.insert(entity, entityManager);
 			entityManager.getTransaction().commit();
 
-			LOGGER.log(Level.INFO, String.format("new user with id=%s was created", entity.getId()));
+			LOGGER.log(Level.INFO, String.format(CREATED, getEntityClassName(), entity.getId()));
 
 		} catch (Exception e) {
 			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, "EntityManager exception", e);
+			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new RuntimeException(e);
-		} finally {
-			entityManager.close();
 		}
 	}
 
@@ -81,14 +78,12 @@ public class UserAccountService extends BaseService implements IUserAccountServi
 			dao.delete(id, entityManager);
 			entityManager.getTransaction().commit();
 
-			LOGGER.log(Level.INFO, String.format("user with id=%s was deleted", id));
+			LOGGER.log(Level.INFO, String.format(DELETED, getEntityClassName(), id));
 
 		} catch (Exception e) {
 			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, "EntityManager exception", e);
+			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new RuntimeException(e);
-		} finally {
-			entityManager.close();
 		}
 	}
 

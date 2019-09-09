@@ -36,6 +36,7 @@ public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
 		from.fetch("seller", JoinType.LEFT);
 		from.fetch("category", JoinType.LEFT);
 		from.fetch("comments", JoinType.LEFT);
+		cq.distinct(true);
 
 		cq.where(cb.equal(from.get("id"), id));
 		TypedQuery<Ad> tq = em.createQuery(cq);
