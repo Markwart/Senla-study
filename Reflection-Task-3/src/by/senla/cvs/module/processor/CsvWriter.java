@@ -98,6 +98,7 @@ public class CsvWriter {
 		}
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	private Object defineTypeField(Object someObject, Field field, CsvProperty annotatedField,
 			List<Object> annotatedObjects, List<Object> relatedObjectsList)
 			throws NoSuchFieldException, IllegalAccessException, IOException {
@@ -114,7 +115,16 @@ public class CsvWriter {
 
 			for (Object relatedObject : relatedObjectsList) {
 				if (relatedObject.equals(compositeField)) {
-					Field relatedObjectField = relatedObject.getClass().getDeclaredField(annotatedField.keyField());
+
+					Field relatedObjectField = null;
+					Field[] relatedObjectFields = relatedObject.getClass().getDeclaredFields();
+
+						if (relatedObjectFields.equals(annotatedField.keyField())) {
+							relatedObjectField = relatedObject.getClass().getDeclaredField(annotatedField.keyField());
+						} else {
+							relatedObjectField = relatedObject.getClass().getSuperclass()
+									.getDeclaredField(annotatedField.keyField());
+						}
 					relatedObjectField.setAccessible(true);
 					keyFieldValue = relatedObjectField.get(relatedObject).toString();
 				}
@@ -128,9 +138,20 @@ public class CsvWriter {
 	}
 
 	private Map<Integer, Field> findAnnFields(Object someObject) {
-		Field[] fields = someObject.getClass().getDeclaredFields();
 		Map<Integer, Field> annotatedFieldsMap = new HashMap<Integer, Field>();
 
+		Field[] superClassFields = someObject.getClass().getSuperclass().getDeclaredFields();
+		if (superClassFields.length > 0) {
+			annotatedFieldsMap = iterateFields(annotatedFieldsMap, superClassFields);
+		}
+
+		Field[] fields = someObject.getClass().getDeclaredFields();
+		annotatedFieldsMap = iterateFields(annotatedFieldsMap, fields);
+
+		return annotatedFieldsMap;
+	}
+
+	public Map<Integer, Field> iterateFields(Map<Integer, Field> annotatedFieldsMap, Field[] fields) {
 		for (Field field : fields) {
 			field.setAccessible(true);
 			if (field.isAnnotationPresent(CsvProperty.class)) {

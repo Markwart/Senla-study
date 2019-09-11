@@ -62,7 +62,7 @@ public class Init {
 
 		writer.writeToCsv(annObjects, path);
 		List<Object> classList = reader.readFromCsv(folder, ClassOne.class);
-
+		
 		System.out.println(classList.size());
 		for (Object object : classList) {
 			String fieldName = null;
@@ -77,11 +77,4 @@ public class Init {
 			}
 		}
 	}
-
-	/*private static void createFolder() {
-		File folder = new File("./data/");
-		if (!folder.isDirectory()) {
-			folder.mkdir();
-		}
-	}*/
 }

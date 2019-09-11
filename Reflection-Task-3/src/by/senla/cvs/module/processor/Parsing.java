@@ -20,7 +20,7 @@ public class Parsing {
 	public List<Object> parseToEntity(Map<String, List<String[]>> strObjectsMap, String requiredClassName) {
 
 		List<Object> newObjectsList = new ArrayList<>();
-		List<Object> relatedbjectsList = new ArrayList<>();
+		List<Object> relatedObjectList = new ArrayList<>();
 		Map<String, String[]> fieldsNameMap = createFieldsMap(strObjectsMap);
 		Map<String, String> classNameMap = createClassNameMap(strObjectsMap);
 
@@ -28,7 +28,7 @@ public class Parsing {
 			for (String[] fieldsArray : strList) {
 				try {
 					Object someObject = createObject(classNameMap, className, fieldsNameMap, fieldsArray, strObjectsMap,
-							relatedbjectsList);
+							relatedObjectList);
 					if (className.equals(requiredClassName)) {
 						newObjectsList.add(someObject);
 					}
@@ -63,7 +63,7 @@ public class Parsing {
 	}
 
 	private Object createObject(Map<String, String> classNameMap, String className, Map<String, String[]> fieldsNameMap,
-			String[] fieldsArray, Map<String, List<String[]>> strObjectsMap, List<Object> relatedbjectsList)
+			String[] fieldsArray, Map<String, List<String[]>> strObjectsMap, List<Object> relatedObjectList)
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 
 		Class<?> someObject = Class.forName(classNameMap.get(className));
@@ -75,22 +75,33 @@ public class Parsing {
 			CsvProperty annotatedField = field.getAnnotation(CsvProperty.class);
 			if (field.isAnnotationPresent(CsvProperty.class)) {
 				setFieldValue(classNameMap, field, newObject, fieldsNameMap, fieldsArray, annotatedField, strObjectsMap,
-						relatedbjectsList);
+						relatedObjectList);
 			}
 		}
 		return newObject;
 	}
 
-	private Object checkExistenceObj(List<Object> relatedbjectsList, Object someObject)
+	@SuppressWarnings("unlikely-arg-type")
+	private Object checkExistenceObj(List<Object> relatedObjectList, Object someObject)
 			throws IllegalAccessException, NoSuchFieldException {
 
-		if (!(relatedbjectsList.size() == 0)) {
-			for (Object object : relatedbjectsList) {
+		if (!(relatedObjectList.size() == 0)) {
+			for (Object object : relatedObjectList) {
 				CsvEntity annClass = someObject.getClass().getAnnotation(CsvEntity.class);
 				if (someObject.getClass().getName().equals(object.getClass().getName())) {
 
-					Field someObjectField = someObject.getClass().getDeclaredField(annClass.entityId());
-					Field objectField = object.getClass().getDeclaredField(annClass.entityId());
+					Field[] someObjectFields = someObject.getClass().getDeclaredFields();
+					Field[] objectFields = object.getClass().getDeclaredFields();
+					Field someObjectField = null;
+					Field objectField = null;
+
+					if (someObjectFields.equals(annClass.entityId()) && objectFields.equals(annClass.entityId())) {
+						someObjectField = someObject.getClass().getDeclaredField(annClass.entityId());
+						objectField = object.getClass().getDeclaredField(annClass.entityId());
+					} else {
+						someObjectField = someObject.getClass().getSuperclass().getDeclaredField(annClass.entityId());
+						objectField = object.getClass().getSuperclass().getDeclaredField(annClass.entityId());
+					}
 					someObjectField.setAccessible(true);
 					objectField.setAccessible(true);
 
@@ -100,14 +111,14 @@ public class Parsing {
 				}
 			}
 		} else {
-			relatedbjectsList.add(someObject);
+			relatedObjectList.add(someObject);
 		}
 		return someObject;
 	}
 
 	private void setFieldValue(Map<String, String> classNameMap, Field field, Object newObject,
 			Map<String, String[]> fieldsNameMap, String[] fieldsArray, CsvProperty annotatedField,
-			Map<String, List<String[]>> strObjectsMap, List<Object> relatedbjectsList)
+			Map<String, List<String[]>> strObjectsMap, List<Object> relatedObjectList)
 			throws IllegalArgumentException, IllegalAccessException {
 
 		String fieldType = field.getType().getSimpleName();
@@ -115,7 +126,7 @@ public class Parsing {
 
 		if (annotatedField.propertyType() == PropertyType.COMPOSITE) {
 			setObjectField(classNameMap, field, fieldValue, newObject, annotatedField, fieldsArray, strObjectsMap,
-					fieldsNameMap, relatedbjectsList);
+					fieldsNameMap, relatedObjectList);
 		} else {
 			field.set(newObject, Сonverting.convertField(fieldType, fieldValue));
 		}
@@ -123,7 +134,7 @@ public class Parsing {
 
 	private void setObjectField(Map<String, String> classNameMap, Field field, String fieldValue, Object newObject,
 			CsvProperty annotatedField, String[] fieldsArray, Map<String, List<String[]>> strObjectsMap,
-			Map<String, String[]> fieldsNameMap, List<Object> relatedbjectsList) {
+			Map<String, String[]> fieldsNameMap, List<Object> relatedObjectList) {
 
 		String className = fieldValue.split("::", 2)[0];
 		String keyField = fieldValue.split("::", 2)[1];
@@ -136,11 +147,11 @@ public class Parsing {
 				if (key.contains(className) & Arrays.asList(array).get(indexArray).equals(keyField)) {
 					try {
 						Object relatedObject = createObject(classNameMap, key, fieldsNameMap, array, strObjectsMap,
-								relatedbjectsList);
+								relatedObjectList);
 
-						relatedObject = checkExistenceObj(relatedbjectsList, relatedObject);
+						relatedObject = checkExistenceObj(relatedObjectList, relatedObject);
 						field.set(newObject, relatedObject);
-						
+
 					} catch (ClassNotFoundException | IllegalAccessException | InstantiationException
 							| NoSuchFieldException e) {
 						LOGGER.log(Level.SEVERE, "Exception", e);
