@@ -1,22 +1,9 @@
 package by.senla.study.api.service;
 
-import java.util.List;
-
 import by.senla.study.model.entity.Message;
 
-public interface IMessageService {
+public interface IMessageService extends GenericService<Message, Integer> {
 
-	Message createEntity();
-
-	Message get(Integer id);
-	
-	void update(Message entity);
-
-	void insert(Message entity);
-
-	void delete(Integer id);
-	
-	List<Message> selectAll();
 
 	Message getFullInfo(Integer id);
 }

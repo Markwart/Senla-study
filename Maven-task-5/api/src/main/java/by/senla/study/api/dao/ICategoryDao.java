@@ -4,7 +4,7 @@ import javax.persistence.EntityManager;
 
 import by.senla.study.model.entity.Category;
 
-public interface ICategoryDao extends IDao<Category, Integer> {
+public interface ICategoryDao extends GenericDao<Category, Integer> {
 
 	Category getFullInfo(Integer id, EntityManager entityManager);
 

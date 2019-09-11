@@ -3,13 +3,14 @@ package by.senla.study.dao.impl;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import by.senla.study.api.dao.IDao;
+import by.senla.study.api.dao.GenericDao;
 
-public abstract class AbstractDao<T, PK> implements IDao<T, PK> {
+public abstract class AbstractDao<T, PK> implements GenericDao<T, PK> {
 
 	private Class<T> entityClass;
 
@@ -22,7 +23,7 @@ public abstract class AbstractDao<T, PK> implements IDao<T, PK> {
 	}
 
 	@Override
-	public T get(PK id, EntityManager entityManager) {
+	public T getByID(PK id, EntityManager entityManager) {
 		return entityManager.find(getEntityClass(), id);
 	}
 
@@ -33,23 +34,28 @@ public abstract class AbstractDao<T, PK> implements IDao<T, PK> {
 
 	@Override
 	public void update(T entity, EntityManager entityManager) {
-		entity = entityManager.merge(entity);
-		entityManager.flush();
+		entityManager.merge(entity);
 	}
 
 	@Override
-	public void delete(PK id, EntityManager entityManager) {
-		entityManager.remove(get(id, entityManager));
-		entityManager.flush();
+	public void deleteByID(PK id, EntityManager entityManager) {
+		entityManager.createQuery(String.format("delete from %s where id = %s", entityClass.getSimpleName(), id));
 	}
 
 	@Override
-	public List<T> selectAll(EntityManager entityManager) {
-		EntityManager em = entityManager;
+	public List<T> selectAll(EntityManager em) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<T> cq = cb.createQuery(getEntityClass());
 		Root<T> from = cq.from(getEntityClass());
 		cq.select(from);
 		return em.createQuery(cq).getResultList();
+	}
+
+	protected T getSingleResult(TypedQuery<T> tq) {
+		List<T> resultList = tq.getResultList();
+		if (resultList.size() != 1) {
+			throw new IllegalArgumentException("unexpected result count:" + resultList.size());
+		}
+		return resultList.get(0);
 	}
 }

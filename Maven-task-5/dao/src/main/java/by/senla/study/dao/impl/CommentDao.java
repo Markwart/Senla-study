@@ -26,8 +26,7 @@ public class CommentDao extends AbstractDao<Comment, Integer> implements ICommen
 	}
 	
 	@Override
-	public Comment getFullInfo(Integer id, EntityManager entityManager) {
-		EntityManager em = entityManager;
+	public Comment getFullInfo(Integer id, EntityManager em) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Comment> cq = cb.createQuery(Comment.class);
 		Root<Comment> from = cq.from(Comment.class);
@@ -39,6 +38,6 @@ public class CommentDao extends AbstractDao<Comment, Integer> implements ICommen
 		cq.where(cb.equal(from.get("id"), id));
 		TypedQuery<Comment> tq = em.createQuery(cq);
 
-		return tq.getSingleResult();
+		return getSingleResult(tq);
 	}
 }

@@ -4,7 +4,7 @@ import javax.persistence.EntityManager;
 
 import by.senla.study.model.entity.Chat;
 
-public interface IChatDao extends IDao<Chat, Integer> {
+public interface IChatDao extends GenericDao<Chat, Integer> {
 
 	Chat getFullInfo(Integer id, EntityManager entityManager);
 

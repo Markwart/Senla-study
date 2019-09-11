@@ -26,8 +26,7 @@ public class UserAccountDao extends AbstractDao<UserAccount, Integer> implements
 	}
 	
 	@Override
-	public UserAccount getFullInfo(Integer id, EntityManager entityManager) {
-		EntityManager em = entityManager;
+	public UserAccount getFullInfo(Integer id, EntityManager em) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<UserAccount> cq = cb.createQuery(UserAccount.class);
 		Root<UserAccount> from = cq.from(UserAccount.class);
@@ -42,11 +41,10 @@ public class UserAccountDao extends AbstractDao<UserAccount, Integer> implements
 		from.fetch("comments", JoinType.LEFT);
 		from.fetch("wishlist", JoinType.LEFT);
 		from.fetch("chats", JoinType.LEFT);
-		cq.distinct(true);
 
 		cq.where(cb.equal(from.get("id"), id));
 		TypedQuery<UserAccount> tq = em.createQuery(cq);
 
-		return tq.getSingleResult();
+		return getSingleResult(tq);
 	}
 }

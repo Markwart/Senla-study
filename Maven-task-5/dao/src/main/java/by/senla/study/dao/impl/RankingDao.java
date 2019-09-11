@@ -26,8 +26,7 @@ public class RankingDao extends AbstractDao<Ranking, Integer> implements IRankin
 	}
 	
 	@Override
-	public Ranking getFullInfo(Integer id, EntityManager entityManager) {
-		EntityManager em = entityManager;
+	public Ranking getFullInfo(Integer id, EntityManager em) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Ranking> cq = cb.createQuery(Ranking.class);
 		Root<Ranking> from = cq.from(Ranking.class);
@@ -39,6 +38,6 @@ public class RankingDao extends AbstractDao<Ranking, Integer> implements IRankin
 		cq.where(cb.equal(from.get("id"), id));
 		TypedQuery<Ranking> tq = em.createQuery(cq);
 
-		return tq.getSingleResult();
+		return getSingleResult(tq);
 	}
 }

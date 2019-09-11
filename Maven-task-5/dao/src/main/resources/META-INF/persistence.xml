@@ -19,10 +19,13 @@
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />
-			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.show_sql" value="false" />
 			<property name="hibernate.format_sql" value="true" />
 			<property name="current_session_context_class" value="thread" />
 			<property name="cache.provider_class" value="org.hibernate.cache.internal.NoCacheProvider" />
+			
+			<property name="hibernate.search.default.directory_provider" value="filesystem"/>
+			<property name="hibernate.search.default.indexBase" value="/data/lucene/indexes"/>
 		</properties>
 
 	</persistence-unit>

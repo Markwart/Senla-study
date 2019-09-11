@@ -24,21 +24,19 @@ public class CategoryDao extends AbstractDao<Category, Integer> implements ICate
 		}
 		return instance;
 	}
-	
+
 	@Override
-	public Category getFullInfo(Integer id, EntityManager entityManager) {
-		EntityManager em = entityManager;
+	public Category getFullInfo(Integer id, EntityManager em) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Category> cq = cb.createQuery(Category.class);
 		Root<Category> from = cq.from(Category.class);
 
 		cq.select(from);
 		from.fetch("ads", JoinType.LEFT);
-		cq.distinct(true);
 
 		cq.where(cb.equal(from.get("id"), id));
 		TypedQuery<Category> tq = em.createQuery(cq);
 
-		return tq.getSingleResult();
+		return getSingleResult(tq);
 	}
 }

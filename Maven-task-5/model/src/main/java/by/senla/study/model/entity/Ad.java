@@ -1,6 +1,7 @@
 package by.senla.study.model.entity;
 
 import java.math.BigDecimal;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,16 +15,25 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
+
 import by.senla.study.model.enums.Status;
 
 @Entity
 @Table(name = "ad")
+@Indexed
 public class Ad extends BaseEntity {
 
 	@Column(name = "theme")
+	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
 	private String theme;
 
 	@Column(name = "text")
+	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
 	private String text;
 
 	@Column(name = "price")
@@ -43,7 +53,7 @@ public class Ad extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id")
 	private Category category;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "ad")
 	private Set<Comment> comments = new HashSet<Comment>();
 

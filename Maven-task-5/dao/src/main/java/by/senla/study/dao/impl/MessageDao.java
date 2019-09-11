@@ -26,8 +26,7 @@ public class MessageDao extends AbstractDao<Message, Integer> implements IMessag
 	}
 	
 	@Override
-	public Message getFullInfo(Integer id, EntityManager entityManager) {
-		EntityManager em = entityManager;
+	public Message getFullInfo(Integer id, EntityManager em) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Message> cq = cb.createQuery(Message.class);
 		Root<Message> from = cq.from(Message.class);
@@ -39,6 +38,6 @@ public class MessageDao extends AbstractDao<Message, Integer> implements IMessag
 		cq.where(cb.equal(from.get("id"), id));
 		TypedQuery<Message> tq = em.createQuery(cq);
 
-		return tq.getSingleResult();
+		return getSingleResult(tq);
 	}
 }

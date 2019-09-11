@@ -26,19 +26,17 @@ public class ChatDao extends AbstractDao<Chat, Integer> implements IChatDao {
 	}
 	
 	@Override
-	public Chat getFullInfo(Integer id, EntityManager entityManager) {
-		EntityManager em = entityManager;
+	public Chat getFullInfo(Integer id, EntityManager em) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Chat> cq = cb.createQuery(Chat.class);
 		Root<Chat> from = cq.from(Chat.class);
 
 		cq.select(from);
 		from.fetch("messages", JoinType.LEFT);
-		cq.distinct(true);
 
 		cq.where(cb.equal(from.get("id"), id));
 		TypedQuery<Chat> tq = em.createQuery(cq);
 
-		return tq.getSingleResult();
+		return getSingleResult(tq);
 	}
 }

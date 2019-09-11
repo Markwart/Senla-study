@@ -2,19 +2,14 @@ package by.senla.study.service.impl;
 
 import java.util.List;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import by.senla.study.api.dao.IPersonalDataDao;
 import by.senla.study.api.service.IPersonalDataService;
 import by.senla.study.dao.impl.PersonalDataDao;
 import by.senla.study.model.entity.PersonalData;
 
-public class PersonalDataService extends BaseService<PersonalData> implements IPersonalDataService {
+public class PersonalDataService extends AbstractService<PersonalData, Integer> implements IPersonalDataService {
 
-	private static final Logger LOGGER = LogManager.getLogger(PersonalDataService.class);
-	private IPersonalDataDao dao = PersonalDataDao.getInstance();
+	private IPersonalDataDao personalDataDao = PersonalDataDao.getInstance();
 	private static PersonalDataService instance;
 
 	private PersonalDataService() {
@@ -34,34 +29,35 @@ public class PersonalDataService extends BaseService<PersonalData> implements IP
 	}
 
 	@Override
-	public PersonalData get(Integer id) {
-		PersonalData entity = dao.get(id, entityManager);
+	public PersonalData getByID(Integer id) {
+		PersonalData entity = personalDataDao.getByID(id, entityManager);
 		return entity;
 	}
 
 	@Override
-	public void update(PersonalData entity) {
-		dao.update(entity, entityManager);
-		LOGGER.log(Level.INFO, String.format(UPDATED, getEntityClassName(), entity.getId()));
-	}
-
-	@Override
-	public void insert(PersonalData entity) {
-		dao.insert(entity, entityManager);
-		LOGGER.log(Level.INFO, String.format(CREATED, getEntityClassName(), entity.getId()));
-	}
-
-	@Override
-
-	public void delete(Integer id) {
-		dao.delete(id, entityManager);
-		LOGGER.log(Level.INFO, String.format(DELETED, getEntityClassName(), id));
-	}
-
-	@Override
 	public List<PersonalData> selectAll() {
-		List<PersonalData> all = dao.selectAll(entityManager);
-		return all;
+		List<PersonalData> personalDataList = personalDataDao.selectAll(entityManager);
+		return personalDataList;
+	}
+
+	@Override
+	public void updateOperation(PersonalData entity) {
+		personalDataDao.update(entity, entityManager);
+	}
+
+	@Override
+	public void insertOperation(PersonalData entity) {
+		personalDataDao.insert(entity, entityManager);
+	}
+
+	@Override
+	public void deleteOperation(Integer id) {
+		personalDataDao.deleteByID(id, entityManager);
+	}
+
+	@Override
+	public Integer getPK(PersonalData entity) {
+		return entity.getId();
 	}
 
 }

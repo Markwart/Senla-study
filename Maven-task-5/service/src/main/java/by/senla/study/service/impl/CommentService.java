@@ -2,19 +2,14 @@ package by.senla.study.service.impl;
 
 import java.util.List;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import by.senla.study.api.dao.ICommentDao;
 import by.senla.study.api.service.ICommentService;
 import by.senla.study.dao.impl.CommentDao;
 import by.senla.study.model.entity.Comment;
 
-public class CommentService extends BaseService<Comment> implements ICommentService {
+public class CommentService extends AbstractService<Comment, Integer> implements ICommentService {
 
-	private static final Logger LOGGER = LogManager.getLogger(CommentService.class);
-	private ICommentDao dao = CommentDao.getInstance();
+	private ICommentDao commentDao = CommentDao.getInstance();
 	private static CommentService instance;
 
 	private CommentService() {
@@ -34,67 +29,39 @@ public class CommentService extends BaseService<Comment> implements ICommentServ
 	}
 
 	@Override
-	public Comment get(Integer id) {
-		Comment entity = dao.get(id, entityManager);
+	public Comment getByID(Integer id) {
+		Comment entity = commentDao.getByID(id, entityManager);
 		return entity;
 	}
 
 	@Override
-	public void update(Comment entity) {
-		entityManager.getTransaction().begin();
-		try {
-			dao.update(entity, entityManager);
-			entityManager.getTransaction().commit();
-
-			LOGGER.log(Level.INFO, String.format(UPDATED, getEntityClassName(), entity.getId()));
-
-		} catch (Exception e) {
-			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, EXCEPTION, e);
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public void insert(Comment entity) {
-		entityManager.getTransaction().begin();
-		try {
-			dao.insert(entity, entityManager);
-			entityManager.getTransaction().commit();
-
-			LOGGER.log(Level.INFO, String.format(CREATED, getEntityClassName(), entity.getId()));
-
-		} catch (Exception e) {
-			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, EXCEPTION, e);
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public void delete(Integer id) {
-		entityManager.getTransaction().begin();
-		try {
-			dao.delete(id, entityManager);
-			entityManager.getTransaction().commit();
-
-			LOGGER.log(Level.INFO, String.format(DELETED, getEntityClassName(), id));
-
-		} catch (Exception e) {
-			entityManager.getTransaction().rollback();
-			LOGGER.log(Level.WARN, EXCEPTION, e);
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
 	public List<Comment> selectAll() {
-		List<Comment> all = dao.selectAll(entityManager);
-		return all;
+		List<Comment> commentList = commentDao.selectAll(entityManager);
+		return commentList;
 	}
 
 	@Override
 	public Comment getFullInfo(Integer id) {
-		return dao.getFullInfo(id, entityManager);
+		return commentDao.getFullInfo(id, entityManager);
+	}
+
+	@Override
+	public void updateOperation(Comment entity) {
+		commentDao.update(entity, entityManager);
+	}
+
+	@Override
+	public void insertOperation(Comment entity) {
+		commentDao.insert(entity, entityManager);
+	}
+
+	@Override
+	public void deleteOperation(Integer id) {
+		commentDao.deleteByID(id, entityManager);
+	}
+
+	@Override
+	public Integer getPK(Comment entity) {
+		return entity.getId();
 	}
 }

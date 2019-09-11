@@ -4,7 +4,7 @@ import javax.persistence.EntityManager;
 
 import by.senla.study.model.entity.UserAccount;
 
-public interface IUserAccountDao extends IDao<UserAccount, Integer> {
+public interface IUserAccountDao extends GenericDao<UserAccount, Integer> {
 
 	UserAccount getFullInfo(Integer id, EntityManager entityManager);
 
