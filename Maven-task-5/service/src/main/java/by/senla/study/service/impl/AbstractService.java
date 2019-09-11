@@ -18,7 +18,7 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 	private static final String CREATED = "new %s with id=%d was created";
 	private static final String UPDATED = "%s with id=%d was updated";
 	private static final String DELETED = "%s with id=%d was deleted";
-	
+
 	private Class<T> entityClass;
 
 	protected AbstractService(Class<T> entityClass) {

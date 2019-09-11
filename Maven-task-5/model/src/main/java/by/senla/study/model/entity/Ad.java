@@ -38,7 +38,7 @@ public class Ad extends BaseEntity {
 
 	@Column(name = "price")
 	private BigDecimal price;
-
+	
 	@Column(name = "image")
 	private String image;
 

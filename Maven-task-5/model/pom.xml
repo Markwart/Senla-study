@@ -28,6 +28,15 @@
 			<version>5.11.2.Final</version>
 		</dependency>
 
+		<!-- CSV-module -->
+		<dependency>
+			<artifactId>CSV-module</artifactId>
+			<groupId>CSV-module</groupId>
+			<scope>system</scope>
+			<version>0.0.1-SNAPSHOT</version>
+			<systemPath>${project.basedir}/lib/CsvProcessor.jar</systemPath>
+		</dependency>
+
 	</dependencies>
 
 </project>

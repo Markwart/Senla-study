@@ -8,9 +8,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import by.senla.cvs.module.annotations.CsvProperty;
+import by.senla.cvs.module.enums.PropertyType;
+
 @MappedSuperclass
 public class BaseEntity {
 
+	@CsvProperty(columnNumber = 0, propertyType = PropertyType.SIMPLE)
 	@Id
 	@Column(name = "id", insertable = false, updatable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
