@@ -1,7 +1,6 @@
 package by.senla.cvs.module.processor;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,7 +22,7 @@ public class CsvWriter {
 
 	private static final Logger LOGGER = Logger.getLogger(CsvWriter.class.getName());
 
-	public void writeToCsv(List<Object> annotatedObjects, File folder) throws IOException {
+	public void writeToCsv(List<Object> annotatedObjects, String folder) throws IOException {
 
 		writeFieldName(annotatedObjects, folder);
 		List<Object> relatedObjectsList = new ArrayList<>();
@@ -51,17 +50,16 @@ public class CsvWriter {
 			}
 		}
 		writeClassName(annotatedObjects, folder);
-		
+
 		if (!(relatedObjectsList.size() == 0)) {
 			writeToCsv(relatedObjectsList, folder);
 		}
 	}
 
-	private void writeClassName(List<Object> annObjects, File folder) throws IOException, FileNotFoundException {
+	private void writeClassName(List<Object> annObjects, String folder) throws IOException, FileNotFoundException {
 		for (Object someObject : annObjects) {
 			CsvEntity annotatedClass = someObject.getClass().getAnnotation(CsvEntity.class);
-			try (BufferedWriter wr = new BufferedWriter(
-					new FileWriter(folder + annotatedClass.fileName(), true));) {
+			try (BufferedWriter wr = new BufferedWriter(new FileWriter(folder + annotatedClass.fileName(), true));) {
 				List<String> lines = Files.readAllLines(Paths.get(folder + annotatedClass.fileName()));
 				if (!lines.contains(someObject.getClass().getName())) {
 					wr.write(someObject.getClass().getName());
@@ -70,15 +68,14 @@ public class CsvWriter {
 		}
 	}
 
-	private void writeFieldName(List<Object> annotatedObjects, File folder) throws IOException {
+	private void writeFieldName(List<Object> annotatedObjects, String folder) throws IOException {
 
 		for (Object someObject : annotatedObjects) {
 
 			CsvEntity annotatedClass = someObject.getClass().getAnnotation(CsvEntity.class);
 			Map<Integer, Field> annotatedFieldsMap = findAnnFields(someObject);
 
-			try (BufferedWriter wr = new BufferedWriter(
-					new FileWriter(folder + annotatedClass.fileName(), false));) {
+			try (BufferedWriter wr = new BufferedWriter(new FileWriter(folder + annotatedClass.fileName(), false));) {
 
 				annotatedFieldsMap.forEach((key, field) -> {
 					try {

@@ -23,7 +23,7 @@ public class Init {
 		classTwo1.setNumber(34);
 		classTwo1.setCharacter('g');
 		classTwo1.setFl(11.6F);
-		
+
 		ClassTwo classTwo2 = new ClassTwo();
 		classTwo2.setId(5);
 		classTwo2.setName("Bad name");
@@ -58,10 +58,11 @@ public class Init {
 		}
 
 		File folder = new File("./data/");
+		String stringFolder = "./data/";
 		CsvWriter writer = new CsvWriter();
 		CsvReader reader = new CsvReader();
 
-		writer.writeToCsv(annObjects, folder);
+		writer.writeToCsv(annObjects, stringFolder);
 		List<Object> classList = reader.readFromCsv(folder, ClassOne.class);
 
 		System.out.println(classList.size());
@@ -80,7 +81,7 @@ public class Init {
 	}
 
 	private static void createFolder() {
-		File folder = new File("./data");
+		File folder = new File("./data/");
 		if (!folder.isDirectory()) {
 			folder.mkdir();
 		}
