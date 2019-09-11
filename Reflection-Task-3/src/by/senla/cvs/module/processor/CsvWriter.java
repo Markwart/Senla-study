@@ -1,6 +1,7 @@
 package by.senla.cvs.module.processor;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,6 +24,8 @@ public class CsvWriter {
 	private static final Logger LOGGER = Logger.getLogger(CsvWriter.class.getName());
 
 	public void writeToCsv(List<Object> annotatedObjects, String folder) throws IOException {
+
+		createFolder(folder);
 
 		writeFieldName(annotatedObjects, folder);
 		List<Object> relatedObjectsList = new ArrayList<>();
@@ -135,5 +138,12 @@ public class CsvWriter {
 			}
 		}
 		return annotatedFieldsMap;
+	}
+
+	private static void createFolder(String path) {
+		File folder = new File(path);
+		if (!folder.isDirectory()) {
+			folder.mkdir();
+		}
 	}
 }

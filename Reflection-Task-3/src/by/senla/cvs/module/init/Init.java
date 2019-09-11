@@ -15,8 +15,6 @@ public class Init {
 	public static void main(String[] args) throws IOException, IllegalArgumentException, IllegalAccessException,
 			NoSuchFieldException, InstantiationException, ClassNotFoundException {
 
-		createFolder();
-
 		ClassTwo classTwo1 = new ClassTwo();
 		classTwo1.setId(3);
 		classTwo1.setName("Good name");
@@ -57,12 +55,12 @@ public class Init {
 			}
 		}
 
-		File folder = new File("./data/");
-		String stringFolder = "./data/";
+		String path = "./data/";
+		File folder = new File(path);
 		CsvWriter writer = new CsvWriter();
 		CsvReader reader = new CsvReader();
 
-		writer.writeToCsv(annObjects, stringFolder);
+		writer.writeToCsv(annObjects, path);
 		List<Object> classList = reader.readFromCsv(folder, ClassOne.class);
 
 		System.out.println(classList.size());
@@ -80,10 +78,10 @@ public class Init {
 		}
 	}
 
-	private static void createFolder() {
+	/*private static void createFolder() {
 		File folder = new File("./data/");
 		if (!folder.isDirectory()) {
 			folder.mkdir();
 		}
-	}
+	}*/
 }
