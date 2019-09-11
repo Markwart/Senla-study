@@ -1,0 +1,10 @@
+by\senla\study\dao\impl\UserAccountDao.class
+by\senla\study\dao\impl\PersonalDataDao.class
+by\senla\study\dao\impl\AdDao.class
+by\senla\study\dao\impl\AbstractDao.class
+by\senla\study\dao\impl\RankingDao.class
+by\senla\study\dao\impl\ChatDao.class
+by\senla\study\dao\impl\MessageDao.class
+by\senla\study\dao\impl\CategoryDao.class
+by\senla\study\dao\impl\CommentDao.class
+by\senla\study\dao\utils\HibernateEntityManagerUtil.class
