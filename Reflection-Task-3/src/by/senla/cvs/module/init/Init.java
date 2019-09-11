@@ -61,7 +61,7 @@ public class Init {
 		CsvWriter writer = new CsvWriter();
 		CsvReader reader = new CsvReader();
 
-		writer.writeToCsv(annObjects);
+		writer.writeToCsv(annObjects, folder);
 		List<Object> classList = reader.readFromCsv(folder, ClassOne.class);
 
 		System.out.println(classList.size());
