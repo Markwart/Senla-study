@@ -11,6 +11,7 @@ import javax.persistence.MappedSuperclass;
 import by.senla.cvs.module.annotations.CsvProperty;
 import by.senla.cvs.module.enums.PropertyType;
 
+
 @MappedSuperclass
 public class BaseEntity {
 

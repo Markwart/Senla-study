@@ -76,14 +76,15 @@ public class UserAccountService extends AbstractService<UserAccount, Integer> im
 
 		List<UserAccount> userAccountList = userAccountDao.selectAll(entityManager);
 		List<Object> annotatedObjects = new ArrayList<>();
-		File folder = new File("./data/");
+		File folder = new File("./data");
 
 		for (UserAccount user : userAccountList) {
 			annotatedObjects.add(user);
 		}
 		CsvWriter writer = new CsvWriter();
 		try {
-			writer.writeToCsv(annotatedObjects);
+			writer.writeToCsv(annotatedObjects, folder);
+			LOGGER.log(Level.INFO, "Data was written to file");
 		} catch (IOException e) {
 			LOGGER.log(Level.WARN, "Failed to write", e);
 			throw new RuntimeException(e);

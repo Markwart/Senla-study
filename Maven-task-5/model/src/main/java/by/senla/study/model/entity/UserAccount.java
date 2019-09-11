@@ -17,6 +17,7 @@ import by.senla.cvs.module.annotations.CsvEntity;
 import by.senla.cvs.module.annotations.CsvProperty;
 import by.senla.cvs.module.enums.PropertyType;
 
+
 @CsvEntity(fileName = "UserAccount.csv")
 @Entity
 @Table(name = "user_account")

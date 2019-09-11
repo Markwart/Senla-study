@@ -22,8 +22,8 @@ public class Init {
 		user1.setUpdated(new Date());
 		service.insert(user1);*/
 
-		System.out.println("LIST=" + service.selectAll().size());
-		System.out.println("EMAIL=" + service.getByID(25).getEmail());
+		//System.out.println("LIST=" + service.selectAll().size());
+		//System.out.println("EMAIL=" + service.getByID(25).getEmail());
 		
 		service.exportToCSV();
 		
