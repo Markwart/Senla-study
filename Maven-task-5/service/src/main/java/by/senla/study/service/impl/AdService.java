@@ -66,6 +66,11 @@ public class AdService extends AbstractService<Ad, Integer> implements IAdServic
 	public Integer getPK(Ad entity) {
 		return entity.getId();
 	}
+	
+	@Override
+	public void mergeOperation(Ad entity) {
+		adDao.merge(entity, entityManager);
+	}
 
 	@Override
 	public List<Ad> searchByIndex(String text) {

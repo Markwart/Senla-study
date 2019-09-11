@@ -60,4 +60,9 @@ public class PersonalDataService extends AbstractService<PersonalData, Integer> 
 		return entity.getId();
 	}
 
+	@Override
+	public void mergeOperation(PersonalData entity) {
+		personalDataDao.merge(entity, entityManager);		
+	}
+
 }

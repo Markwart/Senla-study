@@ -16,4 +16,6 @@ public interface GenericDao<T, PK> {
 
 	List<T> selectAll(EntityManager entityManager);
 
+	void merge(T entity, EntityManager entityManager);
+
 }

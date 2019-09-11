@@ -64,4 +64,9 @@ public class ChatService extends AbstractService<Chat, Integer> implements IChat
 	public Integer getPK(Chat entity) {
 		return entity.getId();
 	}
+
+	@Override
+	public void mergeOperation(Chat entity) {
+		chatDao.merge(entity, entityManager);		
+	}
 }

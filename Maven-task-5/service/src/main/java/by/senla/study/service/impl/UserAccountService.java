@@ -1,13 +1,7 @@
 package by.senla.study.service.impl;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.Level;
-
-import by.senla.cvs.module.processor.CsvWriter;
 import by.senla.study.api.dao.IUserAccountDao;
 import by.senla.study.api.service.IUserAccountService;
 import by.senla.study.dao.impl.UserAccountDao;
@@ -72,22 +66,7 @@ public class UserAccountService extends AbstractService<UserAccount, Integer> im
 	}
 
 	@Override
-	public void exportToCSV() {
-
-		List<UserAccount> userAccountList = userAccountDao.selectAll(entityManager);
-		List<Object> annotatedObjects = new ArrayList<>();
-		File folder = new File("./data");
-
-		for (UserAccount user : userAccountList) {
-			annotatedObjects.add(user);
-		}
-		CsvWriter writer = new CsvWriter();
-		try {
-			writer.writeToCsv(annotatedObjects, folder);
-			LOGGER.log(Level.INFO, "Data was written to file");
-		} catch (IOException e) {
-			LOGGER.log(Level.WARN, "Failed to write", e);
-			throw new RuntimeException(e);
-		}
+	public void mergeOperation(UserAccount entity) {
+		userAccountDao.merge(entity, entityManager);		
 	}
 }

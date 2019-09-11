@@ -24,6 +24,7 @@ public class Init {
 
 		//System.out.println("LIST=" + service.selectAll().size());
 		//System.out.println("EMAIL=" + service.getByID(25).getEmail());
+		System.out.println("SIZE=" + service.selectAll().size());
 		
 		service.exportToCSV();
 		

@@ -16,4 +16,10 @@ public interface GenericService <T, PK> {
 	
 	List<T> selectAll();
 
+	void exportToCSV();
+
+	List<T> importFromCSV();
+
+	void merge(T entity);
+
 }

@@ -64,4 +64,9 @@ public class CategoryService extends AbstractService<Category, Integer> implemen
 	public Integer getPK(Category entity) {
 		return entity.getId();
 	}
+
+	@Override
+	public void mergeOperation(Category entity) {
+		categoryDao.merge(entity, entityManager);
+	}
 }

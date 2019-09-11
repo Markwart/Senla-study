@@ -64,4 +64,9 @@ public class MessageService extends AbstractService<Message, Integer> implements
 	public Integer getPK(Message entity) {
 		return entity.getId();
 	}
+
+	@Override
+	public void mergeOperation(Message entity) {
+		messageDao.merge(entity, entityManager);		
+	}
 }

@@ -64,4 +64,9 @@ public class RankingService extends AbstractService<Ranking, Integer> implements
 	public Integer getPK(Ranking entity) {
 		return entity.getId();
 	}
+
+	@Override
+	public void mergeOperation(Ranking entity) {
+		rankingDao.merge(entity, entityManager);		
+	}
 }

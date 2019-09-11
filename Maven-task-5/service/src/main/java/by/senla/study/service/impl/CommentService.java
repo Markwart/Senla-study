@@ -64,4 +64,9 @@ public class CommentService extends AbstractService<Comment, Integer> implements
 	public Integer getPK(Comment entity) {
 		return entity.getId();
 	}
+
+	@Override
+	public void mergeOperation(Comment entity) {
+		commentDao.merge(entity, entityManager);		
+	}
 }

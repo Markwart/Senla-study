@@ -51,6 +51,11 @@ public abstract class AbstractDao<T, PK> implements GenericDao<T, PK> {
 		return em.createQuery(cq).getResultList();
 	}
 
+	@Override
+	public void merge(T entity, EntityManager entityManager) {
+		entityManager.merge(entity);
+	}
+
 	protected T getSingleResult(TypedQuery<T> tq) {
 		List<T> resultList = tq.getResultList();
 		if (resultList.size() != 1) {

@@ -17,11 +17,10 @@ import by.senla.cvs.module.annotations.CsvEntity;
 import by.senla.cvs.module.annotations.CsvProperty;
 import by.senla.cvs.module.enums.PropertyType;
 
-
 @CsvEntity(fileName = "UserAccount.csv")
 @Entity
 @Table(name = "user_account")
-public class UserAccount extends BaseEntity  {
+public class UserAccount extends BaseEntity {
 
 	@CsvProperty(columnNumber = 1, propertyType = PropertyType.SIMPLE)
 	@Column(name = "name")
@@ -136,5 +135,5 @@ public class UserAccount extends BaseEntity  {
 	public void setRankingWhom(Set<Ranking> rankingWhom) {
 		this.rankingWhom = rankingWhom;
 	}
-	
+
 }
