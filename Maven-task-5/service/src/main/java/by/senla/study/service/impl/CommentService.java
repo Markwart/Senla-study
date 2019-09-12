@@ -1,5 +1,6 @@
 package by.senla.study.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import by.senla.study.api.dao.ICommentDao;
@@ -47,11 +48,13 @@ public class CommentService extends AbstractService<Comment, Integer> implements
 
 	@Override
 	public void updateOperation(Comment entity) {
+		entity.setUpdated(new Date());
 		commentDao.update(entity, entityManager);
 	}
 
 	@Override
 	public void insertOperation(Comment entity) {
+		entity.setCreated(new Date());
 		commentDao.insert(entity, entityManager);
 	}
 
@@ -67,6 +70,7 @@ public class CommentService extends AbstractService<Comment, Integer> implements
 
 	@Override
 	public void mergeOperation(Comment entity) {
+		entity.setUpdated(new Date());
 		commentDao.merge(entity, entityManager);		
 	}
 }

@@ -1,5 +1,6 @@
 package by.senla.study.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import by.senla.study.api.dao.IMessageDao;
@@ -47,11 +48,13 @@ public class MessageService extends AbstractService<Message, Integer> implements
 
 	@Override
 	public void updateOperation(Message entity) {
+		entity.setUpdated(new Date());
 		messageDao.update(entity, entityManager);
 	}
 
 	@Override
 	public void insertOperation(Message entity) {
+		entity.setCreated(new Date());
 		messageDao.insert(entity, entityManager);
 	}
 
@@ -67,6 +70,7 @@ public class MessageService extends AbstractService<Message, Integer> implements
 
 	@Override
 	public void mergeOperation(Message entity) {
+		entity.setUpdated(new Date());
 		messageDao.merge(entity, entityManager);		
 	}
 }

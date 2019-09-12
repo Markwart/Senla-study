@@ -1,5 +1,6 @@
 package by.senla.study.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.logging.log4j.Level;
@@ -49,11 +50,13 @@ public class AdService extends AbstractService<Ad, Integer> implements IAdServic
 
 	@Override
 	public void updateOperation(Ad entity) {
+		entity.setUpdated(new Date());
 		adDao.update(entity, entityManager);
 	}
 
 	@Override
 	public void insertOperation(Ad entity) {
+		entity.setCreated(new Date());
 		adDao.insert(entity, entityManager);
 	}
 
@@ -69,6 +72,7 @@ public class AdService extends AbstractService<Ad, Integer> implements IAdServic
 	
 	@Override
 	public void mergeOperation(Ad entity) {
+		entity.setUpdated(new Date());
 		adDao.merge(entity, entityManager);
 	}
 

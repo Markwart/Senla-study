@@ -1,11 +1,13 @@
 package by.senla.study.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import by.senla.study.api.dao.IPersonalDataDao;
 import by.senla.study.api.service.IPersonalDataService;
 import by.senla.study.dao.impl.PersonalDataDao;
 import by.senla.study.model.entity.PersonalData;
+import by.senla.study.model.enums.Roles;
 
 public class PersonalDataService extends AbstractService<PersonalData, Integer> implements IPersonalDataService {
 
@@ -42,11 +44,14 @@ public class PersonalDataService extends AbstractService<PersonalData, Integer> 
 
 	@Override
 	public void updateOperation(PersonalData entity) {
+		entity.setUpdated(new Date());
 		personalDataDao.update(entity, entityManager);
 	}
 
 	@Override
 	public void insertOperation(PersonalData entity) {
+		entity.setRole(Roles.USER);
+		entity.setCreated(new Date());
 		personalDataDao.insert(entity, entityManager);
 	}
 
@@ -62,6 +67,7 @@ public class PersonalDataService extends AbstractService<PersonalData, Integer> 
 
 	@Override
 	public void mergeOperation(PersonalData entity) {
+		entity.setUpdated(new Date());
 		personalDataDao.merge(entity, entityManager);		
 	}
 

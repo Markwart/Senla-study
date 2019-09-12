@@ -149,7 +149,7 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 		List<Object> objectList;
 		try {
 			objectList = reader.readFromCsv(new File(FOLDER_CSV), entityClass);
-			LOGGER.log(Level.INFO, "Вata was successfully read from the file");
+			LOGGER.log(Level.INFO, "Data was successfully read from the file");
 		} catch (IOException e) {
 			LOGGER.log(Level.WARN, "Failed to read data from the file", e);
 			throw new RuntimeException(e);

@@ -1,5 +1,6 @@
 package by.senla.study.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import by.senla.study.api.dao.IChatDao;
@@ -47,11 +48,13 @@ public class ChatService extends AbstractService<Chat, Integer> implements IChat
 
 	@Override
 	public void updateOperation(Chat entity) {
+		entity.setUpdated(new Date());
 		chatDao.update(entity, entityManager);		
 	}
 
 	@Override
 	public void insertOperation(Chat entity) {
+		entity.setCreated(new Date());
 		chatDao.insert(entity, entityManager);		
 	}
 
@@ -67,6 +70,7 @@ public class ChatService extends AbstractService<Chat, Integer> implements IChat
 
 	@Override
 	public void mergeOperation(Chat entity) {
+		entity.setUpdated(new Date());
 		chatDao.merge(entity, entityManager);		
 	}
 }
