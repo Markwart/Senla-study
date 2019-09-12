@@ -12,7 +12,7 @@ public interface GenericService <T, PK> {
 
 	void insert(T entity);
 
-	void deleteByID(PK id);
+	void delete(T entity);
 	
 	List<T> selectAll();
 
@@ -21,5 +21,7 @@ public interface GenericService <T, PK> {
 	List<T> importFromCSV();
 
 	void merge(T entity);
+
+	T getFullInfo(PK id);
 
 }

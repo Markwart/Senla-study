@@ -13,7 +13,7 @@ import by.senla.study.api.dao.GenericDao;
 public abstract class AbstractDao<T, PK> implements GenericDao<T, PK> {
 
 	private Class<T> entityClass;
-
+	
 	protected AbstractDao(Class<T> entityClass) {
 		this.entityClass = entityClass;
 	}
@@ -38,8 +38,8 @@ public abstract class AbstractDao<T, PK> implements GenericDao<T, PK> {
 	}
 
 	@Override
-	public void deleteByID(PK id, EntityManager entityManager) {
-		entityManager.createQuery(String.format("delete from %s where id = %s", entityClass.getSimpleName(), id));
+	public void delete(T entity, EntityManager entityManager) {
+		entityManager.remove(entity);;
 	}
 
 	@Override

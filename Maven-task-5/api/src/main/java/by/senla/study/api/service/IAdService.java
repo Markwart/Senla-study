@@ -6,7 +6,5 @@ import by.senla.study.model.entity.Ad;
 
 public interface IAdService extends GenericService<Ad, Integer> {
 
-	Ad getFullInfo(Integer id);
-
 	List<Ad> searchByIndex(String text);
 }

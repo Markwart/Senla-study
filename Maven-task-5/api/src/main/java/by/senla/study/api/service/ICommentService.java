@@ -4,5 +4,4 @@ import by.senla.study.model.entity.Comment;
 
 public interface ICommentService extends GenericService<Comment, Integer> {
 
-	Comment getFullInfo(Integer id);
 }

@@ -1,7 +1,6 @@
 package by.senla.study.service.impl;
 
 import java.util.Date;
-import java.util.List;
 
 import by.senla.study.api.dao.IPersonalDataDao;
 import by.senla.study.api.service.IPersonalDataService;
@@ -11,11 +10,11 @@ import by.senla.study.model.enums.Roles;
 
 public class PersonalDataService extends AbstractService<PersonalData, Integer> implements IPersonalDataService {
 
-	private IPersonalDataDao personalDataDao = PersonalDataDao.getInstance();
+	private static IPersonalDataDao personalDataDao = PersonalDataDao.getInstance();
 	private static PersonalDataService instance;
 
 	private PersonalDataService() {
-		super(PersonalData.class);
+		super(PersonalData.class, personalDataDao);
 	}
 
 	public static PersonalDataService getInstance() {
@@ -31,33 +30,16 @@ public class PersonalDataService extends AbstractService<PersonalData, Integer> 
 	}
 
 	@Override
-	public PersonalData getByID(Integer id) {
-		PersonalData entity = personalDataDao.getByID(id, entityManager);
+	public PersonalData updateOperation(PersonalData entity) {
+		entity.setUpdated(new Date());
 		return entity;
 	}
 
 	@Override
-	public List<PersonalData> selectAll() {
-		List<PersonalData> personalDataList = personalDataDao.selectAll(entityManager);
-		return personalDataList;
-	}
-
-	@Override
-	public void updateOperation(PersonalData entity) {
-		entity.setUpdated(new Date());
-		personalDataDao.update(entity, entityManager);
-	}
-
-	@Override
-	public void insertOperation(PersonalData entity) {
+	public PersonalData insertOperation(PersonalData entity) {
 		entity.setRole(Roles.USER);
 		entity.setCreated(new Date());
-		personalDataDao.insert(entity, entityManager);
-	}
-
-	@Override
-	public void deleteOperation(Integer id) {
-		personalDataDao.deleteByID(id, entityManager);
+		return entity;
 	}
 
 	@Override
@@ -66,9 +48,9 @@ public class PersonalDataService extends AbstractService<PersonalData, Integer> 
 	}
 
 	@Override
-	public void mergeOperation(PersonalData entity) {
+	public PersonalData mergeOperation(PersonalData entity) {
 		entity.setUpdated(new Date());
-		personalDataDao.merge(entity, entityManager);		
+		return entity;
 	}
 
 }

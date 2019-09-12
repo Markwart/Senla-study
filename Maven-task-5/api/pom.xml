@@ -19,13 +19,12 @@
 			<version>1.0.0</version>
 		</dependency>
 
-		<!-- Hibernate -->
+		<!-- Javax Persistence API -->
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>5.3.11.Final</version>
+			<groupId>javax.persistence</groupId>
+			<artifactId>javax.persistence-api</artifactId>
+			<version>2.2</version>
 		</dependency>
-		
 
 	</dependencies>
 

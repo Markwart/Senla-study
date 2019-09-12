@@ -1,7 +1,6 @@
 package by.senla.study.service.impl;
 
 import java.util.Date;
-import java.util.List;
 
 import by.senla.study.api.dao.ICommentDao;
 import by.senla.study.api.service.ICommentService;
@@ -10,11 +9,11 @@ import by.senla.study.model.entity.Comment;
 
 public class CommentService extends AbstractService<Comment, Integer> implements ICommentService {
 
-	private ICommentDao commentDao = CommentDao.getInstance();
+	private static ICommentDao commentDao = CommentDao.getInstance();
 	private static CommentService instance;
 
 	private CommentService() {
-		super(Comment.class);
+		super(Comment.class, commentDao);
 	}
 
 	public static CommentService getInstance() {
@@ -30,37 +29,15 @@ public class CommentService extends AbstractService<Comment, Integer> implements
 	}
 
 	@Override
-	public Comment getByID(Integer id) {
-		Comment entity = commentDao.getByID(id, entityManager);
+	public Comment updateOperation(Comment entity) {
+		entity.setUpdated(new Date());
 		return entity;
 	}
 
 	@Override
-	public List<Comment> selectAll() {
-		List<Comment> commentList = commentDao.selectAll(entityManager);
-		return commentList;
-	}
-
-	@Override
-	public Comment getFullInfo(Integer id) {
-		return commentDao.getFullInfo(id, entityManager);
-	}
-
-	@Override
-	public void updateOperation(Comment entity) {
-		entity.setUpdated(new Date());
-		commentDao.update(entity, entityManager);
-	}
-
-	@Override
-	public void insertOperation(Comment entity) {
+	public Comment insertOperation(Comment entity) {
 		entity.setCreated(new Date());
-		commentDao.insert(entity, entityManager);
-	}
-
-	@Override
-	public void deleteOperation(Integer id) {
-		commentDao.deleteByID(id, entityManager);
+		return entity;
 	}
 
 	@Override
@@ -69,8 +46,8 @@ public class CommentService extends AbstractService<Comment, Integer> implements
 	}
 
 	@Override
-	public void mergeOperation(Comment entity) {
+	public Comment mergeOperation(Comment entity) {
 		entity.setUpdated(new Date());
-		commentDao.merge(entity, entityManager);		
+		return entity;
 	}
 }

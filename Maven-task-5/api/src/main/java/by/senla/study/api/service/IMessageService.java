@@ -4,6 +4,4 @@ import by.senla.study.model.entity.Message;
 
 public interface IMessageService extends GenericService<Message, Integer> {
 
-
-	Message getFullInfo(Integer id);
 }

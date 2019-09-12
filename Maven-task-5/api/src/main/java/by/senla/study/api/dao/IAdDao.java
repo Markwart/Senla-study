@@ -9,8 +9,6 @@ import by.senla.study.model.entity.Ad;
 
 public interface IAdDao extends GenericDao<Ad, Integer> {
 
-	Ad getFullInfo(Integer id, EntityManager entityManager);
-
 	List<Ad> searchByIndex(String text, EntityManager entityManager);
 
 }

@@ -1,7 +1,6 @@
 package by.senla.study.service.impl;
 
 import java.util.Date;
-import java.util.List;
 
 import by.senla.study.api.dao.IUserAccountDao;
 import by.senla.study.api.service.IUserAccountService;
@@ -10,11 +9,11 @@ import by.senla.study.model.entity.UserAccount;
 
 public class UserAccountService extends AbstractService<UserAccount, Integer> implements IUserAccountService {
 
-	private IUserAccountDao userAccountDao = UserAccountDao.getInstance();
+	private static IUserAccountDao userAccountDao = UserAccountDao.getInstance();
 	private static UserAccountService instance;
 
 	private UserAccountService() {
-		super(UserAccount.class);
+		super(UserAccount.class, userAccountDao);
 	}
 
 	public static UserAccountService getInstance() {
@@ -30,37 +29,15 @@ public class UserAccountService extends AbstractService<UserAccount, Integer> im
 	}
 
 	@Override
-	public UserAccount getByID(Integer id) {
-		UserAccount entity = userAccountDao.getByID(id, entityManager);
+	public UserAccount updateOperation(UserAccount entity) {
+		entity.setUpdated(new Date());
 		return entity;
 	}
 
 	@Override
-	public List<UserAccount> selectAll() {
-		List<UserAccount> userAccountList = userAccountDao.selectAll(entityManager);
-		return userAccountList;
-	}
-
-	@Override
-	public UserAccount getFullInfo(Integer id) {
-		return userAccountDao.getFullInfo(id, entityManager);
-	}
-
-	@Override
-	public void updateOperation(UserAccount entity) {
-		entity.setUpdated(new Date());
-		userAccountDao.update(entity, entityManager);
-	}
-
-	@Override
-	public void insertOperation(UserAccount entity) {
+	public UserAccount insertOperation(UserAccount entity) {
 		entity.setCreated(new Date());
-		userAccountDao.insert(entity, entityManager);
-	}
-
-	@Override
-	public void deleteOperation(Integer id) {
-		userAccountDao.deleteByID(id, entityManager);
+		return entity;
 	}
 
 	@Override
@@ -69,8 +46,8 @@ public class UserAccountService extends AbstractService<UserAccount, Integer> im
 	}
 
 	@Override
-	public void mergeOperation(UserAccount entity) {
+	public UserAccount mergeOperation(UserAccount entity) {
 		entity.setUpdated(new Date());
-		userAccountDao.merge(entity, entityManager);		
+		return entity;
 	}
 }

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.logging.log4j.Level;
+import org.hibernate.service.spi.ServiceException;
 
 import by.senla.study.api.dao.IAdDao;
 import by.senla.study.api.service.IAdService;
@@ -13,11 +14,11 @@ import by.senla.study.model.enums.Status;
 
 public class AdService extends AbstractService<Ad, Integer> implements IAdService {
 
-	private IAdDao adDao = AdDao.getInstance();
+	private static IAdDao adDao = AdDao.getInstance();
 	private static AdService instance;
 
 	private AdService() {
-		super(Ad.class);
+		super(Ad.class, adDao);
 	}
 
 	public static AdService getInstance() {
@@ -33,38 +34,16 @@ public class AdService extends AbstractService<Ad, Integer> implements IAdServic
 	}
 
 	@Override
-	public Ad getByID(Integer id) {
-		Ad entity = adDao.getByID(id, entityManager);
+	public Ad updateOperation(Ad entity) {
+		entity.setUpdated(new Date());
 		return entity;
 	}
 
 	@Override
-	public List<Ad> selectAll() {
-		List<Ad> adList = adDao.selectAll(entityManager);
-		return adList;
-	}
-
-	@Override
-	public Ad getFullInfo(Integer id) {
-		return adDao.getFullInfo(id, entityManager);
-	}
-
-	@Override
-	public void updateOperation(Ad entity) {
-		entity.setUpdated(new Date());
-		adDao.update(entity, entityManager);
-	}
-
-	@Override
-	public void insertOperation(Ad entity) {
+	public Ad insertOperation(Ad entity) {
 		entity.setCreated(new Date());
 		entity.setStatus(Status.OPEN);
-		adDao.insert(entity, entityManager);
-	}
-
-	@Override
-	public void deleteOperation(Integer id) {
-		adDao.deleteByID(id, entityManager);
+		return entity;
 	}
 
 	@Override
@@ -73,9 +52,9 @@ public class AdService extends AbstractService<Ad, Integer> implements IAdServic
 	}
 	
 	@Override
-	public void mergeOperation(Ad entity) {
+	public Ad mergeOperation(Ad entity) {
 		entity.setUpdated(new Date());
-		adDao.merge(entity, entityManager);
+		return entity;
 	}
 
 	@Override
@@ -89,7 +68,7 @@ public class AdService extends AbstractService<Ad, Integer> implements IAdServic
 		} catch (Exception e) {
 			transactionRollback();
 			LOGGER.log(Level.WARN, EXCEPTION, e);
-			throw new RuntimeException(e);
+			throw new ServiceException(EXCEPTION, e);
 		}
 		return adList;
 	}

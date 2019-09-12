@@ -12,10 +12,12 @@ public interface GenericDao<T, PK> {
 
 	void insert(T entity, EntityManager entityManager);
 
-	void deleteByID (PK id, EntityManager entityManager);
+	void delete (T entity, EntityManager entityManager);
 
 	List<T> selectAll(EntityManager entityManager);
 
 	void merge(T entity, EntityManager entityManager);
+
+	T getFullInfo(PK id, EntityManager entityManager);
 
 }

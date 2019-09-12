@@ -4,5 +4,4 @@ import by.senla.study.model.entity.Category;
 
 public interface ICategoryService extends GenericService<Category, Integer> {
 
-	Category getFullInfo(Integer id);
 }

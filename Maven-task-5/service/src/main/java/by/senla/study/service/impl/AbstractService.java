@@ -10,9 +10,11 @@ import javax.persistence.EntityManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.service.spi.ServiceException;
 
 import by.senla.cvs.module.processor.CsvReader;
 import by.senla.cvs.module.processor.CsvWriter;
+import by.senla.study.api.dao.GenericDao;
 import by.senla.study.api.service.GenericService;
 import by.senla.study.dao.utils.HibernateEntityManagerUtil;
 
@@ -20,7 +22,7 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 
 	protected EntityManager entityManager = HibernateEntityManagerUtil.getEntityManager();
 	protected final Logger LOGGER = LogManager.getLogger(getEntityClass());
-	protected static final String EXCEPTION = "EntityManager exception";
+	protected static final String EXCEPTION = "Servie. Transaction exception";
 	protected static final String FOLDER_CSV = "./data/";
 
 	private static final String CREATED = "new %s with id=%d was created";
@@ -30,19 +32,40 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 
 	private Class<T> entityClass;
 
-	protected AbstractService(Class<T> entityClass) {
+	private GenericDao<T, PK> dao;
+
+	protected AbstractService(Class<T> entityClass, GenericDao<T, PK> dao) {
 		this.entityClass = entityClass;
+		this.dao = dao;
 	}
 
-	public Class<T> getEntityClass() {
+	protected Class<T> getEntityClass() {
 		return entityClass;
+	}
+
+	@Override
+	public T getByID(PK id) {
+		T entity = dao.getByID(id, entityManager);
+		return entity;
+	}
+
+	@Override
+	public List<T> selectAll() {
+		List<T> userAccountList = dao.selectAll(entityManager);
+		return userAccountList;
+	}
+
+	@Override
+	public T getFullInfo(PK id) {
+		return dao.getFullInfo(id, entityManager);
 	}
 
 	@Override
 	public void update(T entity) {
 		transactionBegin();
 		try {
-			updateOperation(entity);
+			entity = updateOperation(entity);
+			dao.update(entity, entityManager);
 			transactionCommit();
 
 			LOGGER.log(Level.INFO, String.format(UPDATED, getEntityClass().getSimpleName(), getPK(entity)));
@@ -50,7 +73,7 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 		} catch (Exception e) {
 			transactionRollback();
 			LOGGER.log(Level.WARN, EXCEPTION, e);
-			throw new RuntimeException(e);
+			throw new ServiceException(EXCEPTION, e);
 		}
 	}
 
@@ -58,7 +81,8 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 	public void insert(T entity) {
 		transactionBegin();
 		try {
-			insertOperation(entity);
+			entity = insertOperation(entity);
+			dao.insert(entity, entityManager);
 			transactionCommit();
 
 			LOGGER.log(Level.INFO, String.format(CREATED, getEntityClass().getSimpleName(), getPK(entity)));
@@ -66,31 +90,32 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 		} catch (Exception e) {
 			transactionRollback();
 			LOGGER.log(Level.WARN, EXCEPTION, e);
-			throw new RuntimeException(e);
+			throw new ServiceException(EXCEPTION, e);
 		}
 	}
 
 	@Override
-	public void deleteByID(PK id) {
+	public void delete(T entity) {
 		transactionBegin();
 		try {
-			deleteOperation(id);
+			dao.delete(entity, entityManager);
 			transactionCommit();
 
-			LOGGER.log(Level.INFO, String.format(DELETED, getEntityClass().getSimpleName(), id));
+			LOGGER.log(Level.INFO, String.format(DELETED, getEntityClass().getSimpleName(), getPK(entity)));
 
 		} catch (Exception e) {
 			transactionRollback();
 			LOGGER.log(Level.WARN, EXCEPTION, e);
-			throw new RuntimeException(e);
+			throw new ServiceException(EXCEPTION, e);
 		}
 	}
-	
+
 	@Override
 	public void merge(T entity) {
 		transactionBegin();
 		try {
-			mergeOperation(entity);
+			entity = mergeOperation(entity);
+			dao.merge(entity, entityManager);
 			transactionCommit();
 
 			LOGGER.log(Level.INFO, String.format(MERGED, getEntityClass().getSimpleName(), getPK(entity)));
@@ -98,29 +123,33 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 		} catch (Exception e) {
 			transactionRollback();
 			LOGGER.log(Level.WARN, EXCEPTION, e);
-			throw new RuntimeException(e);
+			throw new ServiceException(EXCEPTION, e);
 		}
 	}
 
-	public abstract void updateOperation(T entity);
+	protected T updateOperation(T entity) {
+		return entity;
+	}
 
-	public abstract void insertOperation(T entity);
+	protected T insertOperation(T entity) {
+		return entity;
+	}
 
-	public abstract void deleteOperation(PK id);
-	
-	public abstract void mergeOperation(T entity);
+	protected T mergeOperation(T entity) {
+		return entity;
+	}
 
-	public abstract PK getPK(T entity);
+	protected abstract PK getPK(T entity);
 
-	public void transactionBegin() {
+	protected void transactionBegin() {
 		entityManager.getTransaction().begin();
 	}
 
-	public void transactionCommit() {
+	protected void transactionCommit() {
 		entityManager.getTransaction().commit();
 	}
 
-	public void transactionRollback() {
+	protected void transactionRollback() {
 		entityManager.getTransaction().rollback();
 	}
 
@@ -138,7 +167,7 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 			LOGGER.log(Level.INFO, "Data was written to the file");
 		} catch (IOException e) {
 			LOGGER.log(Level.WARN, "Failed to write data to the file", e);
-			throw new RuntimeException(e);
+			throw new ServiceException(EXCEPTION, e);
 		}
 	}
 
@@ -152,7 +181,7 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 			LOGGER.log(Level.INFO, "Data was successfully read from the file");
 		} catch (IOException e) {
 			LOGGER.log(Level.WARN, "Failed to read data from the file", e);
-			throw new RuntimeException(e);
+			throw new ServiceException(EXCEPTION, e);
 		}
 		return (List<T>) objectList;
 	}
