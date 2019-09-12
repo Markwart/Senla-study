@@ -9,6 +9,7 @@ import by.senla.study.api.dao.IAdDao;
 import by.senla.study.api.service.IAdService;
 import by.senla.study.dao.impl.AdDao;
 import by.senla.study.model.entity.Ad;
+import by.senla.study.model.enums.Status;
 
 public class AdService extends AbstractService<Ad, Integer> implements IAdService {
 
@@ -57,6 +58,7 @@ public class AdService extends AbstractService<Ad, Integer> implements IAdServic
 	@Override
 	public void insertOperation(Ad entity) {
 		entity.setCreated(new Date());
+		entity.setStatus(Status.OPEN);
 		adDao.insert(entity, entityManager);
 	}
 

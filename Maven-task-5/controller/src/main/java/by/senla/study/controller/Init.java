@@ -1,11 +1,10 @@
 package by.senla.study.controller;
 
-import java.util.Date;
-
+import by.senla.study.api.service.IAdService;
 import by.senla.study.api.service.IUserAccountService;
 import by.senla.study.dao.search.HibernateSearchInitializer;
 import by.senla.study.dao.utils.HibernateEntityManagerUtil;
-import by.senla.study.model.entity.UserAccount;
+import by.senla.study.service.impl.AdService;
 import by.senla.study.service.impl.UserAccountService;
 
 public class Init {
@@ -16,18 +15,13 @@ public class Init {
 		
 		System.out.println("Hello! This is application for working with the database \n");
 
-		IUserAccountService service = UserAccountService.getInstance();
+		IUserAccountService userAccountService = UserAccountService.getInstance();
+		IAdService adService = AdService.getInstance();
 		
-		UserAccount user1 = service.createEntity();
-		user1.setName("Mark");
-		user1.setEmail("mmm@gmail.com");
-		user1.setCreated(new Date());
-		user1.setUpdated(new Date());
-		service.insert(user1);
-
-		System.out.println("SIZE=" + service.selectAll().size());
+		System.out.println("SIZE=" + userAccountService.selectAll().size());
+		System.out.println(adService.searchByIndex("thing").get(0).getTheme());
 		
-		service.exportToCSV();
+		userAccountService.exportToCSV();
 		
 		HibernateEntityManagerUtil.close();
 	}
