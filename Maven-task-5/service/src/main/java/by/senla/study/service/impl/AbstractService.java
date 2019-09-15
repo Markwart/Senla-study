@@ -64,7 +64,6 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 	public void update(T entity) {
 		transactionBegin();
 		try {
-			entity = updateOperation(entity);
 			dao.update(entity, entityManager);
 			transactionCommit();
 
@@ -81,7 +80,6 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 	public void insert(T entity) {
 		transactionBegin();
 		try {
-			entity = insertOperation(entity);
 			dao.insert(entity, entityManager);
 			transactionCommit();
 
@@ -114,7 +112,6 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 	public void merge(T entity) {
 		transactionBegin();
 		try {
-			entity = mergeOperation(entity);
 			dao.merge(entity, entityManager);
 			transactionCommit();
 
@@ -125,18 +122,6 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new ServiceException(EXCEPTION, e);
 		}
-	}
-
-	protected T updateOperation(T entity) {
-		return entity;
-	}
-
-	protected T insertOperation(T entity) {
-		return entity;
-	}
-
-	protected T mergeOperation(T entity) {
-		return entity;
 	}
 
 	protected abstract PK getPK(T entity);

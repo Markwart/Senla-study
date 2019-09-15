@@ -1,7 +1,5 @@
 package by.senla.study.service.impl;
 
-import java.util.Date;
-
 import by.senla.study.api.dao.ICategoryDao;
 import by.senla.study.api.service.ICategoryService;
 import by.senla.study.dao.impl.CategoryDao;
@@ -29,25 +27,7 @@ public class CategoryService extends AbstractService<Category, Integer> implemen
 	}
 
 	@Override
-	public Category updateOperation(Category entity) {
-		entity.setUpdated(new Date());
-		return entity;
-	}
-
-	@Override
-	public Category insertOperation(Category entity) {
-		entity.setCreated(new Date());
-		return entity;
-	}
-
-	@Override
 	public Integer getPK(Category entity) {
 		return entity.getId();
-	}
-
-	@Override
-	public Category mergeOperation(Category entity) {
-		entity.setUpdated(new Date());
-		return entity;
 	}
 }

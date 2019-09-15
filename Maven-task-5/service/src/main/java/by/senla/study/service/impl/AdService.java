@@ -1,6 +1,5 @@
 package by.senla.study.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.logging.log4j.Level;
@@ -10,7 +9,6 @@ import by.senla.study.api.dao.IAdDao;
 import by.senla.study.api.service.IAdService;
 import by.senla.study.dao.impl.AdDao;
 import by.senla.study.model.entity.Ad;
-import by.senla.study.model.enums.Status;
 
 public class AdService extends AbstractService<Ad, Integer> implements IAdService {
 
@@ -34,29 +32,10 @@ public class AdService extends AbstractService<Ad, Integer> implements IAdServic
 	}
 
 	@Override
-	public Ad updateOperation(Ad entity) {
-		entity.setUpdated(new Date());
-		return entity;
-	}
-
-	@Override
-	public Ad insertOperation(Ad entity) {
-		entity.setCreated(new Date());
-		entity.setStatus(Status.OPEN);
-		return entity;
-	}
-
-	@Override
 	public Integer getPK(Ad entity) {
 		return entity.getId();
 	}
 	
-	@Override
-	public Ad mergeOperation(Ad entity) {
-		entity.setUpdated(new Date());
-		return entity;
-	}
-
 	@Override
 	public List<Ad> searchByIndex(String text) {
 		List<Ad> adList;

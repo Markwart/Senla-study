@@ -1,7 +1,5 @@
 package by.senla.study.service.impl;
 
-import java.util.Date;
-
 import by.senla.study.api.dao.IUserAccountDao;
 import by.senla.study.api.service.IUserAccountService;
 import by.senla.study.dao.impl.UserAccountDao;
@@ -29,25 +27,7 @@ public class UserAccountService extends AbstractService<UserAccount, Integer> im
 	}
 
 	@Override
-	public UserAccount updateOperation(UserAccount entity) {
-		entity.setUpdated(new Date());
-		return entity;
-	}
-
-	@Override
-	public UserAccount insertOperation(UserAccount entity) {
-		entity.setCreated(new Date());
-		return entity;
-	}
-
-	@Override
 	public Integer getPK(UserAccount entity) {
 		return entity.getId();
-	}
-
-	@Override
-	public UserAccount mergeOperation(UserAccount entity) {
-		entity.setUpdated(new Date());
-		return entity;
 	}
 }

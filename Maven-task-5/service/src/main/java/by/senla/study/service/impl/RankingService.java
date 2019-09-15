@@ -1,7 +1,5 @@
 package by.senla.study.service.impl;
 
-import java.util.Date;
-
 import by.senla.study.api.dao.IRankingDao;
 import by.senla.study.api.service.IRankingService;
 import by.senla.study.dao.impl.RankingDao;
@@ -29,25 +27,7 @@ public class RankingService extends AbstractService<Ranking, Integer> implements
 	}
 
 	@Override
-	public Ranking updateOperation(Ranking entity) {
-		entity.setUpdated(new Date());
-		return entity;
-	}
-
-	@Override
-	public Ranking insertOperation(Ranking entity) {
-		entity.setCreated(new Date());
-		return entity;
-	}
-
-	@Override
 	public Integer getPK(Ranking entity) {
 		return entity.getId();
-	}
-
-	@Override
-	public Ranking mergeOperation(Ranking entity) {
-		entity.setUpdated(new Date());
-		return entity;
 	}
 }

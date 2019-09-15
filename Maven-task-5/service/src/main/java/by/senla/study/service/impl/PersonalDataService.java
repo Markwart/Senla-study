@@ -1,12 +1,9 @@
 package by.senla.study.service.impl;
 
-import java.util.Date;
-
 import by.senla.study.api.dao.IPersonalDataDao;
 import by.senla.study.api.service.IPersonalDataService;
 import by.senla.study.dao.impl.PersonalDataDao;
 import by.senla.study.model.entity.PersonalData;
-import by.senla.study.model.enums.Roles;
 
 public class PersonalDataService extends AbstractService<PersonalData, Integer> implements IPersonalDataService {
 
@@ -30,27 +27,7 @@ public class PersonalDataService extends AbstractService<PersonalData, Integer> 
 	}
 
 	@Override
-	public PersonalData updateOperation(PersonalData entity) {
-		entity.setUpdated(new Date());
-		return entity;
-	}
-
-	@Override
-	public PersonalData insertOperation(PersonalData entity) {
-		entity.setRole(Roles.USER);
-		entity.setCreated(new Date());
-		return entity;
-	}
-
-	@Override
 	public Integer getPK(PersonalData entity) {
 		return entity.getId();
 	}
-
-	@Override
-	public PersonalData mergeOperation(PersonalData entity) {
-		entity.setUpdated(new Date());
-		return entity;
-	}
-
 }
