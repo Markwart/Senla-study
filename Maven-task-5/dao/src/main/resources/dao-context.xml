@@ -1,0 +1,34 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+      http://www.springframework.org/schema/beans 
+      http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+      http://www.springframework.org/schema/tx 
+	  http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+      http://www.springframework.org/schema/context 
+      http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+
+	<!-- Scanning "Spring MVC annotations" -->
+	<context:component-scan
+		base-package="by.senla.study.dao.impl" />
+
+	<!-- The configuration entity Manager (EntityManager) in a "Spring application 
+		context" via configuration entity Manager factory (EntityManagerFactory) -->
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+		p:dataSource-ref="dataSource" />
+
+	<!-- This element tells the "Spring Framework" to examine all components 
+		in the context of the application and find those marked with "@Transactional" 
+		annotation -->
+	<tx:annotation-driven />
+	<bean id="transactionManager"
+		class="org.springframework.orm.jpa.JpaTransactionManager"
+		p:entityManagerFactory-ref="entityManagerFactory" />
+</beans>
+
+

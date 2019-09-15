@@ -22,7 +22,7 @@ public class Init {
 		System.out.println(adService.searchByIndex("thing").get(0).getTheme());
 		System.out.println("EMAIL=" + userAccountService.getByID(33).getEmail());
 		
-		userAccountService.exportToCSV();
+		//userAccountService.exportToCSV();
 		
 		HibernateEntityManagerUtil.close();
 	}

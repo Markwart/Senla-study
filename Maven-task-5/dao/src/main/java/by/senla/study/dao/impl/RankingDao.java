@@ -7,9 +7,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
+import org.springframework.stereotype.Repository;
+
 import by.senla.study.api.dao.IRankingDao;
 import by.senla.study.model.entity.Ranking;
 
+@Repository
 public class RankingDao extends AbstractDao<Ranking, Integer> implements IRankingDao {
 
 	private static RankingDao instance;

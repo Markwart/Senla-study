@@ -11,10 +11,12 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.query.dsl.QueryBuilder;
+import org.springframework.stereotype.Repository;
 
 import by.senla.study.api.dao.IAdDao;
 import by.senla.study.model.entity.Ad;
 
+@Repository
 public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
 
 	private AdDao() {

@@ -7,9 +7,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
+import org.springframework.stereotype.Repository;
+
 import by.senla.study.api.dao.IMessageDao;
 import by.senla.study.model.entity.Message;
 
+@Repository
 public class MessageDao extends AbstractDao<Message, Integer> implements IMessageDao {
 
 	private static MessageDao instance;

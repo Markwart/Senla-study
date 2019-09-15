@@ -7,9 +7,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
+import org.springframework.stereotype.Repository;
+
 import by.senla.study.api.dao.ICommentDao;
 import by.senla.study.model.entity.Comment;
 
+@Repository
 public class CommentDao extends AbstractDao<Comment, Integer> implements ICommentDao {
 
 	private static CommentDao instance;

@@ -7,9 +7,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
+import org.springframework.stereotype.Repository;
+
 import by.senla.study.api.dao.IChatDao;
 import by.senla.study.model.entity.Chat;
 
+@Repository
 public class ChatDao extends AbstractDao<Chat, Integer> implements IChatDao {
 	
 	private static ChatDao instance;

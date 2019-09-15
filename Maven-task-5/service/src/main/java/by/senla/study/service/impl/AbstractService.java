@@ -43,6 +43,10 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 		return entityClass;
 	}
 
+	public GenericDao<T, PK> getDao() {
+		return dao;
+	}
+
 	@Override
 	public T getByID(PK id) {
 		T entity = dao.getByID(id, entityManager);

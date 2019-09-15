@@ -7,9 +7,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
+import org.springframework.stereotype.Repository;
+
 import by.senla.study.api.dao.IPersonalDataDao;
 import by.senla.study.model.entity.PersonalData;
 
+@Repository
 public class PersonalDataDao extends AbstractDao<PersonalData, Integer> implements IPersonalDataDao {
 
 	private static PersonalDataDao instance;

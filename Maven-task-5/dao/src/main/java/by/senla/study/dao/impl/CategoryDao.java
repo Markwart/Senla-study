@@ -7,9 +7,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 
+import org.springframework.stereotype.Repository;
+
 import by.senla.study.api.dao.ICategoryDao;
 import by.senla.study.model.entity.Category;
 
+@Repository
 public class CategoryDao extends AbstractDao<Category, Integer> implements ICategoryDao {
 
 	private static CategoryDao instance;
