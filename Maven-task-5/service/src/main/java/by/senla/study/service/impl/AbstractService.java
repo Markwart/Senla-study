@@ -9,14 +9,16 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.service.spi.ServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import by.senla.cvs.module.processor.CsvReader;
 import by.senla.cvs.module.processor.CsvWriter;
 import by.senla.study.api.dao.GenericDao;
 import by.senla.study.api.service.GenericService;
+import by.senla.study.model.entity.BaseEntity;
 
-public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
+@Transactional
+public abstract class AbstractService<T extends BaseEntity, PK> implements GenericService<T, PK> {
 
 	protected final Logger LOGGER = LogManager.getLogger(getEntityClass());
 	protected static final String EXCEPTION = "Service layer. Transaction exception";
@@ -28,11 +30,10 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 	private static final String MERGED = "%s with id=%d was merged";
 
 	private Class<T> entityClass;
-	
-	@Autowired
-	private GenericDao<T, PK> dao;
-	
-	protected AbstractService(Class<T> entityClass, GenericDao<T, PK> dao) {
+
+	protected GenericDao<T, PK> dao;
+
+	public AbstractService(Class<T> entityClass, GenericDao<T, PK> dao) {
 		this.entityClass = entityClass;
 		this.dao = dao;
 	}
@@ -62,7 +63,7 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 	public void update(T entity) {
 		try {
 			dao.update(entity);
-			LOGGER.log(Level.INFO, String.format(UPDATED, getEntityClass().getSimpleName(), getPK(entity)));
+			LOGGER.log(Level.INFO, String.format(UPDATED, getEntityClass().getSimpleName(), entity.getId()));
 
 		} catch (Exception e) {
 			LOGGER.log(Level.WARN, EXCEPTION, e);
@@ -74,7 +75,7 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 	public void insert(T entity) {
 		try {
 			dao.insert(entity);
-			LOGGER.log(Level.INFO, String.format(CREATED, getEntityClass().getSimpleName(), getPK(entity)));
+			LOGGER.log(Level.INFO, String.format(CREATED, getEntityClass().getSimpleName(), entity.getId()));
 
 		} catch (Exception e) {
 			LOGGER.log(Level.WARN, EXCEPTION, e);
@@ -87,7 +88,7 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 		try {
 			T entity = dao.getByID(id);
 			dao.delete(entity);
-			LOGGER.log(Level.INFO, String.format(DELETED, getEntityClass().getSimpleName(), getPK(entity)));
+			LOGGER.log(Level.INFO, String.format(DELETED, getEntityClass().getSimpleName(), entity.getId()));
 
 		} catch (Exception e) {
 			LOGGER.log(Level.WARN, EXCEPTION, e);
@@ -99,15 +100,13 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 	public void merge(T entity) {
 		try {
 			dao.merge(entity);
-			LOGGER.log(Level.INFO, String.format(MERGED, getEntityClass().getSimpleName(), getPK(entity)));
+			LOGGER.log(Level.INFO, String.format(MERGED, getEntityClass().getSimpleName(), entity.getId()));
 
 		} catch (Exception e) {
 			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new ServiceException(EXCEPTION, e);
 		}
 	}
-
-	protected abstract PK getPK(T entity);
 
 	@Override
 	public void exportToCSV() {
@@ -127,9 +126,8 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> importFromCSV() {
+	public List<Object> importFromCSV() {
 		CsvReader reader = new CsvReader();
 		List<Object> objectList;
 		try {
@@ -139,6 +137,6 @@ public abstract class AbstractService<T, PK> implements GenericService<T, PK> {
 			LOGGER.log(Level.WARN, "Failed to read data from the file", e);
 			throw new ServiceException(EXCEPTION, e);
 		}
-		return (List<T>) objectList;
+		return objectList;
 	}
 }

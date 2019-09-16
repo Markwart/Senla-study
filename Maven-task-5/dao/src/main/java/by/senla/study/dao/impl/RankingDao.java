@@ -14,7 +14,7 @@ import by.senla.study.model.entity.Ranking;
 @Repository
 public class RankingDao extends AbstractDao<Ranking, Integer> implements IRankingDao {
 
-	private RankingDao() {
+	public RankingDao() {
 		super(Ranking.class);
 	}
 

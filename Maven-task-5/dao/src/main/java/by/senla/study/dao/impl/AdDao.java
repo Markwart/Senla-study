@@ -18,7 +18,7 @@ import by.senla.study.model.entity.Ad;
 @Repository
 public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
 
-	private AdDao() {
+	public AdDao() {
 		super(Ad.class);
 	}
 

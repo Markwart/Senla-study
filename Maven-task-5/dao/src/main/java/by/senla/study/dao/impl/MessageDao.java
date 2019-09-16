@@ -14,7 +14,7 @@ import by.senla.study.model.entity.Message;
 @Repository
 public class MessageDao extends AbstractDao<Message, Integer> implements IMessageDao {
 
-	private MessageDao() {
+	public MessageDao() {
 		super(Message.class);
 	}
 

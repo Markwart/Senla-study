@@ -3,6 +3,7 @@ package by.senla.study.dao.search;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +16,7 @@ public class HibernateSearchInitializer {
 
 	private static final Logger LOGGER = LogManager.getLogger(HibernateSearchInitializer.class);
 
-	@PersistenceContext
+	@PersistenceContext(type = PersistenceContextType.EXTENDED)
 	private EntityManager entityManager;
 
 	@PostConstruct

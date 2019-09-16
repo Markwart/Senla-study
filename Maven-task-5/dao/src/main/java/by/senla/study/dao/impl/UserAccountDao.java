@@ -14,7 +14,7 @@ import by.senla.study.model.entity.UserAccount;
 @Repository
 public class UserAccountDao extends AbstractDao<UserAccount, Integer> implements IUserAccountDao {
 
-	private UserAccountDao() {
+	public UserAccountDao() {
 		super(UserAccount.class);
 	}
 

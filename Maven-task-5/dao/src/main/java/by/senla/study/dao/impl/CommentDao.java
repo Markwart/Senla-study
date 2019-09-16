@@ -14,7 +14,7 @@ import by.senla.study.model.entity.Comment;
 @Repository
 public class CommentDao extends AbstractDao<Comment, Integer> implements ICommentDao {
 
-	private CommentDao() {
+	public CommentDao() {
 		super(Comment.class);
 	}
 

@@ -1,5 +1,6 @@
 package by.senla.study.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import by.senla.study.api.dao.ICommentDao;
@@ -9,19 +10,11 @@ import by.senla.study.model.entity.Comment;
 @Service
 public class CommentService extends AbstractService<Comment, Integer> implements ICommentService {
 
-	private static ICommentDao commentDao;
+	private final ICommentDao commentDao;
 
-	private CommentService() {
+	@Autowired
+	public CommentService(ICommentDao commentDao) {
 		super(Comment.class, commentDao);
-	}
-
-	@Override
-	public Comment createEntity() {
-		return new Comment();
-	}
-
-	@Override
-	public Integer getPK(Comment entity) {
-		return entity.getId();
+		this.commentDao = commentDao;
 	}
 }

@@ -14,7 +14,7 @@ import by.senla.study.model.entity.Chat;
 @Repository
 public class ChatDao extends AbstractDao<Chat, Integer> implements IChatDao {
 	
-	private ChatDao() {
+	public ChatDao() {
 		super(Chat.class);
 	}
 

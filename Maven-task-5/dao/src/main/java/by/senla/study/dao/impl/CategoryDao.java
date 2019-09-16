@@ -14,7 +14,7 @@ import by.senla.study.model.entity.Category;
 @Repository
 public class CategoryDao extends AbstractDao<Category, Integer> implements ICategoryDao {
 
-	private CategoryDao() {
+	public CategoryDao() {
 		super(Category.class);
 	}
 

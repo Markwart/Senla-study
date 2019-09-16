@@ -4,31 +4,26 @@ import java.util.List;
 
 import org.apache.logging.log4j.Level;
 import org.hibernate.service.spi.ServiceException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import by.senla.study.api.dao.IAdDao;
 import by.senla.study.api.service.IAdService;
 import by.senla.study.model.entity.Ad;
 
 @Service
+@Transactional
 public class AdService extends AbstractService<Ad, Integer> implements IAdService {
 
-	private static IAdDao adDao;
+	private final IAdDao adDao;
 
-	public AdService() {
+	@Autowired
+	public AdService(IAdDao adDao) {
 		super(Ad.class, adDao);
+		this.adDao = adDao;
 	}
 
-	@Override
-	public Ad createEntity() {
-		return new Ad();
-	}
-
-	@Override
-	public Integer getPK(Ad entity) {
-		return entity.getId();
-	}
-	
 	@Override
 	public List<Ad> searchByIndex(String text) {
 		List<Ad> adList;

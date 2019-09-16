@@ -1,5 +1,6 @@
 package by.senla.study.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import by.senla.study.api.dao.ICategoryDao;
@@ -9,19 +10,11 @@ import by.senla.study.model.entity.Category;
 @Service
 public class CategoryService extends AbstractService<Category, Integer> implements ICategoryService {
 
-	private static ICategoryDao categoryDao;
+	private final ICategoryDao categoryDao;
 
-	private CategoryService() {
+	@Autowired
+	public CategoryService(ICategoryDao categoryDao) {
 		super(Category.class, categoryDao);
-	}
-
-	@Override
-	public Category createEntity() {
-		return new Category();
-	}
-
-	@Override
-	public Integer getPK(Category entity) {
-		return entity.getId();
+		this.categoryDao = categoryDao;
 	}
 }

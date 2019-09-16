@@ -1,5 +1,6 @@
 package by.senla.study.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import by.senla.study.api.dao.IChatDao;
@@ -9,19 +10,11 @@ import by.senla.study.model.entity.Chat;
 @Service
 public class ChatService extends AbstractService<Chat, Integer> implements IChatService {
 
-	private static IChatDao chatDao;
+	private final IChatDao chatDao;
 
-	private ChatService() {
+	@Autowired
+	public ChatService(IChatDao chatDao) {
 		super(Chat.class, chatDao);
-	}
-
-	@Override
-	public Chat createEntity() {
-		return new Chat();
-	}
-
-	@Override
-	public Integer getPK(Chat entity) {
-		return entity.getId();
+		this.chatDao = chatDao;
 	}
 }

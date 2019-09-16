@@ -1,5 +1,6 @@
 package by.senla.study.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import by.senla.study.api.dao.IMessageDao;
@@ -9,19 +10,11 @@ import by.senla.study.model.entity.Message;
 @Service
 public class MessageService extends AbstractService<Message, Integer> implements IMessageService {
 
-	private static IMessageDao messageDao;
+	private final IMessageDao messageDao;
 
-	private MessageService() {
+	@Autowired
+	public MessageService(IMessageDao messageDao) {
 		super(Message.class, messageDao);
-	}
-
-	@Override
-	public Message createEntity() {
-		return new Message();
-	}
-
-	@Override
-	public Integer getPK(Message entity) {
-		return entity.getId();
+		this.messageDao = messageDao;
 	}
 }

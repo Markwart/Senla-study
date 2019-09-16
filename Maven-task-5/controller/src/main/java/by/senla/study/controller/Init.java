@@ -19,8 +19,8 @@ public class Init {
 		System.out.println("SIZE=" + userAccountService.selectAll().size());
 		System.out.println("EMAIL=" + userAccountService.getByID(33).getEmail());
 		System.out.println("TEXT=" + adService.getByID(1).getText());
-		System.out.println(adService.searchByIndex("thing").get(0).getTheme());
-
+		System.out.println("SEARCH=" + adService.searchByIndex("thing").get(0).getTheme());
+		
 		userAccountService.exportToCSV();
 
 	}

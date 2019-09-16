@@ -14,7 +14,7 @@ import by.senla.study.model.entity.PersonalData;
 @Repository
 public class PersonalDataDao extends AbstractDao<PersonalData, Integer> implements IPersonalDataDao {
 
-	private PersonalDataDao() {
+	public PersonalDataDao() {
 		super(PersonalData.class);
 	}
 
