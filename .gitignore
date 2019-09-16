@@ -7,4 +7,3 @@ web/logs/
 *.class
 
 target/
-data/
