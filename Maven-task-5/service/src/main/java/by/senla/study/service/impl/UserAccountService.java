@@ -1,6 +1,5 @@
 package by.senla.study.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import by.senla.study.api.dao.IUserAccountDao;
@@ -10,19 +9,11 @@ import by.senla.study.model.entity.UserAccount;
 @Service
 public class UserAccountService extends AbstractService<UserAccount, Integer> implements IUserAccountService {
 
-	@Autowired
-	private static IUserAccountDao userAccountDao/* = UserAccountDao.getInstance()*/;
-	private static UserAccountService instance;
-
-	private UserAccountService() {
+	
+	private static IUserAccountDao userAccountDao;
+	
+	public UserAccountService() {
 		super(UserAccount.class, userAccountDao);
-	}
-
-	public static UserAccountService getInstance() {
-		if (instance == null) {
-			instance = new UserAccountService();
-		}
-		return instance;
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package by.senla.study.dao.impl;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -19,18 +18,9 @@ public class UserAccountDao extends AbstractDao<UserAccount, Integer> implements
 		super(UserAccount.class);
 	}
 
-	private static UserAccountDao instance;
-
-	public static UserAccountDao getInstance() {
-		if (instance == null) {
-			instance = new UserAccountDao();
-		}
-		return instance;
-	}
-	
 	@Override
-	public UserAccount getFullInfo(Integer id, EntityManager em) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
+	public UserAccount getFullInfo(Integer id) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<UserAccount> cq = cb.createQuery(UserAccount.class);
 		Root<UserAccount> from = cq.from(UserAccount.class);
 
@@ -46,7 +36,7 @@ public class UserAccountDao extends AbstractDao<UserAccount, Integer> implements
 		from.fetch("chats", JoinType.LEFT);
 
 		cq.where(cb.equal(from.get("id"), id));
-		TypedQuery<UserAccount> tq = em.createQuery(cq);
+		TypedQuery<UserAccount> tq = entityManager.createQuery(cq);
 
 		return getSingleResult(tq);
 	}

@@ -4,24 +4,15 @@ import org.springframework.stereotype.Service;
 
 import by.senla.study.api.dao.IPersonalDataDao;
 import by.senla.study.api.service.IPersonalDataService;
-import by.senla.study.dao.impl.PersonalDataDao;
 import by.senla.study.model.entity.PersonalData;
 
 @Service
 public class PersonalDataService extends AbstractService<PersonalData, Integer> implements IPersonalDataService {
 
-	private static IPersonalDataDao personalDataDao = PersonalDataDao.getInstance();
-	private static PersonalDataService instance;
+	private static IPersonalDataDao personalDataDao;
 
 	private PersonalDataService() {
 		super(PersonalData.class, personalDataDao);
-	}
-
-	public static PersonalDataService getInstance() {
-		if (instance == null) {
-			instance = new PersonalDataService();
-		}
-		return instance;
 	}
 
 	@Override

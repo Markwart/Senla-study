@@ -2,22 +2,20 @@ package by.senla.study.api.dao;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 public interface GenericDao<T, PK> {
 
-	T getByID(PK id, EntityManager entityManager);
+	T getByID(PK id);
 
-	void update(T entity, EntityManager entityManager);
+	void update(T entity);
 
-	void insert(T entity, EntityManager entityManager);
+	void insert(T entity);
 
-	void delete (T entity, EntityManager entityManager);
+	void delete (T entity);
 
-	List<T> selectAll(EntityManager entityManager);
+	List<T> selectAll();
 
-	void merge(T entity, EntityManager entityManager);
+	void merge(T entity);
 
-	T getFullInfo(PK id, EntityManager entityManager);
+	T getFullInfo(PK id);
 
 }

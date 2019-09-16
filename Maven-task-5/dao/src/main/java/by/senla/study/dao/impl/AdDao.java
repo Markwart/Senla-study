@@ -2,7 +2,6 @@ package by.senla.study.dao.impl;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -23,18 +22,9 @@ public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
 		super(Ad.class);
 	}
 
-	private static AdDao instance;
-
-	public static AdDao getInstance() {
-		if (instance == null) {
-			instance = new AdDao();
-		}
-		return instance;
-	}
-	
 	@Override
-	public Ad getFullInfo(Integer id, EntityManager em) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
+	public Ad getFullInfo(Integer id) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Ad> cq = cb.createQuery(Ad.class);
 		Root<Ad> from = cq.from(Ad.class);
 
@@ -44,14 +34,14 @@ public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
 		from.fetch("comments", JoinType.LEFT);
 
 		cq.where(cb.equal(from.get("id"), id));
-		TypedQuery<Ad> tq = em.createQuery(cq);
+		TypedQuery<Ad> tq = entityManager.createQuery(cq);
 
 		return getSingleResult(tq);
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Ad> searchByIndex(String text, EntityManager entityManager) {
+	public List<Ad> searchByIndex(String text) {
 		FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search.getFullTextEntityManager(entityManager);
 
 		QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(Ad.class).get();

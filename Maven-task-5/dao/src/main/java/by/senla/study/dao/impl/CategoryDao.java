@@ -1,6 +1,5 @@
 package by.senla.study.dao.impl;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,22 +14,13 @@ import by.senla.study.model.entity.Category;
 @Repository
 public class CategoryDao extends AbstractDao<Category, Integer> implements ICategoryDao {
 
-	private static CategoryDao instance;
-
 	private CategoryDao() {
 		super(Category.class);
 	}
 
-	public static CategoryDao getInstance() {
-		if (instance == null) {
-			instance = new CategoryDao();
-		}
-		return instance;
-	}
-
 	@Override
-	public Category getFullInfo(Integer id, EntityManager em) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
+	public Category getFullInfo(Integer id) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Category> cq = cb.createQuery(Category.class);
 		Root<Category> from = cq.from(Category.class);
 
@@ -38,7 +28,7 @@ public class CategoryDao extends AbstractDao<Category, Integer> implements ICate
 		from.fetch("ads", JoinType.LEFT);
 
 		cq.where(cb.equal(from.get("id"), id));
-		TypedQuery<Category> tq = em.createQuery(cq);
+		TypedQuery<Category> tq = entityManager.createQuery(cq);
 
 		return getSingleResult(tq);
 	}

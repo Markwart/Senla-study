@@ -3,6 +3,7 @@ package by.senla.study.dao.impl;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -11,6 +12,9 @@ import javax.persistence.criteria.Root;
 import by.senla.study.api.dao.GenericDao;
 
 public abstract class AbstractDao<T, PK> implements GenericDao<T, PK> {
+	
+	@PersistenceContext
+	protected EntityManager entityManager;
 
 	private Class<T> entityClass;
 	
@@ -23,36 +27,36 @@ public abstract class AbstractDao<T, PK> implements GenericDao<T, PK> {
 	}
 
 	@Override
-	public T getByID(PK id, EntityManager entityManager) {
+	public T getByID(PK id) {
 		return entityManager.find(getEntityClass(), id);
 	}
 
 	@Override
-	public void insert(T entity, EntityManager entityManager) {
+	public void insert(T entity) {
 		entityManager.persist(entity);
 	}
 
 	@Override
-	public void update(T entity, EntityManager entityManager) {
+	public void update(T entity) {
 		entityManager.merge(entity);
 	}
 
 	@Override
-	public void delete(T entity, EntityManager entityManager) {
+	public void delete(T entity) {
 		entityManager.remove(entity);;
 	}
 
 	@Override
-	public List<T> selectAll(EntityManager em) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
+	public List<T> selectAll() {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<T> cq = cb.createQuery(getEntityClass());
 		Root<T> from = cq.from(getEntityClass());
 		cq.select(from);
-		return em.createQuery(cq).getResultList();
+		return entityManager.createQuery(cq).getResultList();
 	}
 
 	@Override
-	public void merge(T entity, EntityManager entityManager) {
+	public void merge(T entity) {
 		entityManager.merge(entity);
 	}
 

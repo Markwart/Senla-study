@@ -1,6 +1,5 @@
 package by.senla.study.dao.impl;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,22 +14,13 @@ import by.senla.study.model.entity.PersonalData;
 @Repository
 public class PersonalDataDao extends AbstractDao<PersonalData, Integer> implements IPersonalDataDao {
 
-	private static PersonalDataDao instance;
-
 	private PersonalDataDao() {
 		super(PersonalData.class);
 	}
 
-	public static PersonalDataDao getInstance() {
-		if (instance == null) {
-			instance = new PersonalDataDao();
-		}
-		return instance;
-	}
-
 	@Override
-	public PersonalData getFullInfo(Integer id, EntityManager em) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
+	public PersonalData getFullInfo(Integer id) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<PersonalData> cq = cb.createQuery(PersonalData.class);
 		Root<PersonalData> from = cq.from(PersonalData.class);
 
@@ -38,7 +28,7 @@ public class PersonalDataDao extends AbstractDao<PersonalData, Integer> implemen
 		from.fetch("userAccount", JoinType.LEFT);
 
 		cq.where(cb.equal(from.get("id"), id));
-		TypedQuery<PersonalData> tq = em.createQuery(cq);
+		TypedQuery<PersonalData> tq = entityManager.createQuery(cq);
 
 		return getSingleResult(tq);
 	}

@@ -12,19 +12,24 @@
       http://www.springframework.org/schema/context 
       http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 
-	<!-- Scanning "Spring MVC annotations" -->
 	<context:component-scan
-		base-package="by.senla.study.dao.impl" />
+		base-package="by.senla.study.dao" />
 
-	<!-- The configuration entity Manager (EntityManager) in a "Spring application 
-		context" via configuration entity Manager factory (EntityManagerFactory) -->
+    <context:property-placeholder
+	    location="classpath:hibernate.properties" />
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${hibernate.connection.driver_class}"/>
+		<property name="url" value="${hibernate.connection.url}" />
+		<property name="username" value="${hibernate.connection.username}" />
+		<property name="password" value="${hibernate.connection.password}" />
+	</bean> 
+
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
 		p:dataSource-ref="dataSource" />
 
-	<!-- This element tells the "Spring Framework" to examine all components 
-		in the context of the application and find those marked with "@Transactional" 
-		annotation -->
 	<tx:annotation-driven />
 	<bean id="transactionManager"
 		class="org.springframework.orm.jpa.JpaTransactionManager"

@@ -5,6 +5,7 @@
 	version="1.0">
 
 	<persistence-unit name="sample" transaction-type="RESOURCE_LOCAL">
+	<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 	
 	<class>by.senla.study.model.entity.BaseEntity</class>
 	<class>by.senla.study.model.entity.Ad</class>
@@ -25,7 +26,7 @@
 			<property name="cache.provider_class" value="org.hibernate.cache.internal.NoCacheProvider" />
 			
 			<property name="hibernate.search.default.directory_provider" value="filesystem"/>
-			<property name="hibernate.search.default.indexBase" value="/data/lucene/indexes"/>
+			<property name="hibernate.search.default.indexBase" value="./data/lucene/indexes"/>
 		</properties>
 
 	</persistence-unit>

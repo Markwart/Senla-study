@@ -1,6 +1,5 @@
 package by.senla.study.dao.impl;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,22 +14,13 @@ import by.senla.study.model.entity.Ranking;
 @Repository
 public class RankingDao extends AbstractDao<Ranking, Integer> implements IRankingDao {
 
-	private static RankingDao instance;
-
 	private RankingDao() {
 		super(Ranking.class);
 	}
 
-	public static RankingDao getInstance() {
-		if (instance == null) {
-			instance = new RankingDao();
-		}
-		return instance;
-	}
-	
 	@Override
-	public Ranking getFullInfo(Integer id, EntityManager em) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
+	public Ranking getFullInfo(Integer id) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Ranking> cq = cb.createQuery(Ranking.class);
 		Root<Ranking> from = cq.from(Ranking.class);
 
@@ -39,7 +29,7 @@ public class RankingDao extends AbstractDao<Ranking, Integer> implements IRankin
 		from.fetch("userWhom", JoinType.LEFT);
 
 		cq.where(cb.equal(from.get("id"), id));
-		TypedQuery<Ranking> tq = em.createQuery(cq);
+		TypedQuery<Ranking> tq = entityManager.createQuery(cq);
 
 		return getSingleResult(tq);
 	}

@@ -1,6 +1,5 @@
 package by.senla.study.dao.impl;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,22 +14,13 @@ import by.senla.study.model.entity.Message;
 @Repository
 public class MessageDao extends AbstractDao<Message, Integer> implements IMessageDao {
 
-	private static MessageDao instance;
-
 	private MessageDao() {
 		super(Message.class);
 	}
 
-	public static MessageDao getInstance() {
-		if (instance == null) {
-			instance = new MessageDao();
-		}
-		return instance;
-	}
-	
 	@Override
-	public Message getFullInfo(Integer id, EntityManager em) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
+	public Message getFullInfo(Integer id) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Message> cq = cb.createQuery(Message.class);
 		Root<Message> from = cq.from(Message.class);
 
@@ -39,7 +29,7 @@ public class MessageDao extends AbstractDao<Message, Integer> implements IMessag
 		from.fetch("chat", JoinType.LEFT);
 
 		cq.where(cb.equal(from.get("id"), id));
-		TypedQuery<Message> tq = em.createQuery(cq);
+		TypedQuery<Message> tq = entityManager.createQuery(cq);
 
 		return getSingleResult(tq);
 	}
