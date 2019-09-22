@@ -36,4 +36,16 @@ public class AdService extends AbstractService<Ad, Integer> implements IAdServic
 		}
 		return adList;
 	}
+
+	@Override
+	public List<Ad> sellerHistory(Integer sellerID) {
+		List<Ad> adList = adDao.sellerHistory(sellerID);
+		return adList;
+	}
+
+	@Override
+	public List<Ad> findAdsByCategory(String category, String column) {
+		List<Ad> adList = adDao.findAdsByCategory(category, column);
+		return adList;
+	}
 }

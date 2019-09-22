@@ -17,4 +17,9 @@ public class RankingService extends AbstractService<Ranking, Integer> implements
 		super(Ranking.class, rankingDao);
 		this.rankingDao = rankingDao;
 	}
+
+	@Override
+	public Double getRankByUserID(Integer id) {
+		return rankingDao.getRankByUserID(id);
+	}
 }
