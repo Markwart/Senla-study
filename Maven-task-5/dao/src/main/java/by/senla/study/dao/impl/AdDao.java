@@ -5,7 +5,10 @@ import java.util.List;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -17,6 +20,8 @@ import org.springframework.stereotype.Repository;
 
 import by.senla.study.api.dao.IAdDao;
 import by.senla.study.model.entity.Ad;
+import by.senla.study.model.entity.Ranking;
+import by.senla.study.model.entity.UserAccount;
 import by.senla.study.model.enums.Status;
 
 @Repository
@@ -78,6 +83,7 @@ public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Ad> cq = cb.createQuery(Ad.class);
 		Root<Ad> from = cq.from(Ad.class);
+		Join<Ad, Ranking> join = from.join("seller", JoinType.LEFT).join("userWhom", JoinType.LEFT);
 
 		cq.select(from);
 		Predicate categoryPred = cb.equal(from.get("category").get("name"), category);
@@ -88,7 +94,8 @@ public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
 			column = "id";
 		}
 		final Path<?> expression = from.get(column);
-		cq.orderBy(cb.desc(from.get("status")), new OrderImpl(expression, ascending));
+		cq.groupBy(join.get("userWhom"));	
+		cq.orderBy(cb.desc(from.get("status")), new OrderImpl(expression, ascending), (Order)cb.avg(join.<Number>get("feedback")));
 
 		TypedQuery<Ad> tq = entityManager.createQuery(cq);
 		return tq.getResultList();
