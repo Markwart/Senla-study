@@ -11,5 +11,5 @@ public interface IAdDao extends GenericDao<Ad, Integer> {
 
 	List<Ad> sellerHistory(Integer sellerID);
 
-	List<Ad> findAdsByCategory(String category, String column);
+	List<Ad> findAdsByCategory(String category, String column, Boolean ascending);
 }

@@ -5,19 +5,18 @@ import java.util.List;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.hibernate.query.criteria.internal.OrderImpl;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.stereotype.Repository;
 
 import by.senla.study.api.dao.IAdDao;
 import by.senla.study.model.entity.Ad;
-import by.senla.study.model.entity.Ranking;
-import by.senla.study.model.entity.UserAccount;
 import by.senla.study.model.enums.Status;
 
 @Repository
@@ -66,28 +65,30 @@ public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
 		Root<Ad> from = cq.from(Ad.class);
 
 		cq.select(from);
-		Predicate seller = cb.equal(from.get("seller"), sellerID);
-		Predicate status = cb.equal(from.get("status"), Status.CLOSED);
-		cq.where(cb.and(seller, status));
+		Predicate sellerPred = cb.equal(from.get("seller"), sellerID);
+		Predicate statusPred = cb.equal(from.get("status"), Status.CLOSED);
+		cq.where(cb.and(sellerPred, statusPred));
 
 		TypedQuery<Ad> tq = entityManager.createQuery(cq);
 		return tq.getResultList();
 	}
 
 	@Override
-	public List<Ad> findAdsByCategory(String category, String column) {
+	public List<Ad> findAdsByCategory(String category, String column, Boolean ascending) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Ad> cq = cb.createQuery(Ad.class);
 		Root<Ad> from = cq.from(Ad.class);
-		Join<Ad, Ranking> join = from.join("seller", JoinType.LEFT);
 
 		cq.select(from);
-		cq.where(cb.equal(from.get("category").get("name"), category));
+		Predicate categoryPred = cb.equal(from.get("category").get("name"), category);
+		Predicate statusPred = cb.notEqual(from.get("status"), Status.CLOSED);
+		cq.where(cb.and(categoryPred, statusPred));
+
 		if (column == null) {
 			column = "id";
 		}
-		cq.orderBy(cb.asc(from.get(column)));
-		cq.orderBy(cb.desc(join.get("feedback")));
+		final Path<?> expression = from.get(column);
+		cq.orderBy(cb.desc(from.get("status")), new OrderImpl(expression, ascending));
 
 		TypedQuery<Ad> tq = entityManager.createQuery(cq);
 		return tq.getResultList();

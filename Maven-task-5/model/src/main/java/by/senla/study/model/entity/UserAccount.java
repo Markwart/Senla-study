@@ -44,7 +44,7 @@ public class UserAccount extends BaseEntity {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userFrom")
 	private Set<Ranking> rankingFrom = new HashSet<Ranking>();
-
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userWhom")
 	private Set<Ranking> rankingWhom = new HashSet<Ranking>();
 
