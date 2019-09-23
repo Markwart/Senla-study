@@ -17,7 +17,7 @@ public class Category extends BaseEntity {
 	private String name;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
-	private Set<Ad> ads = new HashSet<Ad>();
+	private Set<Ad> ads = new HashSet<>();
 
 	public String getName() {
 		return name;

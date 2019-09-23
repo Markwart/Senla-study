@@ -19,9 +19,12 @@ public class Init {
 
 		System.out.println("SIZE=" + userAccountService.selectAll().size());
 		System.out.println("EMAIL=" + userAccountService.getByID(33).getEmail());
-		System.out.println("TEXT=" + adService.getByID(1).getText());
-		System.out.println("SEARCH=" + adService.searchByIndex("thing").get(0).getTheme());
+		System.out.println("CATEGORY=" + adService.getFullInfo(1).getCategory().getName());
 		
+		List<Ad> listSearch = adService.searchByIndex("thing");
+		for (Ad ad : listSearch) {
+			System.out.println("SEARCH_ID=" + ad.getId());
+		}
 		
 		List<Ad> list = adService.findAdsByCategory("old", null, true);
 		for (Ad ad : list) {

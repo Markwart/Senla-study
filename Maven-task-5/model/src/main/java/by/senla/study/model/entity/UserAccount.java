@@ -34,27 +34,27 @@ public class UserAccount extends BaseEntity {
 	private PersonalData personalData;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "seller")
-	private Set<Ad> ads = new HashSet<Ad>();
+	private Set<Ad> ads = new HashSet<>();
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userFrom")
-	private Set<Comment> comments = new HashSet<Comment>();
+	private Set<Comment> comments = new HashSet<>();
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-	private Set<Message> messages = new HashSet<Message>();
+	private Set<Message> messages = new HashSet<>();
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userFrom")
-	private Set<Ranking> rankingFrom = new HashSet<Ranking>();
+	private Set<Ranking> rankingFrom = new HashSet<>();
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userWhom")
-	private Set<Ranking> rankingWhom = new HashSet<Ranking>();
+	private Set<Ranking> rankingWhom = new HashSet<>();
 
 	@JoinTable(name = "user_2_ad", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "ad_id"))
 	@ManyToMany(fetch = FetchType.LAZY)
-	private Set<Ad> wishlist = new HashSet<Ad>();
+	private Set<Ad> wishlist = new HashSet<>();
 
 	@JoinTable(name = "user_2_chat", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "chat_id"))
 	@ManyToMany(fetch = FetchType.LAZY)
-	private Set<Ad> chats = new HashSet<Ad>();
+	private Set<Ad> chats = new HashSet<>();
 
 	public String getName() {
 		return name;

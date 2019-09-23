@@ -8,13 +8,15 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
 import org.hibernate.query.criteria.internal.OrderImpl;
 import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.stereotype.Repository;
 
@@ -58,7 +60,10 @@ public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
 		org.apache.lucene.search.Query luceneQuery = qb.keyword().onFields("theme", "text").matching(text)
 				.createQuery();
 
-		javax.persistence.Query jpaQuery = fullTextEntityManager.createFullTextQuery(luceneQuery, Ad.class);
+		FullTextQuery jpaQuery = fullTextEntityManager.createFullTextQuery(luceneQuery, Ad.class);
+
+		org.apache.lucene.search.Sort sort = new Sort(new SortField("price", SortField.Type.STRING, true));
+		jpaQuery.setSort(sort);
 
 		return jpaQuery.getResultList();
 	}
@@ -83,7 +88,9 @@ public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Ad> cq = cb.createQuery(Ad.class);
 		Root<Ad> from = cq.from(Ad.class);
-		Join<Ad, Ranking> join = from.join("seller", JoinType.LEFT).join("userWhom", JoinType.LEFT);
+
+		Join<Ad, UserAccount> joinUser = from.join("seller", JoinType.LEFT);
+		Join<Ranking, UserAccount> joinRanking = joinUser.join("rankingWhom", JoinType.LEFT);
 
 		cq.select(from);
 		Predicate categoryPred = cb.equal(from.get("category").get("name"), category);
@@ -93,9 +100,12 @@ public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
 		if (column == null) {
 			column = "id";
 		}
-		final Path<?> expression = from.get(column);
-		cq.groupBy(join.get("userWhom"));	
-		cq.orderBy(cb.desc(from.get("status")), new OrderImpl(expression, ascending), (Order)cb.avg(join.<Number>get("feedback")));
+		final Path<?> columnSort = from.get(column);
+		final Expression<Double> feedbackSort = cb.avg(joinRanking.get("feedback"));
+
+		cq.groupBy(joinRanking.get("userWhom"));
+		cq.orderBy(cb.desc(from.get("status")), new OrderImpl(columnSort, ascending),
+				new OrderImpl(feedbackSort, false));
 
 		TypedQuery<Ad> tq = entityManager.createQuery(cq);
 		return tq.getResultList();

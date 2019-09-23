@@ -1,7 +1,6 @@
 package by.senla.study.model.entity;
 
 import java.math.BigDecimal;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +18,7 @@ import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.SortableField;
 import org.hibernate.search.annotations.Store;
 
 import by.senla.study.model.enums.Status;
@@ -37,6 +37,8 @@ public class Ad extends BaseEntity {
 	private String text;
 
 	@Column(name = "price")
+	@SortableField
+	@Field
 	private BigDecimal price;
 	
 	@Column(name = "image")
@@ -55,7 +57,7 @@ public class Ad extends BaseEntity {
 	private Category category;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "ad")
-	private Set<Comment> comments = new HashSet<Comment>();
+	private Set<Comment> comments = new HashSet<>(); 
 
 	public String getTheme() {
 		return theme;

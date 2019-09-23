@@ -17,7 +17,7 @@ public class Chat extends BaseEntity {
 	private String name;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "chat")
-	private Set<Message> messages = new HashSet<Message>();
+	private Set<Message> messages = new HashSet<>();
 
 	public String getName() {
 		return name;
