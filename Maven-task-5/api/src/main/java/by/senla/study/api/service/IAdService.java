@@ -11,4 +11,6 @@ public interface IAdService extends GenericService<Ad, Integer> {
 	List<Ad> sellerHistory(Integer sellerID);
 
 	List<Ad> findAdsByCategory(String category, String column, Boolean ascending);
+
+	void moveAdOnTop(Integer id);
 }

@@ -6,16 +6,12 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 
 @Entity
 @Table(name = "ranking")
 public class Ranking extends BaseEntity {
 
 	@Column(name = "feedback")
-	@Min(value = 1)
-	@Max(value = 5)
 	private Integer feedback;
 
 	@ManyToOne(fetch = FetchType.LAZY)

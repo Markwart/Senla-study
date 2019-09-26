@@ -3,13 +3,13 @@ package by.senla.study.service.impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.service.spi.ServiceException;
-import org.springframework.transaction.annotation.Transactional;
 
 import by.senla.cvs.module.processor.CsvReader;
 import by.senla.cvs.module.processor.CsvWriter;
@@ -17,15 +17,14 @@ import by.senla.study.api.dao.GenericDao;
 import by.senla.study.api.service.GenericService;
 import by.senla.study.model.entity.BaseEntity;
 
-@Transactional
 public abstract class AbstractService<T extends BaseEntity, PK> implements GenericService<T, PK> {
 
-	protected final Logger LOGGER = LogManager.getLogger(getEntityClass());
+	private final Logger LOGGER = LogManager.getLogger(getEntityClass());
 	protected static final String EXCEPTION = "Service layer. Transaction exception";
 	protected static final String FOLDER_CSV = "./data/";
 
 	private static final String CREATED = "new %s with id=%d was created";
-	private static final String UPDATED = "%s with id=%d was updated";
+	protected static final String UPDATED = "%s with id=%d was updated";
 	private static final String DELETED = "%s with id=%d was deleted";
 	private static final String MERGED = "%s with id=%d was merged";
 
@@ -33,7 +32,7 @@ public abstract class AbstractService<T extends BaseEntity, PK> implements Gener
 
 	protected GenericDao<T, PK> dao;
 
-	public AbstractService(Class<T> entityClass, GenericDao<T, PK> dao) {
+	protected AbstractService(Class<T> entityClass, GenericDao<T, PK> dao) {
 		this.entityClass = entityClass;
 		this.dao = dao;
 	}
@@ -50,8 +49,7 @@ public abstract class AbstractService<T extends BaseEntity, PK> implements Gener
 
 	@Override
 	public List<T> selectAll() {
-		List<T> userAccountList = dao.selectAll();
-		return userAccountList;
+		return dao.selectAll();
 	}
 
 	@Override
@@ -62,6 +60,7 @@ public abstract class AbstractService<T extends BaseEntity, PK> implements Gener
 	@Override
 	public void update(T entity) {
 		try {
+			entity.setUpdated(new Date());
 			dao.update(entity);
 			LOGGER.log(Level.INFO, String.format(UPDATED, getEntityClass().getSimpleName(), entity.getId()));
 
@@ -73,7 +72,10 @@ public abstract class AbstractService<T extends BaseEntity, PK> implements Gener
 
 	@Override
 	public void insert(T entity) {
+		Date current = new Date();
 		try {
+			entity.setCreated(current);
+			entity.setUpdated(current);
 			dao.insert(entity);
 			LOGGER.log(Level.INFO, String.format(CREATED, getEntityClass().getSimpleName(), entity.getId()));
 
@@ -99,6 +101,7 @@ public abstract class AbstractService<T extends BaseEntity, PK> implements Gener
 	@Override
 	public void merge(T entity) {
 		try {
+			entity.setUpdated(new Date());
 			dao.merge(entity);
 			LOGGER.log(Level.INFO, String.format(MERGED, getEntityClass().getSimpleName(), entity.getId()));
 

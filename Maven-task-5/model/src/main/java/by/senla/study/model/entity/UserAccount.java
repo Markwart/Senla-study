@@ -44,7 +44,7 @@ public class UserAccount extends BaseEntity {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userFrom")
 	private Set<Ranking> rankingFrom = new HashSet<>();
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userWhom")
 	private Set<Ranking> rankingWhom = new HashSet<>();
 
@@ -54,7 +54,7 @@ public class UserAccount extends BaseEntity {
 
 	@JoinTable(name = "user_2_chat", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "chat_id"))
 	@ManyToMany(fetch = FetchType.LAZY)
-	private Set<Ad> chats = new HashSet<>();
+	private Set<Chat> chats = new HashSet<>();
 
 	public String getName() {
 		return name;
@@ -86,14 +86,6 @@ public class UserAccount extends BaseEntity {
 
 	public void setWishlist(Set<Ad> wishlist) {
 		this.wishlist = wishlist;
-	}
-
-	public Set<Ad> getChats() {
-		return chats;
-	}
-
-	public void setChats(Set<Ad> chats) {
-		this.chats = chats;
 	}
 
 	public Set<Ad> getAds() {
@@ -136,4 +128,11 @@ public class UserAccount extends BaseEntity {
 		this.rankingWhom = rankingWhom;
 	}
 
+	public Set<Chat> getChats() {
+		return chats;
+	}
+
+	public void setChats(Set<Chat> chats) {
+		this.chats = chats;
+	}
 }
