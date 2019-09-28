@@ -10,6 +10,6 @@
 	<import resource="dao-context.xml" />
 
 	<context:component-scan
-		base-package="by.senla.study.service.impl" />
+		base-package="by.senla.study.board.service" />
 
 </beans>

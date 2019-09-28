@@ -7,15 +7,15 @@
 	<persistence-unit name="sample" transaction-type="RESOURCE_LOCAL">
 	<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 	
-	<class>by.senla.study.model.entity.BaseEntity</class>
-	<class>by.senla.study.model.entity.Ad</class>
-	<class>by.senla.study.model.entity.Category</class>
-	<class>by.senla.study.model.entity.Chat</class>
-	<class>by.senla.study.model.entity.Comment</class>
-	<class>by.senla.study.model.entity.Message</class>
-	<class>by.senla.study.model.entity.PersonalData</class>
-	<class>by.senla.study.model.entity.Ranking</class>
-	<class>by.senla.study.model.entity.UserAccount</class>
+	<class>by.senla.study.board.model.entity.BaseEntity</class>
+	<class>by.senla.study.board.model.entity.Ad</class>
+	<class>by.senla.study.board.model.entity.Category</class>
+	<class>by.senla.study.board.model.entity.Chat</class>
+	<class>by.senla.study.board.model.entity.Comment</class>
+	<class>by.senla.study.board.model.entity.Message</class>
+	<class>by.senla.study.board.model.entity.PersonalData</class>
+	<class>by.senla.study.board.model.entity.Ranking</class>
+	<class>by.senla.study.board.model.entity.UserAccount</class>
 	
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" />
