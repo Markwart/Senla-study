@@ -18,9 +18,10 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 
 		AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
 		//rootContext.register(SecurityConfig.class);
-
+		rootContext.setConfigLocation("classpath:webapp-context.xml");
+		
 		servletContext.addListener(new ContextLoaderListener(rootContext));
-
+		
 		AnnotationConfigWebApplicationContext servletAppContext = new AnnotationConfigWebApplicationContext();
 		servletAppContext.register(MVCConfig.class);
 

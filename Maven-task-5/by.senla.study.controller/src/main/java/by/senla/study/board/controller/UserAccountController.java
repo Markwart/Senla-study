@@ -5,25 +5,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import by.senla.study.board.api.service.IUserAccountService;
-import by.senla.study.board.model.dto.UserAccountDTO;
+import by.senla.study.board.model.dto.UserAccountDto;
 import by.senla.study.board.model.entity.UserAccount;
-import by.senla.study.board.service.converterDTO.UserAccountFromDTO;
-import by.senla.study.board.service.converterDTO.UserAccountToDTO;
+import by.senla.study.board.service.mapper.UserAccountMapper;
 
 @RestController
 @RequestMapping(value = "/userAccount")
-public class UserAccountController extends AbstractController<UserAccount, Integer, UserAccountDTO> {
+public class UserAccountController extends AbstractController<UserAccount, Integer, UserAccountDto> {
 
 	private final IUserAccountService userAccountService;
-	private final UserAccountToDTO toDTOConverter;
-	private final UserAccountFromDTO fromDTOConverter;
+	private final UserAccountMapper mapper;
 
 	@Autowired
-	public UserAccountController(IUserAccountService userAccountService, UserAccountToDTO toDTOConverter,
-			UserAccountFromDTO fromDTOConverter) {
-		super(UserAccount.class, userAccountService, toDTOConverter, fromDTOConverter);
+	public UserAccountController(IUserAccountService userAccountService, UserAccountMapper mapper) {
+		super(UserAccount.class, userAccountService, mapper);
 		this.userAccountService = userAccountService;
-		this.toDTOConverter = toDTOConverter;
-		this.fromDTOConverter = fromDTOConverter;
+		this.mapper = mapper;
 	}
 }

@@ -1,101 +1,75 @@
 package by.senla.study.board.controller;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
-import by.senla.study.board.api.DTOConverter.IFromDTOConverter;
-import by.senla.study.board.api.DTOConverter.IToDTOConverter;
+import by.senla.study.board.api.DTOConverter.IMapper;
 import by.senla.study.board.api.service.GenericService;
-import by.senla.study.board.exception.JsonMapperException;
-import by.senla.study.board.model.dto.BaseDTO;
+import by.senla.study.board.model.dto.BaseDto;
 import by.senla.study.board.model.entity.BaseEntity;
 
-public abstract class AbstractController<T extends BaseEntity, PK, D extends BaseDTO> {
-
-	private static final String EXCEPTION = "Controller layer. JSON Mapper exception";
+public abstract class AbstractController<T extends BaseEntity, PK, D extends BaseDto> {
+	
+	protected static final String UPDATE = "Entity was updated";
+	private static final String CREATE = "Entity was created";
+	private static final String DELETE = "Successful delete operation";
 
 	private Class<T> entityClass;
 
-	protected GenericService<T, PK> service;
-	protected IToDTOConverter<T, D> toDTOConverter;
-	protected IFromDTOConverter<T, D> fromDTOConverter;
+	private GenericService<T, PK> service;
+	private IMapper<T, D> mapper;
 
-	public AbstractController(Class<T> entityClass, GenericService<T, PK> service, IToDTOConverter<T, D> toDTOConverter,
-			IFromDTOConverter<T, D> fromDTOConverter) {
+	public AbstractController(Class<T> entityClass, GenericService<T, PK> service, IMapper<T, D> mapper) {
 		super();
 		this.entityClass = entityClass;
 		this.service = service;
-		this.toDTOConverter = toDTOConverter;
-		this.fromDTOConverter = fromDTOConverter;
+		this.mapper = mapper;
 	}
 
 	public Class<T> getEntityClass() {
 		return entityClass;
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public String findByID(@PathVariable(name = "id", required = true) PK id) {
+	@GetMapping(value = "/{id}")
+	public D findByID(@PathVariable(name = "id", required = true) PK id) {
 		T entity = service.getByID(id);
-		D dto = toDTOConverter.apply(entity);
-
-		String json = null;
-		try {
-			json = new ObjectMapper().writeValueAsString(dto);
-		} catch (IOException e) {
-			throw new JsonMapperException(EXCEPTION, e);
-		}
-		return json;
+		D dto = mapper.toDto(entity);
+		return dto;
 	}
 
-	@RequestMapping(value = "/sellectAll", method = RequestMethod.GET)
-	public String findAll() {
+	@GetMapping(value = "/sellectAll")
+	public List<D> findAll() {
 		List<T> entities = service.selectAll();
-		List<D> dtos = entities.stream().map(toDTOConverter).collect(Collectors.toList());
-
-		String json = null;
-		try {
-			json = new ObjectMapper().writeValueAsString(dtos);
-		} catch (IOException e) {
-			throw new JsonMapperException(EXCEPTION, e);
+		List<D> dtos = new ArrayList<>();
+		for (T entity : entities) {
+			dtos.add(mapper.toDto(entity));
 		}
-		return json;
+		return dtos;
 	}
 
-	@RequestMapping(value = "/{id}/edit", method = RequestMethod.PUT)
-	public String edit(@PathVariable(name = "id", required = true) PK id) {
-		D dto = toDTOConverter.apply(service.getByID(id));
-
-		String json = null;
-		try {
-			json = new ObjectMapper().writeValueAsString(dto);
-		} catch (IOException e) {
-			throw new JsonMapperException(EXCEPTION, e);
-		}
-		return json;
+	@PutMapping(value = "/{id}/edit")
+	public String edit(D dto) {
+		T entity = mapper.toEntity(dto);
+		service.update(entity);
+		return UPDATE;
 	}
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	@PostMapping(value = "/create")
 	public String create(D dto) {
-		T entity = fromDTOConverter.apply(dto);
+		T entity = mapper.toEntity(dto);
 		service.insert(entity);
-
-		String json = null;
-		try {
-			json = new ObjectMapper().writeValueAsString(toDTOConverter.apply(entity));
-		} catch (IOException e) {
-			throw new JsonMapperException(EXCEPTION, e);
-		}
-		return json;
+		return CREATE;
 	}
 
-	@RequestMapping(value = "/{id}/delete", method = RequestMethod.DELETE)
-	public void delete(@PathVariable(name = "id", required = true) PK id) {
+	@DeleteMapping(value = "/{id}/delete")
+	public String delete(@PathVariable(name = "id", required = true) PK id) {
 		service.deleteByID(id);
+		return DELETE;
 	}
 }

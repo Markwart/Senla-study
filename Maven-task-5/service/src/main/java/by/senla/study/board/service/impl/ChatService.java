@@ -14,7 +14,7 @@ import by.senla.study.board.model.entity.Chat;
 @Transactional
 public class ChatService extends AbstractService<Chat, Integer> implements IChatService {
 	
-	private final Logger LOGGER = LogManager.getLogger(ChatService.class);
+	private static final Logger LOGGER = LogManager.getLogger(ChatService.class);
 
 	private final IChatDao chatDao;
 

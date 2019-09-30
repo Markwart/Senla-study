@@ -19,7 +19,7 @@ import by.senla.study.board.model.entity.BaseEntity;
 
 public abstract class AbstractService<T extends BaseEntity, PK> implements GenericService<T, PK> {
 
-	private final Logger LOGGER = LogManager.getLogger(getEntityClass());
+	private static final Logger LOGGER = LogManager.getLogger(AbstractService.class);
 	protected static final String EXCEPTION = "Service layer. Transaction exception";
 	protected static final String FOLDER_CSV = "./data/";
 

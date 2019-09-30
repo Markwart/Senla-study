@@ -14,7 +14,7 @@ import by.senla.study.board.model.entity.UserAccount;
 @Transactional
 public class UserAccountService extends AbstractService<UserAccount, Integer> implements IUserAccountService {
 	
-	private final Logger LOGGER = LogManager.getLogger(UserAccountService.class);
+	private static final Logger LOGGER = LogManager.getLogger(UserAccountService.class);
 
 	private final IUserAccountDao userAccountDao;
 

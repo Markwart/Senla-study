@@ -14,7 +14,7 @@ import by.senla.study.board.model.entity.PersonalData;
 @Transactional
 public class PersonalDataService extends AbstractService<PersonalData, Integer> implements IPersonalDataService {
 	
-	private final Logger LOGGER = LogManager.getLogger(PersonalDataService.class);
+	private static final Logger LOGGER = LogManager.getLogger(PersonalDataService.class);
 
 	private final IPersonalDataDao personalDataDao;
 

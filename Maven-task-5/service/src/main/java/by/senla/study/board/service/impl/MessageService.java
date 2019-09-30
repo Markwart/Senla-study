@@ -14,7 +14,7 @@ import by.senla.study.board.model.entity.Message;
 @Transactional
 public class MessageService extends AbstractService<Message, Integer> implements IMessageService {
 	
-	private final Logger LOGGER = LogManager.getLogger(MessageService.class);
+	private static final Logger LOGGER = LogManager.getLogger(MessageService.class);
 
 	private final IMessageDao messageDao;
 

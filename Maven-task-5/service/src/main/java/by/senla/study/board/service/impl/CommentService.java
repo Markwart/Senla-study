@@ -14,7 +14,7 @@ import by.senla.study.board.model.entity.Comment;
 @Transactional
 public class CommentService extends AbstractService<Comment, Integer> implements ICommentService {
 	
-	private final Logger LOGGER = LogManager.getLogger(CommentService.class);
+	private static final Logger LOGGER = LogManager.getLogger(CommentService.class);
 
 	private final ICommentDao commentDao;
 

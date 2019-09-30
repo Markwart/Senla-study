@@ -5,25 +5,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import by.senla.study.board.api.service.IMessageService;
-import by.senla.study.board.model.dto.MessageDTO;
+import by.senla.study.board.model.dto.MessageDto;
 import by.senla.study.board.model.entity.Message;
-import by.senla.study.board.service.converterDTO.MessageFromDTO;
-import by.senla.study.board.service.converterDTO.MessageToDTO;
+import by.senla.study.board.service.mapper.MessageMapper;
 
 @RestController
 @RequestMapping(value = "/message")
-public class MessageController extends AbstractController<Message, Integer, MessageDTO> {
+public class MessageController extends AbstractController<Message, Integer, MessageDto> {
 
 	private final IMessageService messageService;
-	private final MessageToDTO toDTOConverter;
-	private final MessageFromDTO fromDTOConverter;
+	private final MessageMapper mapper;
 
 	@Autowired
-	public MessageController(IMessageService messageService, MessageToDTO toDTOConverter,
-			MessageFromDTO fromDTOConverter) {
-		super(Message.class, messageService, toDTOConverter, fromDTOConverter);
+	public MessageController(IMessageService messageService, MessageMapper mapper) {
+		super(Message.class, messageService, mapper);
 		this.messageService = messageService;
-		this.toDTOConverter = toDTOConverter;
-		this.fromDTOConverter = fromDTOConverter;
+		this.mapper = mapper;
 	}
 }

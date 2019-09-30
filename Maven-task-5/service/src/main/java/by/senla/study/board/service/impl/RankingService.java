@@ -14,7 +14,7 @@ import by.senla.study.board.model.entity.Ranking;
 @Transactional
 public class RankingService extends AbstractService<Ranking, Integer> implements IRankingService {
 	
-	private final Logger LOGGER = LogManager.getLogger(RankingService.class);
+	private static final Logger LOGGER = LogManager.getLogger(RankingService.class);
 
 	private final IRankingDao rankingDao;
 

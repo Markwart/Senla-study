@@ -14,7 +14,7 @@ import by.senla.study.board.model.entity.Category;
 @Transactional
 public class CategoryService extends AbstractService<Category, Integer> implements ICategoryService {
 	
-	private final Logger LOGGER = LogManager.getLogger(CategoryService.class);
+	private static final Logger LOGGER = LogManager.getLogger(CategoryService.class);
 
 	private final ICategoryDao categoryDao;
 

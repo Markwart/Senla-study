@@ -20,7 +20,7 @@ import by.senla.study.board.model.enums.Status;
 @Transactional
 public class AdService extends AbstractService<Ad, Integer> implements IAdService {
 
-	private final Logger LOGGER = LogManager.getLogger(AdService.class);
+	private static final Logger LOGGER = LogManager.getLogger(AdService.class);
 
 	private final IAdDao adDao;
 
