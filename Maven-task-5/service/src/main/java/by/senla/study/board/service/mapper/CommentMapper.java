@@ -47,7 +47,7 @@ public class CommentMapper extends AbstractMapper<Comment, CommentDto> {
 
 	@Override
 	public void mapSpecificFields(CommentDto source, Comment destination) {
-		destination.setAd(adDao.getByID(source.getAdId()));
-		destination.setUserFrom(userAccountDao.getByID(source.getUserFromId()));
+		destination.setAd(adDao.getById(source.getAdId()));
+		destination.setUserFrom(userAccountDao.getById(source.getUserFromId()));
 	}
 }

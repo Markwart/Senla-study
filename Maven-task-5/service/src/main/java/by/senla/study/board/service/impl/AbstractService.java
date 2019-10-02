@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.service.spi.ServiceException;
+import org.springframework.transaction.annotation.Transactional;
 
 import by.senla.cvs.module.processor.CsvReader;
 import by.senla.cvs.module.processor.CsvWriter;
@@ -17,16 +18,17 @@ import by.senla.study.board.api.dao.GenericDao;
 import by.senla.study.board.api.service.GenericService;
 import by.senla.study.board.model.entity.BaseEntity;
 
+@Transactional
 public abstract class AbstractService<T extends BaseEntity, PK> implements GenericService<T, PK> {
 
 	private static final Logger LOGGER = LogManager.getLogger(AbstractService.class);
 	protected static final String EXCEPTION = "Service layer. Transaction exception";
 	protected static final String FOLDER_CSV = "./data/";
 
-	private static final String CREATED = "new %s with id=%d was created";
+	protected static final String CREATED = "new %s with id=%d was created";
 	protected static final String UPDATED = "%s with id=%d was updated";
 	private static final String DELETED = "%s with id=%d was deleted";
-	private static final String MERGED = "%s with id=%d was merged";
+	private static final String DELETED_ALL = "all entities was deleted";
 
 	private Class<T> entityClass;
 
@@ -42,8 +44,8 @@ public abstract class AbstractService<T extends BaseEntity, PK> implements Gener
 	}
 
 	@Override
-	public T getByID(PK id) {
-		T entity = dao.getByID(id);
+	public T getById(PK id) {
+		T entity = dao.getById(id);
 		return entity;
 	}
 
@@ -86,9 +88,9 @@ public abstract class AbstractService<T extends BaseEntity, PK> implements Gener
 	}
 
 	@Override
-	public void deleteByID(PK id) {
+	public void deleteById(PK id) {
 		try {
-			T entity = dao.getByID(id);
+			T entity = dao.getById(id);
 			dao.delete(entity);
 			LOGGER.log(Level.INFO, String.format(DELETED, getEntityClass().getSimpleName(), entity.getId()));
 
@@ -97,13 +99,12 @@ public abstract class AbstractService<T extends BaseEntity, PK> implements Gener
 			throw new ServiceException(EXCEPTION, e);
 		}
 	}
-
+	
 	@Override
-	public void merge(T entity) {
+	public void deleteAll() {
 		try {
-			entity.setUpdated(new Date());
-			dao.merge(entity);
-			LOGGER.log(Level.INFO, String.format(MERGED, getEntityClass().getSimpleName(), entity.getId()));
+			dao.deleteAll();;
+			LOGGER.log(Level.INFO, DELETED_ALL);
 
 		} catch (Exception e) {
 			LOGGER.log(Level.WARN, EXCEPTION, e);

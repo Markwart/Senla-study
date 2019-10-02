@@ -1,6 +1,8 @@
 package by.senla.study.board.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,5 +23,11 @@ public class UserAccountController extends AbstractController<UserAccount, Integ
 		super(UserAccount.class, userAccountService, mapper);
 		this.userAccountService = userAccountService;
 		this.mapper = mapper;
+	}
+	
+	@PutMapping(value = "/{adId}/wishList")
+	public String addToWishList(@PathVariable(name = "adId", required = true) Integer adId, Integer userId) {
+		userAccountService.addToWishList(adId, userId);
+		return UPDATE;
 	}
 }

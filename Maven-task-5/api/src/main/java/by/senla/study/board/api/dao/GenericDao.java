@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface GenericDao<T, PK> {
 
-	T getByID(PK id);
+	T getById(PK id);
 
 	void update(T entity);
 
@@ -14,8 +14,7 @@ public interface GenericDao<T, PK> {
 
 	List<T> selectAll();
 
-	void merge(T entity);
-
 	T getFullInfo(PK id);
 
+	void deleteAll();
 }

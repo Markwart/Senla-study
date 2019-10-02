@@ -44,7 +44,7 @@ public class RankingMapper extends AbstractMapper<Ranking, RankingDto> {
 
 	@Override
 	public void mapSpecificFields(RankingDto source, Ranking destination) {
-		destination.setUserFrom(userAccountDao.getByID(source.getUserFromId()));
-		destination.setUserWhom(userAccountDao.getByID(source.getUserWhomId()));
+		destination.setUserFrom(userAccountDao.getById(source.getUserFromId()));
+		destination.setUserWhom(userAccountDao.getById(source.getUserWhomId()));
 	}
 }

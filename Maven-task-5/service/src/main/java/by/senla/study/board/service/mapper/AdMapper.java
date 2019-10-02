@@ -47,7 +47,7 @@ public class AdMapper extends AbstractMapper<Ad, AdDto> {
 
 	@Override
 	public void mapSpecificFields(AdDto source, Ad destination) {
-		destination.setSeller(userAccountDao.getByID(source.getSellerId()));
-		destination.setCategory(categoryDao.getByID(source.getCategoryId()));
+		destination.setSeller(userAccountDao.getById(source.getSellerId()));
+		destination.setCategory(categoryDao.getById(source.getCategoryId()));
 	}
 }

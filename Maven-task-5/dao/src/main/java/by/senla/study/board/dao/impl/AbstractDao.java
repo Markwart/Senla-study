@@ -12,12 +12,12 @@ import javax.persistence.criteria.Root;
 import by.senla.study.board.api.dao.GenericDao;
 
 public abstract class AbstractDao<T, PK> implements GenericDao<T, PK> {
-	
+
 	@PersistenceContext
 	protected EntityManager entityManager;
 
 	private Class<T> entityClass;
-	
+
 	protected AbstractDao(Class<T> entityClass) {
 		this.entityClass = entityClass;
 	}
@@ -27,7 +27,7 @@ public abstract class AbstractDao<T, PK> implements GenericDao<T, PK> {
 	}
 
 	@Override
-	public T getByID(PK id) {
+	public T getById(PK id) {
 		return entityManager.find(getEntityClass(), id);
 	}
 
@@ -43,7 +43,12 @@ public abstract class AbstractDao<T, PK> implements GenericDao<T, PK> {
 
 	@Override
 	public void delete(T entity) {
-		entityManager.remove(entity);;
+		entityManager.remove(entity);
+	}
+
+	@Override
+	public void deleteAll() {
+		entityManager.createQuery(String.format("delete from %s", entityClass.getSimpleName())).executeUpdate();
 	}
 
 	@Override
@@ -55,15 +60,10 @@ public abstract class AbstractDao<T, PK> implements GenericDao<T, PK> {
 		return entityManager.createQuery(cq).getResultList();
 	}
 
-	@Override
-	public void merge(T entity) {
-		entityManager.merge(entity);
-	}
-
 	protected T getSingleResult(TypedQuery<T> tq) {
-		List<T> resultList = tq.getResultList();
-		if (resultList.size() != 1) {
-			throw new IllegalArgumentException("unexpected result count:" + resultList.size());
+		List<T> resultList = tq.setMaxResults(1).getResultList();
+		if (resultList.isEmpty()) {
+			return null;
 		}
 		return resultList.get(0);
 	}

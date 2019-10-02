@@ -1,6 +1,5 @@
 package by.senla.study.board.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.logging.log4j.Level;
@@ -55,11 +54,8 @@ public class AdService extends AbstractService<Ad, Integer> implements IAdServic
 
 	@Override
 	public void moveAdOnTop(Integer id) {
-		Ad entity = dao.getByID(id);
+		Ad entity = dao.getById(id);
 		entity.setStatus(Status.OPEN_VIP);
-		entity.setUpdated(new Date());
-		dao.update(entity);
-		LOGGER.log(Level.INFO, String.format(UPDATED, getEntityClass().getSimpleName(), entity.getId()));
+		update(entity);
 	}
-
 }

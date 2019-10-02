@@ -32,8 +32,10 @@ public class UserAccountDao extends AbstractDao<UserAccount, Integer> implements
 		from.fetch("rankingFrom", JoinType.LEFT);
 		from.fetch("rankingWhom", JoinType.LEFT);
 		from.fetch("comments", JoinType.LEFT);
+		
 		from.fetch("wishlist", JoinType.LEFT);
 		from.fetch("chats", JoinType.LEFT);
+		//cq.distinct(true);
 
 		cq.where(cb.equal(from.get("id"), id));
 		TypedQuery<UserAccount> tq = entityManager.createQuery(cq);

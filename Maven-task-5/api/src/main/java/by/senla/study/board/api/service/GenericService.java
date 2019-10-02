@@ -4,13 +4,13 @@ import java.util.List;
 
 public interface GenericService<T, PK> {
 
-	T getByID(PK id);
+	T getById(PK id);
 
 	void update(T entity);
 
 	void insert(T entity);
 
-	void deleteByID(PK id);
+	void deleteById(PK id);
 
 	List<T> selectAll();
 
@@ -18,8 +18,7 @@ public interface GenericService<T, PK> {
 
 	List<Object> importFromCSV();
 
-	void merge(T entity);
-
 	T getFullInfo(PK id);
 
+	void deleteAll();
 }

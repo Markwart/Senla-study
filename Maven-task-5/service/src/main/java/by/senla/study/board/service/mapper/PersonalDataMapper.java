@@ -39,6 +39,6 @@ public class PersonalDataMapper extends AbstractMapper<PersonalData, PersonalDat
 
 	@Override
 	public void mapSpecificFields(PersonalDataDto source, PersonalData destination) {
-		destination.setUserAccount(userAccountDao.getByID(source.getUserAccountId()));
+		destination.setUserAccount(userAccountDao.getById(source.getUserAccountId()));
 	}
 }

@@ -17,8 +17,8 @@ import by.senla.study.board.model.entity.BaseEntity;
 public abstract class AbstractController<T extends BaseEntity, PK, D extends BaseDto> {
 	
 	protected static final String UPDATE = "Entity was updated";
-	private static final String CREATE = "Entity was created";
-	private static final String DELETE = "Successful delete operation";
+	protected static final String CREATE = "Entity was created";
+	protected static final String DELETE = "Successful delete operation";
 
 	private Class<T> entityClass;
 
@@ -38,7 +38,7 @@ public abstract class AbstractController<T extends BaseEntity, PK, D extends Bas
 
 	@GetMapping(value = "/{id}")
 	public D findByID(@PathVariable(name = "id", required = true) PK id) {
-		T entity = service.getByID(id);
+		T entity = service.getFullInfo(id);
 		D dto = mapper.toDto(entity);
 		return dto;
 	}
@@ -69,7 +69,7 @@ public abstract class AbstractController<T extends BaseEntity, PK, D extends Bas
 
 	@DeleteMapping(value = "/{id}/delete")
 	public String delete(@PathVariable(name = "id", required = true) PK id) {
-		service.deleteByID(id);
+		service.deleteById(id);
 		return DELETE;
 	}
 }

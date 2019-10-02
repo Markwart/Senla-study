@@ -4,4 +4,6 @@ import by.senla.study.board.model.entity.UserAccount;
 
 public interface IUserAccountService extends GenericService<UserAccount, Integer> {
 
+	void addToWishList(Integer adId, Integer userId);
+
 }

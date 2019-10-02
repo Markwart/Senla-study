@@ -47,7 +47,7 @@ public class MessageMapper extends AbstractMapper<Message, MessageDto> {
 
 	@Override
 	public void mapSpecificFields(MessageDto source, Message destination) {
-		destination.setChat(chatDao.getByID(source.getChatId()));
-		destination.setUser(userAccountDao.getByID(source.getUserId()));
+		destination.setChat(chatDao.getById(source.getChatId()));
+		destination.setUser(userAccountDao.getById(source.getUserId()));
 	}
 }

@@ -1,25 +1,30 @@
-package by.senla.study.board.service.tests;
+package by.senla.study.board.service.junit;
 
 import static org.junit.Assert.assertEquals;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 
 import by.senla.study.board.model.dto.AdDto;
 import by.senla.study.board.model.dto.CategoryDto;
 import by.senla.study.board.model.entity.Ad;
 import by.senla.study.board.model.entity.Category;
+import by.senla.study.board.model.enums.Status;
 
 public class DtoTest extends AbstractTest {
+	
+	private ModelMapper modelMapper = new ModelMapper();
 
 	@Test
 	public void test1() {
 		Category entity = new Category();
-		entity.setId(RANDOM_INT);
-		entity.setName(RANDOM_STRING);
+		entity.setId(getRandomInt());
+		entity.setName(getRandomString());
 		entity.setCreated(new Date());
 		entity.setUpdated(new Date());
 		
@@ -42,8 +47,8 @@ public class DtoTest extends AbstractTest {
 	@Test
 	public void test2() {
 		CategoryDto dto = new CategoryDto();
-		dto.setId(RANDOM_INT);
-		dto.setName(RANDOM_STRING);
+		dto.setId(getRandomInt());
+		dto.setName(getRandomString());
 		dto.setCreated(new Date());
 		dto.setUpdated(new Date());
 		
@@ -61,5 +66,31 @@ public class DtoTest extends AbstractTest {
 		assertEquals(dto.getCreated(), entity.getCreated());
 		assertEquals(dto.getUpdated(), entity.getUpdated());
 		assertEquals(entity.getAds().size(), dto.getAds().size());
+	}
+	
+	public Ad createAdEntity() {
+		Ad ad = new Ad();
+		ad.setId(getRandomInt());
+		ad.setImage(getRandomString());
+		ad.setPrice(new BigDecimal(getRandomInt()));
+		ad.setStatus(Status.OPEN);
+		ad.setText(getRandomString());
+		ad.setTheme(getRandomString());
+		ad.setCreated(new Date());
+		ad.setUpdated(new Date());
+		return ad;
+	}
+
+	public AdDto createAdDto() {
+		AdDto adDto = new AdDto();
+		adDto.setId(getRandomInt());
+		adDto.setImage(getRandomString());
+		adDto.setPrice(new BigDecimal(getRandomInt()));
+		adDto.setStatus(Status.OPEN);
+		adDto.setText(getRandomString());
+		adDto.setTheme(getRandomString());
+		adDto.setCreated(new Date());
+		adDto.setUpdated(new Date());
+		return adDto;
 	}
 }
