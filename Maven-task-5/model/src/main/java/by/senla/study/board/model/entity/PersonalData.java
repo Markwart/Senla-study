@@ -16,18 +16,18 @@ import by.senla.study.board.model.enums.Roles;
 
 @Entity
 @Table(name = "personal_data")
-public class PersonalData extends BaseEntity {
-	
+public class PersonalData {
+
 	@Id
-	@Column(name = "id", insertable = false, updatable = false)
+	@Column(name = "id", updatable = false)
 	private Integer id;
-	
+
 	@Column(name = "created", updatable = false)
 	private Date created;
 
 	@Column(name = "updated")
 	private Date updated;
-	
+
 	@Column(name = "role")
 	@Enumerated(EnumType.STRING)
 	private Roles role;
@@ -80,5 +80,21 @@ public class PersonalData extends BaseEntity {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+
+	public Date getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 }

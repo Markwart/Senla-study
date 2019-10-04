@@ -16,10 +16,11 @@ import by.senla.cvs.module.processor.CsvReader;
 import by.senla.cvs.module.processor.CsvWriter;
 import by.senla.study.board.api.dao.GenericDao;
 import by.senla.study.board.api.service.GenericService;
+import by.senla.study.board.model.dto.BaseDto;
 import by.senla.study.board.model.entity.BaseEntity;
 
 @Transactional
-public abstract class AbstractService<T extends BaseEntity, PK> implements GenericService<T, PK> {
+public abstract class AbstractService<T extends BaseEntity, PK, D extends BaseDto> implements GenericService<T, PK, D> {
 
 	private static final Logger LOGGER = LogManager.getLogger(AbstractService.class);
 	protected static final String EXCEPTION = "Service layer. Transaction exception";
@@ -92,7 +93,7 @@ public abstract class AbstractService<T extends BaseEntity, PK> implements Gener
 		try {
 			T entity = dao.getById(id);
 			dao.delete(entity);
-			LOGGER.log(Level.INFO, String.format(DELETED, getEntityClass().getSimpleName(), entity.getId()));
+			LOGGER.log(Level.INFO, String.format(DELETED, getEntityClass().getSimpleName(), id));
 
 		} catch (Exception e) {
 			LOGGER.log(Level.WARN, EXCEPTION, e);

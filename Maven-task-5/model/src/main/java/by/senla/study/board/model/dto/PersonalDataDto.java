@@ -17,8 +17,6 @@ public class PersonalDataDto extends BaseDto {
 	@NotNull
 	private String login;
 
-	private Integer userAccountId;
-
 	public Roles getRole() {
 		return role;
 	}
@@ -41,13 +39,5 @@ public class PersonalDataDto extends BaseDto {
 
 	public void setLogin(String login) {
 		this.login = login;
-	}
-
-	public Integer getUserAccountId() {
-		return userAccountId;
-	}
-
-	public void setUserAccountId(Integer userAccountId) {
-		this.userAccountId = userAccountId;
 	}
 }

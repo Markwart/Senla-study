@@ -8,12 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import by.senla.study.board.api.dao.ICategoryDao;
 import by.senla.study.board.api.service.ICategoryService;
+import by.senla.study.board.model.dto.CategoryDto;
 import by.senla.study.board.model.entity.Category;
 
 @Service
 @Transactional
-public class CategoryService extends AbstractService<Category, Integer> implements ICategoryService {
-	
+public class CategoryService extends AbstractService<Category, Integer, CategoryDto> implements ICategoryService {
+
 	private static final Logger LOGGER = LogManager.getLogger(CategoryService.class);
 
 	private final ICategoryDao categoryDao;
@@ -22,5 +23,12 @@ public class CategoryService extends AbstractService<Category, Integer> implemen
 	public CategoryService(ICategoryDao categoryDao) {
 		super(Category.class, categoryDao);
 		this.categoryDao = categoryDao;
+	}
+
+	@Override
+	public void setFieldsAndUpdate(Category entity, CategoryDto dto) {
+		if (dto.getName() != null)
+			entity.setName(dto.getName());
+		update(entity);
 	}
 }

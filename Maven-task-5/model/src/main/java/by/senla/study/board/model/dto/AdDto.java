@@ -1,7 +1,6 @@
 package by.senla.study.board.model.dto;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
@@ -20,14 +19,13 @@ public class AdDto extends BaseDto {
 
 	private String image;
 
+	@NotNull
 	private Status status;
 
 	private Integer sellerId;
 
 	private Integer categoryId;
-
-	private Set<CommentDto> comments;
-
+	
 	public String getTheme() {
 		return theme;
 	}
@@ -66,14 +64,6 @@ public class AdDto extends BaseDto {
 
 	public void setStatus(Status status) {
 		this.status = status;
-	}
-
-	public Set<CommentDto> getComments() {
-		return comments;
-	}
-
-	public void setComments(Set<CommentDto> comments) {
-		this.comments = comments;
 	}
 
 	public Integer getSellerId() {

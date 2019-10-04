@@ -43,7 +43,6 @@ public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
 		from.fetch("seller", JoinType.LEFT);
 		from.fetch("category", JoinType.LEFT);
 		from.fetch("comments", JoinType.LEFT);
-		//cq.distinct(true);
 
 		cq.where(cb.equal(from.get("id"), id));
 		TypedQuery<Ad> tq = entityManager.createQuery(cq);
@@ -53,30 +52,30 @@ public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Ad> searchByIndex(String text) {
+	public List<Ad> searchByIndex(String keyword) {
 		FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search
 				.getFullTextEntityManager(entityManager);
 
 		QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(Ad.class).get();
-		org.apache.lucene.search.Query luceneQuery = qb.keyword().onFields("theme", "text").matching(text)
+		org.apache.lucene.search.Query luceneQuery = qb.keyword().onFields("theme", "text").matching(keyword)
 				.createQuery();
 
 		FullTextQuery jpaQuery = fullTextEntityManager.createFullTextQuery(luceneQuery, Ad.class);
 
-		org.apache.lucene.search.Sort sort = new Sort(new SortField("price", SortField.Type.STRING, true));
+		org.apache.lucene.search.Sort sort = new Sort(new SortField("status", SortField.Type.STRING, false));
 		jpaQuery.setSort(sort);
 
 		return jpaQuery.getResultList();
 	}
 
 	@Override
-	public List<Ad> sellerHistory(Integer sellerID) {
+	public List<Ad> sellerHistory(Integer sellerId) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Ad> cq = cb.createQuery(Ad.class);
 		Root<Ad> from = cq.from(Ad.class);
 
 		cq.select(from);
-		Predicate sellerPred = cb.equal(from.get("seller"), sellerID);
+		Predicate sellerPred = cb.equal(from.get("seller"), sellerId);
 		Predicate statusPred = cb.equal(from.get("status"), Status.CLOSED);
 		cq.where(cb.and(sellerPred, statusPred));
 
@@ -85,7 +84,7 @@ public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
 	}
 
 	@Override
-	public List<Ad> findAdsByCategory(String category, String sortColumn, Boolean ascending) {
+	public List<Ad> findAdsByCategory(String category, String sortColumn) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Ad> cq = cb.createQuery(Ad.class);
 		Root<Ad> from = cq.from(Ad.class);
@@ -105,7 +104,7 @@ public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
 		final Expression<Double> sortByFeedback = cb.avg(joinRanking.get("feedback"));
 
 		cq.groupBy(joinRanking.get("userWhom"));
-		cq.orderBy(cb.desc(from.get("status")), new OrderImpl(sortByColumn, ascending),
+		cq.orderBy(cb.desc(from.get("status")), new OrderImpl(sortByColumn, true),
 				new OrderImpl(sortByFeedback, false));
 
 		TypedQuery<Ad> tq = entityManager.createQuery(cq);

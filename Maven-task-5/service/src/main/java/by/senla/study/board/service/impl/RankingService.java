@@ -8,12 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import by.senla.study.board.api.dao.IRankingDao;
 import by.senla.study.board.api.service.IRankingService;
+import by.senla.study.board.model.dto.RankingDto;
 import by.senla.study.board.model.entity.Ranking;
 
 @Service
 @Transactional
-public class RankingService extends AbstractService<Ranking, Integer> implements IRankingService {
-	
+public class RankingService extends AbstractService<Ranking, Integer, RankingDto> implements IRankingService {
+
 	private static final Logger LOGGER = LogManager.getLogger(RankingService.class);
 
 	private final IRankingDao rankingDao;
@@ -25,7 +26,14 @@ public class RankingService extends AbstractService<Ranking, Integer> implements
 	}
 
 	@Override
-	public Double getRankByUserID(Integer id) {
-		return rankingDao.getRankByUserID(id);
+	public Double getRankByUserID(Integer userId) {
+		return rankingDao.getRankByUserID(userId);
+	}
+
+	@Override
+	public void setFieldsAndUpdate(Ranking entity, RankingDto dto) {
+		if (dto.getFeedback() != null)
+			entity.setFeedback(dto.getFeedback());
+		update(entity);
 	}
 }

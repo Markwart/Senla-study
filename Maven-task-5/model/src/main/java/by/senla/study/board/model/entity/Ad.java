@@ -37,13 +37,13 @@ public class Ad extends BaseEntity {
 	private String text;
 
 	@Column(name = "price")
-	@SortableField
-	@Field
 	private BigDecimal price;
 	
 	@Column(name = "image")
 	private String image;
 
+	@SortableField
+	@Field
 	@Column(name = "status")
 	@Enumerated(EnumType.STRING)
 	private Status status;

@@ -10,7 +10,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import by.senla.study.board.model.entity.PersonalData;
 import by.senla.study.board.model.entity.UserAccount;
+import by.senla.study.board.model.enums.Roles;
 
 public class UserAccountServiceTest extends AbstractTest {
 
@@ -23,7 +25,6 @@ public class UserAccountServiceTest extends AbstractTest {
 		assertNotNull(entityDb);
 		assertEquals(entity.getName(), entityDb.getName());
 		assertEquals(entity.getEmail(), entityDb.getEmail());
-		//assertEquals(entity.getChats().size(), entityDb.getChats().size());
 		assertNotNull(entityDb.getId());
 		assertNotNull(entityDb.getCreated());
 		assertNotNull(entityDb.getUpdated());
@@ -78,5 +79,39 @@ public class UserAccountServiceTest extends AbstractTest {
 			assertNotNull(entityDb.getUpdated());
 		}
 		assertEquals(randomObjectsCount + entityCount, allEntities.size());
+	}
+	
+	@Test
+	public void createWithPersonalDataTest() {
+		UserAccount userAccount = new UserAccount();
+		userAccount.setEmail(getRandomString());
+		userAccount.setName(getRandomString());
+		
+		PersonalData personalData = new PersonalData();
+		personalData.setLogin(getRandomString());
+		personalData.setPassword(getRandomString());
+		personalData.setRole(Roles.USER);
+		personalData.setId(userAccount.getId());
+		
+		userAccountService.createNewUser(userAccount, personalData);
+		
+		UserAccount userAccountDb = userAccountService.getFullInfo(userAccount.getId());
+		
+		assertNotNull(userAccountDb);
+		assertEquals(userAccount.getName(), userAccountDb.getName());
+		assertEquals(userAccount.getEmail(), userAccountDb.getEmail());
+		assertNotNull(userAccountDb.getId());
+		assertNotNull(userAccountDb.getCreated());
+		assertNotNull(userAccountDb.getUpdated());
+		assertTrue(userAccountDb.getCreated().equals(userAccountDb.getUpdated()));
+		
+		PersonalData perronalDataDb = userAccountDb.getPersonalData();
+		assertEquals(personalData.getLogin(), perronalDataDb.getLogin());
+		assertEquals(personalData.getPassword(), perronalDataDb.getPassword());
+		assertEquals(personalData.getRole(), personalData.getRole());
+		assertNotNull(perronalDataDb.getId());
+		assertNotNull(perronalDataDb.getCreated());
+		assertNotNull(perronalDataDb.getUpdated());
+		assertTrue(perronalDataDb.getCreated().equals(perronalDataDb.getUpdated()));
 	}
 }

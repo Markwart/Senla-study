@@ -8,12 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import by.senla.study.board.api.dao.IMessageDao;
 import by.senla.study.board.api.service.IMessageService;
+import by.senla.study.board.model.dto.MessageDto;
 import by.senla.study.board.model.entity.Message;
 
 @Service
 @Transactional
-public class MessageService extends AbstractService<Message, Integer> implements IMessageService {
-	
+public class MessageService extends AbstractService<Message, Integer, MessageDto> implements IMessageService {
+
 	private static final Logger LOGGER = LogManager.getLogger(MessageService.class);
 
 	private final IMessageDao messageDao;
@@ -22,5 +23,12 @@ public class MessageService extends AbstractService<Message, Integer> implements
 	public MessageService(IMessageDao messageDao) {
 		super(Message.class, messageDao);
 		this.messageDao = messageDao;
+	}
+
+	@Override
+	public void setFieldsAndUpdate(Message entity, MessageDto dto) {
+		if (dto.getText() != null)
+			entity.setText(dto.getText());
+		update(entity);
 	}
 }

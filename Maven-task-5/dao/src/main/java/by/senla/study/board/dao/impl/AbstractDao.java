@@ -61,7 +61,7 @@ public abstract class AbstractDao<T, PK> implements GenericDao<T, PK> {
 	}
 
 	protected T getSingleResult(TypedQuery<T> tq) {
-		List<T> resultList = tq.setMaxResults(1).getResultList();
+		List<T> resultList = tq.getResultList();
 		if (resultList.isEmpty()) {
 			return null;
 		}

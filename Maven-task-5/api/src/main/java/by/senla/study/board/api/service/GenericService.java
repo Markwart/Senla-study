@@ -2,7 +2,7 @@ package by.senla.study.board.api.service;
 
 import java.util.List;
 
-public interface GenericService<T, PK> {
+public interface GenericService<T, PK, D> {
 
 	T getById(PK id);
 
@@ -21,4 +21,6 @@ public interface GenericService<T, PK> {
 	T getFullInfo(PK id);
 
 	void deleteAll();
+
+	void setFieldsAndUpdate(T entity, D dto);
 }

@@ -1,9 +1,7 @@
 package by.senla.study.board.service.junit;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import by.senla.study.board.api.service.ICategoryService;
 import by.senla.study.board.api.service.IChatService;
 import by.senla.study.board.api.service.ICommentService;
 import by.senla.study.board.api.service.IMessageService;
-import by.senla.study.board.api.service.IPersonalDataService;
 import by.senla.study.board.api.service.IRankingService;
 import by.senla.study.board.api.service.IUserAccountService;
 import by.senla.study.board.model.entity.Ad;
@@ -22,10 +19,8 @@ import by.senla.study.board.model.entity.Category;
 import by.senla.study.board.model.entity.Chat;
 import by.senla.study.board.model.entity.Comment;
 import by.senla.study.board.model.entity.Message;
-import by.senla.study.board.model.entity.PersonalData;
 import by.senla.study.board.model.entity.Ranking;
 import by.senla.study.board.model.entity.UserAccount;
-import by.senla.study.board.model.enums.Roles;
 import by.senla.study.board.model.enums.Status;
 
 @SpringJUnitConfig(locations = "classpath:service-context-test.xml")
@@ -45,8 +40,6 @@ public abstract class AbstractTest {
 	@Autowired
 	protected IMessageService messageService;
 	@Autowired
-	protected IPersonalDataService personalDataService;
-	@Autowired
 	protected IRankingService rankingService;
 	@Autowired
 	protected IUserAccountService userAccountService;
@@ -60,7 +53,6 @@ public abstract class AbstractTest {
 		commentService.deleteAll();
 		chatService.deleteAll();
 		adService.deleteAll();
-		personalDataService.deleteAll();
 
 	}
 
@@ -130,37 +122,10 @@ public abstract class AbstractTest {
 		return entity;
 	}
 
-	public PersonalData createPersonalDataEntity() {
-		UserAccount userAccount = createUserAccountEntity();
-		
-		PersonalData entity = new PersonalData();
-		entity.setLogin(getRandomString());
-		entity.setPassword(getRandomString());
-		entity.setRole(Roles.USER);
-		entity.setId(userAccount.getId());
-		entity.setUserAccount(userAccount);
-		personalDataService.insert(entity);
-		return entity;
-	}
-
 	public UserAccount createUserAccountEntity() {
 		UserAccount userAccount = new UserAccount();
-		// PersonalData personalData = new PersonalData();
-
 		userAccount.setEmail(getRandomString());
 		userAccount.setName(getRandomString());
-
-		for (int i = 0; i < getRandomInt(); i++) {
-			userAccount.getChats().add(createChatEntity());
-		}
-
-		/*
-		 * personalData.setLogin(RANDOM_STRING);
-		 * personalData.setPassword(RANDOM_STRING); personalData.setRole(Roles.USER);
-		 * 
-		 * userAccount.setPersonalData(personalData);
-		 */
-
 		userAccountService.insert(userAccount);
 		return userAccount;
 	}

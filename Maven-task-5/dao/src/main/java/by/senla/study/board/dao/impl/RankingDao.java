@@ -35,13 +35,13 @@ public class RankingDao extends AbstractDao<Ranking, Integer> implements IRankin
 	}
 
 	@Override
-	public Double getRankByUserID(Integer id) {
+	public Double getRankByUserID(Integer userId) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Double> cq = cb.createQuery(Double.class);
 		Root<Ranking> from = cq.from(Ranking.class);
 
 		cq.multiselect(cb.avg(from.get("feedback")));
-		cq.where(cb.equal(from.get("userWhom"), id));
+		cq.where(cb.equal(from.get("userWhom"), userId));
 
 		TypedQuery<Double> tq = entityManager.createQuery(cq);
 		return tq.getSingleResult();

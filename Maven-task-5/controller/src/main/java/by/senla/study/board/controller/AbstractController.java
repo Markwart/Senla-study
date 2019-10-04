@@ -16,16 +16,16 @@ import by.senla.study.board.model.entity.BaseEntity;
 
 public abstract class AbstractController<T extends BaseEntity, PK, D extends BaseDto> {
 	
-	protected static final String UPDATE = "Entity was updated";
-	protected static final String CREATE = "Entity was created";
-	protected static final String DELETE = "Successful delete operation";
+	protected static final String UPDATED = "%s with id=%d was updated";
+	protected static final String CREATED = "new %s with id=%d was created";
+	private static final String DELETED = "%s with id=%d was deleted";
 
 	private Class<T> entityClass;
 
-	private GenericService<T, PK> service;
+	private GenericService<T, PK, D> service;
 	private IMapper<T, D> mapper;
 
-	public AbstractController(Class<T> entityClass, GenericService<T, PK> service, IMapper<T, D> mapper) {
+	public AbstractController(Class<T> entityClass, GenericService<T, PK, D> service, IMapper<T, D> mapper) {
 		super();
 		this.entityClass = entityClass;
 		this.service = service;
@@ -38,7 +38,7 @@ public abstract class AbstractController<T extends BaseEntity, PK, D extends Bas
 
 	@GetMapping(value = "/{id}")
 	public D findByID(@PathVariable(name = "id", required = true) PK id) {
-		T entity = service.getFullInfo(id);
+		T entity = service.getById(id);
 		D dto = mapper.toDto(entity);
 		return dto;
 	}
@@ -54,22 +54,22 @@ public abstract class AbstractController<T extends BaseEntity, PK, D extends Bas
 	}
 
 	@PutMapping(value = "/{id}/edit")
-	public String edit(D dto) {
-		T entity = mapper.toEntity(dto);
-		service.update(entity);
-		return UPDATE;
+	public String edit(@PathVariable(name = "id", required = true) PK id, D dto) {
+		T entity = service.getById(id);
+		service.setFieldsAndUpdate(entity, dto);
+		return String.format(UPDATED, getEntityClass().getSimpleName(), id);
 	}
 
 	@PostMapping(value = "/create")
 	public String create(D dto) {
 		T entity = mapper.toEntity(dto);
 		service.insert(entity);
-		return CREATE;
+		return String.format(CREATED, getEntityClass().getSimpleName(), entity.getId());
 	}
 
 	@DeleteMapping(value = "/{id}/delete")
 	public String delete(@PathVariable(name = "id", required = true) PK id) {
 		service.deleteById(id);
-		return DELETE;
+		return String.format(DELETED, getEntityClass().getSimpleName(), id);
 	}
 }
