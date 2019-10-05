@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import by.senla.study.board.api.service.IChatService;
 import by.senla.study.board.api.service.IUserAccountService;
+import by.senla.study.board.exception.RecordNotFoundException;
 import by.senla.study.board.model.dto.ChatDto;
 import by.senla.study.board.model.entity.Chat;
 import by.senla.study.board.service.mapper.ChatMapper;
@@ -41,6 +42,9 @@ public class ChatController extends AbstractController<Chat, Integer, ChatDto> {
 		List<ChatDto> dtos = new ArrayList<>();
 		for (Chat entity : entities) {
 			dtos.add(mapper.toDto(entity));
+		}
+		if (dtos.isEmpty()) {
+			throw new RecordNotFoundException();
 		}
 		return dtos;
 	}

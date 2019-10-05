@@ -32,4 +32,18 @@ public class PersonalDataDao extends AbstractDao<PersonalData, Integer> implemen
 
 		return getSingleResult(tq);
 	}
+	
+	@Override
+	public PersonalData getUserByLogin(String login) {
+		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+
+		final CriteriaQuery<PersonalData> cq = cb.createQuery(PersonalData.class);
+		final Root<PersonalData> from = cq.from(PersonalData.class);
+
+		cq.select(from);
+		cq.where(cb.equal(from.get("login"), login));
+
+		final TypedQuery<PersonalData> q = entityManager.createQuery(cq);
+		return getSingleResult(q);
+	}
 }

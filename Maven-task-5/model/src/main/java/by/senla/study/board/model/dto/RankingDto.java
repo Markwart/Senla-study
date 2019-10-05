@@ -1,12 +1,12 @@
 package by.senla.study.board.model.dto;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 
 public class RankingDto extends BaseDto {
 
-	@Min(value = 1)
-	@Max(value = 5)
+	@DecimalMin(value = "1")
+	@DecimalMax(value = "5")
 	private Integer feedback;
 
 	private Integer userFromId;

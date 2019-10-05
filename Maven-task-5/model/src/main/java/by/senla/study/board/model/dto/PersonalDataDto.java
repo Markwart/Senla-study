@@ -7,7 +7,6 @@ import by.senla.study.board.model.enums.Roles;
 
 public class PersonalDataDto extends BaseDto {
 
-	@NotNull
 	private Roles role;
 
 	@Size(min = 6)

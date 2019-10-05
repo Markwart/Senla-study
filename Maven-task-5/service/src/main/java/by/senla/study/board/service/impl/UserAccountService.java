@@ -2,8 +2,10 @@ package by.senla.study.board.service.impl;
 
 import java.util.Date;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,7 +73,14 @@ public class UserAccountService extends AbstractService<UserAccount, Integer, Us
 			personalData.setRole(personalDataDto.getRole());
 
 		update(userAccount);
-		personalDataDao.update(personalData);
+		try {
+			personalDataDao.update(personalData);
+			LOGGER.log(Level.INFO, String.format(UPDATED, getEntityClass().getSimpleName(), personalData.getId()));
+
+		} catch (Exception e) {
+			LOGGER.log(Level.WARN, EXCEPTION, e);
+			throw new ServiceException(EXCEPTION, e);
+		}
 	}
 
 	@Override
@@ -84,6 +93,18 @@ public class UserAccountService extends AbstractService<UserAccount, Integer, Us
 		personalData.setRole(Roles.USER);
 		personalData.setCreated(current);
 		personalData.setUpdated(current);
-		personalDataDao.insert(personalData);
+		try {
+			personalDataDao.insert(personalData);
+			LOGGER.log(Level.INFO, String.format(CREATED, getEntityClass().getSimpleName(), personalData.getId()));
+
+		} catch (Exception e) {
+			LOGGER.log(Level.WARN, EXCEPTION, e);
+			throw new ServiceException(EXCEPTION, e);
+		}
+	}
+
+	@Override
+	public PersonalData getUserByLogin(String login) {
+		return personalDataDao.getUserByLogin(login);
 	}
 }

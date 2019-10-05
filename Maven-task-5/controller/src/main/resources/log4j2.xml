@@ -39,7 +39,7 @@
 			<AppenderRef ref="File_Warn" level="WARN"/>
 		</Root>
 		
-		<Logger name="by.senla.study.service"
+		<Logger name="by.senla.study.board.controller"
 			level="debug" additivity="false">
 			<AppenderRef ref="Console" />
 		</Logger>

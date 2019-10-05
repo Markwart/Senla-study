@@ -1,4 +1,4 @@
-package by.senla.study.board.api.DTOConverter;
+package by.senla.study.board.api.сonverter;
 
 import by.senla.study.board.model.dto.BaseDto;
 import by.senla.study.board.model.entity.BaseEntity;

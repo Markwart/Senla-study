@@ -6,7 +6,7 @@ import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import by.senla.study.board.api.DTOConverter.IMapper;
+import by.senla.study.board.api.сonverter.IMapper;
 import by.senla.study.board.model.dto.BaseDto;
 import by.senla.study.board.model.entity.BaseEntity;
 

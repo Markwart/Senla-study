@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import by.senla.study.board.api.service.IAdService;
 import by.senla.study.board.api.service.IUserAccountService;
+import by.senla.study.board.exception.RecordNotFoundException;
 import by.senla.study.board.model.dto.AdDto;
 import by.senla.study.board.model.entity.Ad;
 import by.senla.study.board.model.enums.Status;
@@ -51,6 +52,9 @@ public class AdController extends AbstractController<Ad, Integer, AdDto> {
 		for (Ad entity : entities) {
 			dtos.add(mapper.toDto(entity));
 		}
+		if (dtos.isEmpty()) {
+			throw new RecordNotFoundException();
+		}
 		return dtos;
 	}
 
@@ -61,6 +65,9 @@ public class AdController extends AbstractController<Ad, Integer, AdDto> {
 		for (Ad entity : entities) {
 			dtos.add(mapper.toDto(entity));
 		}
+		if (dtos.isEmpty()) {
+			throw new RecordNotFoundException();
+		}
 		return dtos;
 	}
 
@@ -70,6 +77,9 @@ public class AdController extends AbstractController<Ad, Integer, AdDto> {
 		List<AdDto> dtos = new ArrayList<>();
 		for (Ad entity : entities) {
 			dtos.add(mapper.toDto(entity));
+		}
+		if (dtos.isEmpty()) {
+			throw new RecordNotFoundException();
 		}
 		return dtos;
 	}
@@ -93,6 +103,9 @@ public class AdController extends AbstractController<Ad, Integer, AdDto> {
 		for (Ad entity : entities) {
 			dtos.add(mapper.toDto(entity));
 		}
+		if (dtos.isEmpty()) {
+			throw new RecordNotFoundException();
+		}
 		return dtos;
 	}
 
@@ -102,6 +115,9 @@ public class AdController extends AbstractController<Ad, Integer, AdDto> {
 		List<AdDto> dtos = new ArrayList<>();
 		for (Ad entity : entities) {
 			dtos.add(mapper.toDto(entity));
+		}
+		if (dtos.isEmpty()) {
+			throw new RecordNotFoundException();
 		}
 		return dtos;
 	}

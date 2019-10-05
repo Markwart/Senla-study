@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import by.senla.study.board.api.service.IAdService;
 import by.senla.study.board.api.service.ICommentService;
+import by.senla.study.board.exception.RecordNotFoundException;
 import by.senla.study.board.model.dto.CommentDto;
 import by.senla.study.board.model.entity.Comment;
 import by.senla.study.board.service.mapper.CommentMapper;
@@ -34,8 +35,7 @@ public class CommentController extends AbstractController<Comment, Integer, Comm
 	}
 
 	@PostMapping(value = "/{adId}/add")
-	public String addComment(@PathVariable(name = "adId", required = true) Integer adId, Integer userId,
-			CommentDto dto) {
+	public String addComment(@PathVariable(name = "adId", required = true) Integer adId, Integer userId, CommentDto dto) {
 		dto.setAdId(adId);
 		dto.setUserFromId(userId);
 		Comment entity = mapper.toEntity(dto);
@@ -49,6 +49,9 @@ public class CommentController extends AbstractController<Comment, Integer, Comm
 		List<CommentDto> dtos = new ArrayList<>();
 		for (Comment entity : entities) {
 			dtos.add(mapper.toDto(entity));
+		}
+		if (dtos.isEmpty()) {
+			throw new RecordNotFoundException();
 		}
 		return dtos;
 	}

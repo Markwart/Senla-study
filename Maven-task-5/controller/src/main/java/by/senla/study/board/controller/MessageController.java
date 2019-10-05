@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import by.senla.study.board.api.service.IChatService;
 import by.senla.study.board.api.service.IMessageService;
+import by.senla.study.board.exception.RecordNotFoundException;
 import by.senla.study.board.model.dto.MessageDto;
 import by.senla.study.board.model.entity.Message;
 import by.senla.study.board.service.mapper.MessageMapper;
@@ -49,6 +50,9 @@ public class MessageController extends AbstractController<Message, Integer, Mess
 		List<MessageDto> dtos = new ArrayList<>();
 		for (Message entity : entities) {
 			dtos.add(mapper.toDto(entity));
+		}
+		if (dtos.isEmpty()) {
+			throw new RecordNotFoundException();
 		}
 		return dtos;
 	}

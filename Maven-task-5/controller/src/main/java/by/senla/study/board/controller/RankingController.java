@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import by.senla.study.board.api.service.IRankingService;
 import by.senla.study.board.api.service.IUserAccountService;
+import by.senla.study.board.exception.RecordNotFoundException;
 import by.senla.study.board.model.dto.RankingDto;
 import by.senla.study.board.model.entity.Ranking;
 import by.senla.study.board.service.mapper.RankingMapper;
@@ -41,7 +45,10 @@ public class RankingController extends AbstractController<Ranking, Integer, Rank
 
 	@PostMapping(value = "/{userWhomId}/add")
 	public String putFeedback(@PathVariable(name = "userWhomId", required = true) Integer userWhomId, Integer userId,
-			RankingDto dto) {
+			@Valid RankingDto dto, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return "WWW";
+		}
 		dto.setUserWhomId(userWhomId);
 		dto.setUserFromId(userId);
 		Ranking entity = mapper.toEntity(dto);
@@ -55,6 +62,9 @@ public class RankingController extends AbstractController<Ranking, Integer, Rank
 		List<RankingDto> dtos = new ArrayList<>();
 		for (Ranking entity : entities) {
 			dtos.add(mapper.toDto(entity));
+		}
+		if (dtos.isEmpty()) {
+			throw new RecordNotFoundException();
 		}
 		return dtos;
 	}

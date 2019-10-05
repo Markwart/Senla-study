@@ -13,4 +13,6 @@ public interface IUserAccountService extends GenericService<UserAccount, Integer
 
 	void setFieldsAndUpdate(UserAccount userAccount, UserAccountDto userAccountDto, PersonalDataDto personalDataDto);
 
+	PersonalData getUserByLogin(String login);
+
 }

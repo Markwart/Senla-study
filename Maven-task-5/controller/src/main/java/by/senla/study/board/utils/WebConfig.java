@@ -11,20 +11,24 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import by.senla.study.board.exception.ExceptionHandlerController;
+import by.senla.study.board.security.SecurityConfig;
+
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
 
 		AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-		//rootContext.register(SecurityConfig.class);
+		rootContext.register(SecurityConfig.class);
 		
 		servletContext.addListener(new ContextLoaderListener(rootContext));
 		
-		AnnotationConfigWebApplicationContext servletAppContext = new AnnotationConfigWebApplicationContext();
-		servletAppContext.register(MVCConfig.class);
+		AnnotationConfigWebApplicationContext dispatcherContext = new AnnotationConfigWebApplicationContext();
+		dispatcherContext.register(MVCConfig.class);
+		dispatcherContext.register(ExceptionHandlerController.class);
 
-		DispatcherServlet dispatcherServlet = new DispatcherServlet(servletAppContext);
+		DispatcherServlet dispatcherServlet = new DispatcherServlet(dispatcherContext);
 		dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
 
 		ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", dispatcherServlet);

@@ -43,7 +43,7 @@ public class Ad extends BaseEntity {
 	private String image;
 
 	@SortableField
-	@Field
+	@Field(analyze = Analyze.NO)
 	@Column(name = "status")
 	@Enumerated(EnumType.STRING)
 	private Status status;

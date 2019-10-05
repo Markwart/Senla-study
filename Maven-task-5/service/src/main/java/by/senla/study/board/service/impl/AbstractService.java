@@ -100,11 +100,11 @@ public abstract class AbstractService<T extends BaseEntity, PK, D extends BaseDt
 			throw new ServiceException(EXCEPTION, e);
 		}
 	}
-	
+
 	@Override
 	public void deleteAll() {
 		try {
-			dao.deleteAll();;
+			dao.deleteAll();
 			LOGGER.log(Level.INFO, DELETED_ALL);
 
 		} catch (Exception e) {
