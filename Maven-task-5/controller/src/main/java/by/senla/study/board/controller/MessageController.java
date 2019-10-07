@@ -4,15 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import by.senla.study.board.api.service.IChatService;
 import by.senla.study.board.api.service.IMessageService;
+import by.senla.study.board.dto.ResponseDto;
 import by.senla.study.board.exception.RecordNotFoundException;
 import by.senla.study.board.model.dto.MessageDto;
 import by.senla.study.board.model.entity.Message;
@@ -35,13 +40,17 @@ public class MessageController extends AbstractController<Message, Integer, Mess
 	}
 
 	@PostMapping(value = "/{chatId}/add")
-	public String addMessage(@PathVariable(name = "chatId", required = true) Integer chatId, Integer userId,
-			MessageDto dto) {
-		dto.setChatId(chatId);
-		dto.setUserId(userId);
-		Message entity = mapper.toEntity(dto);
-		messageService.insert(entity);
-		return String.format(CREATED, getEntityClass().getSimpleName(), entity.getId());
+	public ResponseDto addMessage(@PathVariable(name = "chatId", required = true) Integer chatId,
+			@Valid @RequestBody MessageDto dto, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return new ResponseDto(INVALID);
+		} else {
+			dto.setChatId(chatId);
+			dto.setUserId(getLoggedUserId());
+			Message entity = mapper.toEntity(dto);
+			messageService.insert(entity);
+			return new ResponseDto(String.format(CREATED, getEntityClass().getSimpleName(), entity.getId()));
+		}
 	}
 
 	@GetMapping(value = "/{chatId}/messages")

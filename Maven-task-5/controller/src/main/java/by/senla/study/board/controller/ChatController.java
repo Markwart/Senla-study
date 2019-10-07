@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import by.senla.study.board.api.service.IChatService;
 import by.senla.study.board.api.service.IUserAccountService;
+import by.senla.study.board.dto.ResponseDto;
 import by.senla.study.board.exception.RecordNotFoundException;
 import by.senla.study.board.model.dto.ChatDto;
 import by.senla.study.board.model.entity.Chat;
@@ -37,8 +38,8 @@ public class ChatController extends AbstractController<Chat, Integer, ChatDto> {
 	}
 
 	@GetMapping(value = "/myChats")
-	public List<ChatDto> myChats(Integer userId) {
-		Set<Chat> entities = userAccountService.getFullInfo(userId).getChats();
+	public List<ChatDto> myChats() {
+		Set<Chat> entities = userAccountService.getFullInfo(getLoggedUserId()).getChats();
 		List<ChatDto> dtos = new ArrayList<>();
 		for (Chat entity : entities) {
 			dtos.add(mapper.toDto(entity));
@@ -50,8 +51,8 @@ public class ChatController extends AbstractController<Chat, Integer, ChatDto> {
 	}
 
 	@PostMapping(value = "/{sellerId}/createNew")
-	public String createNewChat(@PathVariable(name = "sellerId", required = true) Integer sellerId, Integer userId) {
-		chatService.createNewChat(sellerId, userId);
-		return String.format(CREATED_CHAT, sellerId, userId);
+	public ResponseDto createNewChat(@PathVariable(name = "sellerId", required = true) Integer sellerId) {
+		chatService.createNewChat(sellerId, getLoggedUserId());
+		return new ResponseDto(String.format(CREATED_CHAT, sellerId, getLoggedUserId()));
 	}
 }

@@ -4,15 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import by.senla.study.board.api.service.IAdService;
 import by.senla.study.board.api.service.ICommentService;
+import by.senla.study.board.dto.ResponseDto;
 import by.senla.study.board.exception.RecordNotFoundException;
 import by.senla.study.board.model.dto.CommentDto;
 import by.senla.study.board.model.entity.Comment;
@@ -35,12 +40,17 @@ public class CommentController extends AbstractController<Comment, Integer, Comm
 	}
 
 	@PostMapping(value = "/{adId}/add")
-	public String addComment(@PathVariable(name = "adId", required = true) Integer adId, Integer userId, CommentDto dto) {
-		dto.setAdId(adId);
-		dto.setUserFromId(userId);
-		Comment entity = mapper.toEntity(dto);
-		commentService.insert(entity);
-		return String.format(CREATED, getEntityClass().getSimpleName(), entity.getId());
+	public ResponseDto addComment(@PathVariable(name = "adId", required = true) Integer adId,
+			@Valid @RequestBody CommentDto dto, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return new ResponseDto(INVALID);
+		} else {
+			dto.setAdId(adId);
+			dto.setUserFromId(getLoggedUserId());
+			Comment entity = mapper.toEntity(dto);
+			commentService.insert(entity);
+			return new ResponseDto(String.format(CREATED, getEntityClass().getSimpleName(), entity.getId()));
+		}
 	}
 
 	@GetMapping(value = "/{adId}/comments")

@@ -25,6 +25,7 @@ import by.senla.study.board.model.entity.Ad;
 import by.senla.study.board.model.entity.Ranking;
 import by.senla.study.board.model.entity.UserAccount;
 import by.senla.study.board.model.enums.Status;
+import by.senla.study.board.model.search.AdSearchDto;
 
 @Repository
 public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
@@ -84,7 +85,7 @@ public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
 	}
 
 	@Override
-	public List<Ad> findAdsByCategory(String category, String sortColumn) {
+	public List<Ad> findAdsByCategory(AdSearchDto dto) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Ad> cq = cb.createQuery(Ad.class);
 		Root<Ad> from = cq.from(Ad.class);
@@ -93,18 +94,18 @@ public class AdDao extends AbstractDao<Ad, Integer> implements IAdDao {
 		Join<Ranking, UserAccount> joinRanking = joinUser.join("rankingWhom", JoinType.LEFT);
 
 		cq.select(from);
-		Predicate categoryPred = cb.equal(from.get("category").get("name"), category);
+		Predicate categoryPred = cb.equal(from.get("category").get("name"), dto.getCategory());
 		Predicate statusPred = cb.notEqual(from.get("status"), Status.CLOSED);
 		cq.where(cb.and(categoryPred, statusPred));
 
-		if (sortColumn == null) {
-			sortColumn = "id";
+		if (dto.getSortColumn() == null) {
+			dto.setSortColumn("id");
 		}
-		final Path<?> sortByColumn = from.get(sortColumn);
+		final Path<?> sortByColumn = from.get(dto.getSortColumn());
 		final Expression<Double> sortByFeedback = cb.avg(joinRanking.get("feedback"));
 
 		cq.groupBy(joinRanking.get("userWhom"));
-		cq.orderBy(cb.desc(from.get("status")), new OrderImpl(sortByColumn, true),
+		cq.orderBy(cb.desc(from.get("status")), new OrderImpl(sortByColumn, dto.getAscending()),
 				new OrderImpl(sortByFeedback, false));
 
 		TypedQuery<Ad> tq = entityManager.createQuery(cq);

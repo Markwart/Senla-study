@@ -11,11 +11,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import by.senla.study.board.api.service.IRankingService;
 import by.senla.study.board.api.service.IUserAccountService;
+import by.senla.study.board.dto.ResponseDto;
 import by.senla.study.board.exception.RecordNotFoundException;
 import by.senla.study.board.model.dto.RankingDto;
 import by.senla.study.board.model.entity.Ranking;
@@ -39,21 +41,22 @@ public class RankingController extends AbstractController<Ranking, Integer, Rank
 	}
 
 	@GetMapping(value = "/{userId}/totalRanking")
-	public Double overallRanking(@PathVariable(name = "userId", required = true) Integer userId) {
-		return rankingService.getRankByUserID(userId);
+	public ResponseDto overallRanking(@PathVariable(name = "userId", required = true) Integer userId) {
+		return new ResponseDto(rankingService.getRankByUserID(userId).toString());
 	}
 
 	@PostMapping(value = "/{userWhomId}/add")
-	public String putFeedback(@PathVariable(name = "userWhomId", required = true) Integer userWhomId, Integer userId,
-			@Valid RankingDto dto, BindingResult bindingResult) {
+	public ResponseDto putFeedback(@PathVariable(name = "userWhomId", required = true) Integer userWhomId,
+			@Valid @RequestBody RankingDto dto, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
-			return "WWW";
+			return new ResponseDto(INVALID);
+		} else {
+			dto.setUserWhomId(userWhomId);
+			dto.setUserFromId(getLoggedUserId());
+			Ranking entity = mapper.toEntity(dto);
+			rankingService.insert(entity);
+			return new ResponseDto(String.format(CREATED, getEntityClass().getSimpleName(), entity.getId()));
 		}
-		dto.setUserWhomId(userWhomId);
-		dto.setUserFromId(userId);
-		Ranking entity = mapper.toEntity(dto);
-		rankingService.insert(entity);
-		return String.format(CREATED, getEntityClass().getSimpleName(), entity.getId());
 	}
 
 	@GetMapping(value = "/{userId}/feedback")

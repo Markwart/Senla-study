@@ -1,13 +1,18 @@
 package by.senla.study.board.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import by.senla.study.board.api.service.IUserAccountService;
+import by.senla.study.board.dto.ResponseDto;
 import by.senla.study.board.model.dto.PersonalDataDto;
 import by.senla.study.board.model.dto.UserAccountDto;
 import by.senla.study.board.model.entity.PersonalData;
@@ -33,18 +38,28 @@ public class UserAccountController extends AbstractController<UserAccount, Integ
 	}
 
 	@PostMapping(value = "/createNewUser")
-	public String createNewUser(UserAccountDto userAccountDto, PersonalDataDto personalDataDto) {
-		UserAccount userAccount = userAccountMapper.toEntity(userAccountDto);
-		PersonalData personalData = personalDataMapper.toEntity(personalDataDto);
-		userAccountService.createNewUser(userAccount, personalData);
-		return String.format(CREATED, getEntityClass().getSimpleName(), userAccount.getId());
+	public ResponseDto createNewUser(@Valid @RequestBody UserAccountDto userAccountDto,
+			@Valid @RequestBody PersonalDataDto personalDataDto, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return new ResponseDto(INVALID);
+		} else {
+			UserAccount userAccount = userAccountMapper.toEntity(userAccountDto);
+			PersonalData personalData = personalDataMapper.toEntity(personalDataDto);
+			userAccountService.createNewUser(userAccount, personalData);
+			return new ResponseDto(String.format(CREATED, getEntityClass().getSimpleName(), userAccount.getId()));
+		}
 	}
 
 	@PutMapping(value = "/{userId}/editUser")
-	public String editUser(@PathVariable(name = "userId", required = true) Integer userId,
-			UserAccountDto userAccountDto, PersonalDataDto personalDataDto) {
-		UserAccount userAccount = userAccountService.getById(userId);
-		userAccountService.setFieldsAndUpdate(userAccount, userAccountDto, personalDataDto);
-		return String.format(UPDATED, getEntityClass().getSimpleName(), userId);
+	public ResponseDto editUser(@PathVariable(name = "userId", required = true) Integer userId,
+			@Valid @RequestBody UserAccountDto userAccountDto, @Valid @RequestBody PersonalDataDto personalDataDto,
+			BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return new ResponseDto(INVALID);
+		} else {
+			UserAccount userAccount = userAccountService.getById(userId);
+			userAccountService.setFieldsAndUpdate(userAccount, userAccountDto, personalDataDto);
+			return new ResponseDto(String.format(UPDATED, getEntityClass().getSimpleName(), userId));
+		}
 	}
 }

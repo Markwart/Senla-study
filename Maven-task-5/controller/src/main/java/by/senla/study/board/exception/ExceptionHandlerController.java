@@ -41,7 +41,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
-		LOGGER.log(Level.WARN, EXCEPTION, "Request: " + request.getContextPath() + " raised " + ex);
+		LOGGER.log(Level.WARN, EXCEPTION, ex);
 		ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, UNEXPECTED_ERROR, ex.getMessage());
 		return new ResponseEntity<Object>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
 	}

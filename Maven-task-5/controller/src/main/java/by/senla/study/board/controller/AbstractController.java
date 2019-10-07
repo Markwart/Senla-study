@@ -11,18 +11,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import by.senla.study.board.api.service.GenericService;
 import by.senla.study.board.api.сonverter.IMapper;
+import by.senla.study.board.dto.ResponseDto;
 import by.senla.study.board.exception.RecordNotFoundException;
 import by.senla.study.board.model.dto.BaseDto;
 import by.senla.study.board.model.entity.BaseEntity;
+import by.senla.study.board.security.AuthHelper;
 
 public abstract class AbstractController<T extends BaseEntity, PK, D extends BaseDto> {
 
 	protected static final String UPDATED = "%s with id=%d was updated";
 	protected static final String CREATED = "new %s with id=%d was created";
 	private static final String DELETED = "%s with id=%d was deleted";
+	protected static final String INVALID = "Sorry, you entered invalid data.";
 
 	private Class<T> entityClass;
 
@@ -65,22 +69,35 @@ public abstract class AbstractController<T extends BaseEntity, PK, D extends Bas
 	}
 
 	@PutMapping(value = "/{id}/edit")
-	public String edit(@PathVariable(name = "id", required = true) PK id, @Valid D dto, BindingResult bindingResult) {
-		T entity = service.getById(id);
-		service.setFieldsAndUpdate(entity, dto);
-		return String.format(UPDATED, getEntityClass().getSimpleName(), id);
+	public ResponseDto edit(@PathVariable(name = "id", required = true) PK id, @Valid @RequestBody D dto,
+			BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return new ResponseDto(INVALID);
+		} else {
+			T entity = service.getById(id);
+			service.setFieldsAndUpdate(entity, dto);
+			return new ResponseDto(String.format(UPDATED, getEntityClass().getSimpleName(), id));
+		}
 	}
 
 	@PostMapping(value = "/create")
-	public String create(@Valid D dto) {
-		T entity = mapper.toEntity(dto);
-		service.insert(entity);
-		return String.format(CREATED, getEntityClass().getSimpleName(), entity.getId());
+	public ResponseDto create(@Valid @RequestBody D dto, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return new ResponseDto(INVALID);
+		} else {
+			T entity = mapper.toEntity(dto);
+			service.insert(entity);
+			return new ResponseDto(String.format(CREATED, getEntityClass().getSimpleName(), entity.getId()));
+		}
 	}
 
 	@DeleteMapping(value = "/{id}/delete")
-	public String delete(@PathVariable(name = "id", required = true) PK id) {
+	public ResponseDto delete(@PathVariable(name = "id", required = true) PK id) {
 		service.deleteById(id);
-		return String.format(DELETED, getEntityClass().getSimpleName(), id);
+		return new ResponseDto(String.format(DELETED, getEntityClass().getSimpleName(), id));
+	}
+
+	public Integer getLoggedUserId() {
+		return AuthHelper.getLoggedUserId();
 	}
 }

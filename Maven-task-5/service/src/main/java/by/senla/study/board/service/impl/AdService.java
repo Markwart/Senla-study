@@ -16,6 +16,7 @@ import by.senla.study.board.api.service.IAdService;
 import by.senla.study.board.model.dto.AdDto;
 import by.senla.study.board.model.entity.Ad;
 import by.senla.study.board.model.enums.Status;
+import by.senla.study.board.model.search.AdSearchDto;
 
 @Service
 @Transactional
@@ -52,8 +53,8 @@ public class AdService extends AbstractService<Ad, Integer, AdDto> implements IA
 	}
 
 	@Override
-	public List<Ad> findAdsByCategory(String category, String sortColumn) {
-		return adDao.findAdsByCategory(category, sortColumn);
+	public List<Ad> findAdsByCategory(AdSearchDto dto) {
+		return adDao.findAdsByCategory(dto);
 	}
 
 	@Override

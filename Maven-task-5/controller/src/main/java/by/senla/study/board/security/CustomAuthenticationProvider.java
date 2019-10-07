@@ -27,19 +27,21 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		final String login = authentication.getName();
 		final String password = authentication.getCredentials().toString();
 
-		PersonalData user = userAccountService.getUserByLogin(login);
-		if (!login.equals(user.getLogin()) & !password.equals(user.getPassword())) {
+		PersonalData account = userAccountService.getUserByLogin(login);
+		if (!login.equals(account.getLogin()) & !password.equals(account.getPassword())) {
 			throw new BadCredentialsException("Bad Credentials");
 		}
 		
+		final int userId = account.getId();
+		
 		List<String> userRoles = new ArrayList<>();
-		userRoles.add("ROLE_" + user.getRole());
+		userRoles.add("ROLE_" + account.getRole());
 
 		final List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		for (String roleName : userRoles) {
 			authorities.add(new SimpleGrantedAuthority(roleName));
 		}
-		return new UsernamePasswordAuthenticationToken(login, password, authorities);
+		return new ExtendedUsernamePasswordAuthenticationToken(userId, login, password, authorities);
 	}
 
 	@Override
