@@ -16,5 +16,5 @@ public interface IAdService extends GenericService<Ad, Integer, AdDto> {
 
 	void closeAd(Integer id);
 
-	List<Ad> findAdsByCategory(AdSearchDto dto);
+	List<Ad> filterAds(AdSearchDto dto);
 }

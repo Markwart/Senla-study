@@ -2,7 +2,6 @@ package by.senla.study.board.model.dto;
 
 import java.math.BigDecimal;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
 import by.senla.study.board.model.enums.Status;
@@ -11,7 +10,6 @@ public class AdDto extends BaseDto {
 
 	private String theme;
 
-	@NotNull
 	private String text;
 
 	@PositiveOrZero
@@ -19,7 +17,6 @@ public class AdDto extends BaseDto {
 
 	private String image;
 
-	@NotNull
 	private Status status;
 
 	private Integer sellerId;

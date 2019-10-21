@@ -55,7 +55,7 @@ public abstract class AbstractController<T extends BaseEntity, PK, D extends Bas
 		return dto;
 	}
 
-	@GetMapping(value = "/sellectAll")
+	@GetMapping(value = "/sellect-all")
 	public List<D> findAll() {
 		List<T> entities = service.selectAll();
 		List<D> dtos = new ArrayList<>();

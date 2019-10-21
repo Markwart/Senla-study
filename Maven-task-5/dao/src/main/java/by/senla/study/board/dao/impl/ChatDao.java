@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import by.senla.study.board.api.dao.IChatDao;
 import by.senla.study.board.model.entity.Chat;
+import by.senla.study.board.model.entity.Chat_;
 
 @Repository
 public class ChatDao extends AbstractDao<Chat, Integer> implements IChatDao {
@@ -25,9 +26,9 @@ public class ChatDao extends AbstractDao<Chat, Integer> implements IChatDao {
 		Root<Chat> from = cq.from(Chat.class);
 
 		cq.select(from);
-		from.fetch("messages", JoinType.LEFT);
+		from.fetch(Chat_.messages, JoinType.LEFT);
 
-		cq.where(cb.equal(from.get("id"), id));
+		cq.where(cb.equal(from.get(Chat_.id), id));
 		TypedQuery<Chat> tq = entityManager.createQuery(cq);
 
 		return getSingleResult(tq);

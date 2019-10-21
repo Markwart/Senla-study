@@ -116,6 +116,7 @@ public abstract class AbstractTest {
 	public Ranking createRankingEntity() {
 		Ranking entity = new Ranking();
 		entity.setFeedback(gerRandomFeedback());
+		entity.setText(getRandomString());
 		entity.setUserFrom(createUserAccountEntity());
 		entity.setUserWhom(createUserAccountEntity());
 		rankingService.insert(entity);

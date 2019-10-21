@@ -12,12 +12,12 @@ public class AuthHelper {
     public static Integer getLoggedUserId() {
     	
         SecurityContext context = SecurityContextHolder.getContext();
-        Authentication auth = context.getAuthentication();
-        if (!(auth instanceof ExtendedUsernamePasswordAuthenticationToken)) {
+        Authentication authentication = context.getAuthentication();
+        if (!(authentication instanceof ExtendedUsernamePasswordAuthenticationToken)) {
             return null;
         }
 
-        ExtendedUsernamePasswordAuthenticationToken extendedAuth = (ExtendedUsernamePasswordAuthenticationToken) auth;
-        return extendedAuth.getId();
+        ExtendedUsernamePasswordAuthenticationToken extendedAuthentication = (ExtendedUsernamePasswordAuthenticationToken) authentication;
+        return extendedAuthentication.getId();
     }
 }

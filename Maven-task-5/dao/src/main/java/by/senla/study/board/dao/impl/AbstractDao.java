@@ -22,7 +22,7 @@ public abstract class AbstractDao<T, PK> implements GenericDao<T, PK> {
 		this.entityClass = entityClass;
 	}
 
-	public Class<T> getEntityClass() {
+	protected Class<T> getEntityClass() {
 		return entityClass;
 	}
 

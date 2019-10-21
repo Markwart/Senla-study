@@ -8,6 +8,8 @@ public class RankingDto extends BaseDto {
 	@DecimalMin(value = "1")
 	@DecimalMax(value = "5")
 	private Integer feedback;
+	
+	private String text;
 
 	private Integer userFromId;
 
@@ -35,5 +37,13 @@ public class RankingDto extends BaseDto {
 
 	public void setUserWhomId(Integer userWhomId) {
 		this.userWhomId = userWhomId;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
 	}
 }

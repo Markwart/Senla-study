@@ -6,13 +6,22 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "ranking")
 public class Ranking extends BaseEntity {
 
 	@Column(name = "feedback")
+	@DecimalMin(value = "1")
+	@DecimalMax(value = "5")
+	@NotNull
 	private Integer feedback;
+	
+	@Column(name = "text")
+	private String text;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_from_id")
@@ -20,6 +29,7 @@ public class Ranking extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_whom_id")
+	@NotNull
 	private UserAccount userWhom;
 
 	public Integer getFeedback() {
@@ -44,5 +54,13 @@ public class Ranking extends BaseEntity {
 
 	public void setUserWhom(UserAccount userWhom) {
 		this.userWhom = userWhom;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
 	}
 }

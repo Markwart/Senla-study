@@ -5,6 +5,6 @@ import by.senla.study.board.model.entity.Ranking;
 
 public interface IRankingService extends GenericService<Ranking, Integer, RankingDto> {
 
-	Double getRankByUserID(Integer userId);
+	Double getTotalRankByUserId(Integer userId);
 	
 }

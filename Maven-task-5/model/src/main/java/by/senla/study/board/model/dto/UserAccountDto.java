@@ -1,16 +1,12 @@
 package by.senla.study.board.model.dto;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-
 
 public class UserAccountDto extends BaseDto {
 
-	@NotNull
 	private String name;
 	
 	@Email
-	@NotNull
 	private String email;
 
 	private PersonalDataDto personalData;
@@ -38,5 +34,4 @@ public class UserAccountDto extends BaseDto {
 	public void setPersonalData(PersonalDataDto personalData) {
 		this.personalData = personalData;
 	}
-
 }

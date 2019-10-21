@@ -22,6 +22,7 @@ public class RankingServiceTest extends AbstractTest {
 
 		assertNotNull(entityDb);
 		assertEquals(entity.getFeedback().intValue(), entityDb.getFeedback().intValue());
+		assertEquals(entity.getText(), entityDb.getText());
 		assertEquals(entity.getUserFrom().getId().intValue(), entityDb.getUserFrom().getId().intValue());
 		assertEquals(entity.getUserWhom().getId().intValue(), entityDb.getUserWhom().getId().intValue());
 		assertNotNull(entityDb.getId());
@@ -45,6 +46,7 @@ public class RankingServiceTest extends AbstractTest {
 
 		assertNotNull(entityDb);
 		assertEquals(entity.getFeedback().intValue(), entityDb.getFeedback().intValue());
+		assertEquals(entity.getText(), entityDb.getText());
 		assertEquals(entity.getUserFrom().getId().intValue(), entityDb.getUserFrom().getId().intValue());
 		assertEquals(entity.getUserWhom().getId().intValue(), entityDb.getUserWhom().getId().intValue());
 		assertNotNull(entityDb.getId());
@@ -74,6 +76,7 @@ public class RankingServiceTest extends AbstractTest {
 		List<Ranking> allEntities = rankingService.selectAll();
 		for (Ranking entityDb : allEntities) {
 			assertNotNull(entityDb.getFeedback());
+			assertNotNull(entityDb.getText());
 			assertNotNull(entityDb.getUserFrom());
 			assertNotNull(entityDb.getUserWhom());
 			assertNotNull(entityDb.getId());

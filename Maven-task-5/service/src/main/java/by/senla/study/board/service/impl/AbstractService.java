@@ -1,8 +1,5 @@
 package by.senla.study.board.service.impl;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,8 +9,6 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.transaction.annotation.Transactional;
 
-import by.senla.cvs.module.processor.CsvReader;
-import by.senla.cvs.module.processor.CsvWriter;
 import by.senla.study.board.api.dao.GenericDao;
 import by.senla.study.board.api.service.GenericService;
 import by.senla.study.board.model.dto.BaseDto;
@@ -24,7 +19,6 @@ public abstract class AbstractService<T extends BaseEntity, PK, D extends BaseDt
 
 	private static final Logger LOGGER = LogManager.getLogger(AbstractService.class);
 	protected static final String EXCEPTION = "Service layer. Transaction exception";
-	protected static final String FOLDER_CSV = "./data/";
 
 	protected static final String CREATED = "new %s with id=%d was created";
 	protected static final String UPDATED = "%s with id=%d was updated";
@@ -33,7 +27,7 @@ public abstract class AbstractService<T extends BaseEntity, PK, D extends BaseDt
 
 	private Class<T> entityClass;
 
-	protected GenericDao<T, PK> dao;
+	private GenericDao<T, PK> dao;
 
 	protected AbstractService(Class<T> entityClass, GenericDao<T, PK> dao) {
 		this.entityClass = entityClass;
@@ -111,37 +105,5 @@ public abstract class AbstractService<T extends BaseEntity, PK, D extends BaseDt
 			LOGGER.log(Level.WARN, EXCEPTION, e);
 			throw new ServiceException(EXCEPTION, e);
 		}
-	}
-
-	@Override
-	public void exportToCSV() {
-		List<T> objectList = selectAll();
-		List<Object> annotatedObjects = new ArrayList<>();
-
-		for (T object : objectList) {
-			annotatedObjects.add(object);
-		}
-		CsvWriter writer = new CsvWriter();
-		try {
-			writer.writeToCsv(annotatedObjects, FOLDER_CSV);
-			LOGGER.log(Level.INFO, "Data was written to the file");
-		} catch (IOException e) {
-			LOGGER.log(Level.WARN, "Failed to write data to the file", e);
-			throw new ServiceException(EXCEPTION, e);
-		}
-	}
-
-	@Override
-	public List<Object> importFromCSV() {
-		CsvReader reader = new CsvReader();
-		List<Object> objectList;
-		try {
-			objectList = reader.readFromCsv(new File(FOLDER_CSV), entityClass);
-			LOGGER.log(Level.INFO, "Data was successfully read from the file");
-		} catch (IOException e) {
-			LOGGER.log(Level.WARN, "Failed to read data from the file", e);
-			throw new ServiceException(EXCEPTION, e);
-		}
-		return objectList;
 	}
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import by.senla.study.board.api.dao.IPersonalDataDao;
 import by.senla.study.board.model.entity.PersonalData;
+import by.senla.study.board.model.entity.PersonalData_;
 
 @Repository
 public class PersonalDataDao extends AbstractDao<PersonalData, Integer> implements IPersonalDataDao {
@@ -25,9 +26,9 @@ public class PersonalDataDao extends AbstractDao<PersonalData, Integer> implemen
 		Root<PersonalData> from = cq.from(PersonalData.class);
 
 		cq.select(from);
-		from.fetch("userAccount", JoinType.LEFT);
+		from.fetch(PersonalData_.userAccount, JoinType.LEFT);
 
-		cq.where(cb.equal(from.get("id"), id));
+		cq.where(cb.equal(from.get(PersonalData_.id), id));
 		TypedQuery<PersonalData> tq = entityManager.createQuery(cq);
 
 		return getSingleResult(tq);
@@ -41,7 +42,7 @@ public class PersonalDataDao extends AbstractDao<PersonalData, Integer> implemen
 		final Root<PersonalData> from = cq.from(PersonalData.class);
 
 		cq.select(from);
-		cq.where(cb.equal(from.get("login"), login));
+		cq.where(cb.equal(from.get(PersonalData_.login), login));
 
 		final TypedQuery<PersonalData> q = entityManager.createQuery(cq);
 		return getSingleResult(q);

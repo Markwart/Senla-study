@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Field;
@@ -34,6 +35,7 @@ public class Ad extends BaseEntity {
 
 	@Column(name = "text")
 	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
+	@NotNull
 	private String text;
 
 	@Column(name = "price")
@@ -46,10 +48,12 @@ public class Ad extends BaseEntity {
 	@Field(analyze = Analyze.NO)
 	@Column(name = "status")
 	@Enumerated(EnumType.STRING)
+	@NotNull
 	private Status status;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "seller_id")
+	@NotNull
 	private UserAccount seller;
 
 	@ManyToOne(fetch = FetchType.LAZY)

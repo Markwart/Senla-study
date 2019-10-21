@@ -26,14 +26,16 @@ public class RankingService extends AbstractService<Ranking, Integer, RankingDto
 	}
 
 	@Override
-	public Double getRankByUserID(Integer userId) {
-		return rankingDao.getRankByUserID(userId);
+	public Double getTotalRankByUserId(Integer userId) {
+		return rankingDao.getTotalRankByUserId(userId);
 	}
 
 	@Override
 	public void setFieldsAndUpdate(Ranking entity, RankingDto dto) {
 		if (dto.getFeedback() != null)
 			entity.setFeedback(dto.getFeedback());
+		if (dto.getText() != null)
+			entity.setText(dto.getText());
 		update(entity);
 	}
 }

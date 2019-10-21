@@ -53,20 +53,20 @@ public class AdService extends AbstractService<Ad, Integer, AdDto> implements IA
 	}
 
 	@Override
-	public List<Ad> findAdsByCategory(AdSearchDto dto) {
-		return adDao.findAdsByCategory(dto);
+	public List<Ad> filterAds(AdSearchDto dto) {
+		return adDao.filterAds(dto);
 	}
 
 	@Override
 	public void moveAdOnTop(Integer adId) {
-		Ad entity = dao.getById(adId);
+		Ad entity = adDao.getById(adId);
 		entity.setStatus(Status.OPEN_VIP);
 		update(entity);
 	}
 
 	@Override
 	public void closeAd(Integer adId) {
-		Ad entity = dao.getById(adId);
+		Ad entity = adDao.getById(adId);
 		entity.setStatus(Status.CLOSED);
 		update(entity);
 	}

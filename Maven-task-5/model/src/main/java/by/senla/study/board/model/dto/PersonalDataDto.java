@@ -1,6 +1,5 @@
 package by.senla.study.board.model.dto;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import by.senla.study.board.model.enums.Roles;
@@ -10,10 +9,8 @@ public class PersonalDataDto extends BaseDto {
 	private Roles role;
 
 	@Size(min = 6)
-	@NotNull
 	private String password;
 
-	@NotNull
 	private String login;
 
 	public Roles getRole() {

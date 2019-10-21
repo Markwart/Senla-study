@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import by.senla.study.board.api.dao.IMessageDao;
 import by.senla.study.board.model.entity.Message;
+import by.senla.study.board.model.entity.Message_;
 
 @Repository
 public class MessageDao extends AbstractDao<Message, Integer> implements IMessageDao {
@@ -25,10 +26,10 @@ public class MessageDao extends AbstractDao<Message, Integer> implements IMessag
 		Root<Message> from = cq.from(Message.class);
 
 		cq.select(from);
-		from.fetch("user", JoinType.LEFT);
-		from.fetch("chat", JoinType.LEFT);
+		from.fetch(Message_.user, JoinType.LEFT);
+		from.fetch(Message_.chat, JoinType.LEFT);
 
-		cq.where(cb.equal(from.get("id"), id));
+		cq.where(cb.equal(from.get(Message_.id), id));
 		TypedQuery<Message> tq = entityManager.createQuery(cq);
 
 		return getSingleResult(tq);

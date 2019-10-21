@@ -92,8 +92,9 @@ public class UserAccountServiceTest extends AbstractTest {
 		personalData.setPassword(getRandomString());
 		personalData.setRole(Roles.USER);
 		personalData.setId(userAccount.getId());
+		userAccount.setPersonalData(personalData);
 		
-		userAccountService.createNewUser(userAccount, personalData);
+		userAccountService.createNewUser(userAccount);
 		
 		UserAccount userAccountDb = userAccountService.getFullInfo(userAccount.getId());
 		

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import by.senla.study.board.api.dao.ICategoryDao;
 import by.senla.study.board.model.entity.Category;
+import by.senla.study.board.model.entity.Category_;
 
 @Repository
 public class CategoryDao extends AbstractDao<Category, Integer> implements ICategoryDao {
@@ -25,9 +26,9 @@ public class CategoryDao extends AbstractDao<Category, Integer> implements ICate
 		Root<Category> from = cq.from(Category.class);
 
 		cq.select(from);
-		from.fetch("ads", JoinType.LEFT);
+		from.fetch(Category_.ads, JoinType.LEFT);
 		
-		cq.where(cb.equal(from.get("id"), id));
+		cq.where(cb.equal(from.get(Category_.id), id));
 		TypedQuery<Category> tq = entityManager.createQuery(cq);
 
 		return getSingleResult(tq);

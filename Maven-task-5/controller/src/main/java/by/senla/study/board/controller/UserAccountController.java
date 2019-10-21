@@ -3,6 +3,7 @@ package by.senla.study.board.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,6 @@ import by.senla.study.board.model.dto.PersonalDataDto;
 import by.senla.study.board.model.dto.UserAccountDto;
 import by.senla.study.board.model.entity.PersonalData;
 import by.senla.study.board.model.entity.UserAccount;
-import by.senla.study.board.service.mapper.PersonalDataMapper;
 import by.senla.study.board.service.mapper.UserAccountMapper;
 
 @RestController
@@ -26,40 +26,54 @@ public class UserAccountController extends AbstractController<UserAccount, Integ
 
 	private final IUserAccountService userAccountService;
 	private final UserAccountMapper userAccountMapper;
-	private final PersonalDataMapper personalDataMapper;
 
 	@Autowired
-	public UserAccountController(IUserAccountService userAccountService, UserAccountMapper userAccountMapper,
-			PersonalDataMapper personalDataMapper) {
+	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	public UserAccountController(IUserAccountService userAccountService, UserAccountMapper userAccountMapper) {
 		super(UserAccount.class, userAccountService, userAccountMapper);
 		this.userAccountService = userAccountService;
 		this.userAccountMapper = userAccountMapper;
-		this.personalDataMapper = personalDataMapper;
 	}
 
-	@PostMapping(value = "/createNewUser")
-	public ResponseDto createNewUser(@Valid @RequestBody UserAccountDto userAccountDto,
-			@Valid @RequestBody PersonalDataDto personalDataDto, BindingResult bindingResult) {
+	@PostMapping(value = "/create-new")
+	public ResponseDto createNewUser(@Valid @RequestBody UserAccountDto userAccountDto, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return new ResponseDto(INVALID);
 		} else {
 			UserAccount userAccount = userAccountMapper.toEntity(userAccountDto);
-			PersonalData personalData = personalDataMapper.toEntity(personalDataDto);
-			userAccountService.createNewUser(userAccount, personalData);
+			userAccount.getPersonalData()
+					.setPassword(passwordEncoder.encode(userAccount.getPersonalData().getPassword()));
+			userAccountService.createNewUser(userAccount);
 			return new ResponseDto(String.format(CREATED, getEntityClass().getSimpleName(), userAccount.getId()));
 		}
 	}
 
-	@PutMapping(value = "/{userId}/editUser")
+	@PutMapping(value = "/{userId}/edit-user")
 	public ResponseDto editUser(@PathVariable(name = "userId", required = true) Integer userId,
-			@Valid @RequestBody UserAccountDto userAccountDto, @Valid @RequestBody PersonalDataDto personalDataDto,
-			BindingResult bindingResult) {
+			@Valid @RequestBody UserAccountDto userAccountDto, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return new ResponseDto(INVALID);
 		} else {
 			UserAccount userAccount = userAccountService.getById(userId);
-			userAccountService.setFieldsAndUpdate(userAccount, userAccountDto, personalDataDto);
+			userAccountService.setFieldsAndUpdate(userAccount, userAccountDto);
 			return new ResponseDto(String.format(UPDATED, getEntityClass().getSimpleName(), userId));
+		}
+	}
+
+	@PutMapping(value = "/{userId}/edit-creds")
+	public ResponseDto editPersonalData(@PathVariable(name = "userId", required = true) Integer userId,
+			@Valid @RequestBody PersonalDataDto personalDataDto, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return new ResponseDto(INVALID);
+		} else {
+			if (personalDataDto != null) {
+				personalDataDto.setPassword(passwordEncoder.encode(personalDataDto.getPassword()));
+			}
+			PersonalData personalData = userAccountService.getFullInfo(userId).getPersonalData();
+			userAccountService.setFieldsAndUpdate(personalData, personalDataDto);
+			return new ResponseDto(String.format(UPDATED, personalData.getClass().getSimpleName(), userId));
 		}
 	}
 }

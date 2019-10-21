@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>by.senla.study.board</groupId>
@@ -12,8 +14,8 @@
 		<module>api</module>
 		<module>dao</module>
 		<module>service</module>
-    <module>controller</module>
-  </modules>
+		<module>controller</module>
+	</modules>
 
 	<properties>
 		<log4j2.version>2.11.2</log4j2.version>
@@ -43,5 +45,5 @@
 
 		</dependencies>
 	</dependencyManagement>
-	
+
 </project>

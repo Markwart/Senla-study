@@ -40,9 +40,9 @@ public class RankingController extends AbstractController<Ranking, Integer, Rank
 		this.userAccountService = userAccountService;
 	}
 
-	@GetMapping(value = "/{userId}/totalRanking")
+	@GetMapping(value = "/{userId}/total-ranking")
 	public ResponseDto overallRanking(@PathVariable(name = "userId", required = true) Integer userId) {
-		return new ResponseDto(rankingService.getRankByUserID(userId).toString());
+		return new ResponseDto(rankingService.getTotalRankByUserId(userId).toString());
 	}
 
 	@PostMapping(value = "/{userWhomId}/add")
@@ -60,7 +60,7 @@ public class RankingController extends AbstractController<Ranking, Integer, Rank
 	}
 
 	@GetMapping(value = "/{userId}/feedback")
-	public List<RankingDto> getFeedback(@PathVariable(name = "userId", required = true) Integer userId) {
+	public List<RankingDto> getUserFeedback(@PathVariable(name = "userId", required = true) Integer userId) {
 		Set<Ranking> entities = userAccountService.getFullInfo(userId).getRankingWhom();
 		List<RankingDto> dtos = new ArrayList<>();
 		for (Ranking entity : entities) {

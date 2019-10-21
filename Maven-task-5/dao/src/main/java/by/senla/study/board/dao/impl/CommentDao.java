@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import by.senla.study.board.api.dao.ICommentDao;
 import by.senla.study.board.model.entity.Comment;
+import by.senla.study.board.model.entity.Comment_;
 
 @Repository
 public class CommentDao extends AbstractDao<Comment, Integer> implements ICommentDao {
@@ -25,10 +26,10 @@ public class CommentDao extends AbstractDao<Comment, Integer> implements ICommen
 		Root<Comment> from = cq.from(Comment.class);
 
 		cq.select(from);
-		from.fetch("ad", JoinType.LEFT);
-		from.fetch("userFrom", JoinType.LEFT);
+		from.fetch(Comment_.ad, JoinType.LEFT);
+		from.fetch(Comment_.userFrom, JoinType.LEFT);
 
-		cq.where(cb.equal(from.get("id"), id));
+		cq.where(cb.equal(from.get(Comment_.id), id));
 		TypedQuery<Comment> tq = entityManager.createQuery(cq);
 
 		return getSingleResult(tq);

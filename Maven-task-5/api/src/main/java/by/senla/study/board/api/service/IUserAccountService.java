@@ -9,10 +9,9 @@ public interface IUserAccountService extends GenericService<UserAccount, Integer
 
 	void addToWishList(Integer adId, Integer userId);
 
-	void createNewUser(UserAccount userAccount, PersonalData personalData);
-
-	void setFieldsAndUpdate(UserAccount userAccount, UserAccountDto userAccountDto, PersonalDataDto personalDataDto);
+	void createNewUser(UserAccount userAccount);
 
 	PersonalData getUserByLogin(String login);
 
+	void setFieldsAndUpdate(PersonalData personalData, PersonalDataDto personalDataDto);
 }

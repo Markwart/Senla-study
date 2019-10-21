@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import by.senla.study.board.model.enums.Roles;
 
@@ -30,12 +31,15 @@ public class PersonalData {
 
 	@Column(name = "role")
 	@Enumerated(EnumType.STRING)
+	@NotNull
 	private Roles role;
 
 	@Column(name = "password")
+	@NotNull
 	private String password;
 
 	@Column(name = "login")
+	@NotNull
 	private String login;
 
 	@OneToOne(fetch = FetchType.LAZY)

@@ -30,7 +30,7 @@ public class UserAccountService extends AbstractService<UserAccount, Integer, Us
 	private final IUserAccountDao userAccountDao;
 	private final IAdDao adDao;
 	private final IPersonalDataDao personalDataDao;
-
+	
 	@Autowired
 	public UserAccountService(IUserAccountDao userAccountDao, IAdDao adDao, IPersonalDataDao personalDataDao) {
 		super(UserAccount.class, userAccountDao);
@@ -47,35 +47,26 @@ public class UserAccountService extends AbstractService<UserAccount, Integer, Us
 	}
 
 	@Override
-	public void setFieldsAndUpdate(UserAccount entity, UserAccountDto dto) {
-		if (dto.getEmail() != null)
-			entity.setEmail(dto.getEmail());
-		if (dto.getName() != null)
-			entity.setName(dto.getName());
-		update(entity);
-	}
-
-	@Override
-	public void setFieldsAndUpdate(UserAccount userAccount, UserAccountDto userAccountDto,
-			PersonalDataDto personalDataDto) {
+	public void setFieldsAndUpdate(UserAccount userAccount, UserAccountDto userAccountDto) {
 		if (userAccountDto.getEmail() != null)
 			userAccount.setEmail(userAccountDto.getEmail());
 		if (userAccountDto.getName() != null)
 			userAccount.setName(userAccountDto.getName());
+		update(userAccount);
+	}
 
-		PersonalData personalData = userAccount.getPersonalData();
-
+	@Override
+	public void setFieldsAndUpdate(PersonalData personalData, PersonalDataDto personalDataDto) {
 		if (personalDataDto.getLogin() != null)
 			personalData.setLogin(personalDataDto.getLogin());
 		if (personalDataDto.getPassword() != null)
 			personalData.setPassword(personalDataDto.getPassword());
 		if (personalDataDto.getRole() != null)
 			personalData.setRole(personalDataDto.getRole());
-
-		update(userAccount);
 		try {
 			personalDataDao.update(personalData);
-			LOGGER.log(Level.INFO, String.format(UPDATED, getEntityClass().getSimpleName(), personalData.getId()));
+			LOGGER.log(Level.INFO,
+					String.format(UPDATED, personalData.getClass().getSimpleName(), personalData.getId()));
 
 		} catch (Exception e) {
 			LOGGER.log(Level.WARN, EXCEPTION, e);
@@ -84,18 +75,19 @@ public class UserAccountService extends AbstractService<UserAccount, Integer, Us
 	}
 
 	@Override
-	public void createNewUser(UserAccount userAccount, PersonalData personalData) {
+	public void createNewUser(UserAccount userAccount) {
 		Date current = new Date();
 
 		insert(userAccount);
-		personalData.setId(userAccount.getId());
-		personalData.setUserAccount(userAccount);
-		personalData.setRole(Roles.USER);
-		personalData.setCreated(current);
-		personalData.setUpdated(current);
+		userAccount.getPersonalData().setUserAccount(userAccount);
+		userAccount.getPersonalData().setId(userAccount.getId());
+		userAccount.getPersonalData().setRole(Roles.USER);
+		userAccount.getPersonalData().setCreated(current);
+		userAccount.getPersonalData().setUpdated(current);
 		try {
-			personalDataDao.insert(personalData);
-			LOGGER.log(Level.INFO, String.format(CREATED, getEntityClass().getSimpleName(), personalData.getId()));
+			personalDataDao.insert(userAccount.getPersonalData());
+			LOGGER.log(Level.INFO,
+					String.format(CREATED, userAccount.getPersonalData().getClass().getSimpleName(), userAccount.getPersonalData().getId()));
 
 		} catch (Exception e) {
 			LOGGER.log(Level.WARN, EXCEPTION, e);

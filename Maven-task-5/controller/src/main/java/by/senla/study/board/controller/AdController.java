@@ -45,7 +45,7 @@ public class AdController extends AbstractController<Ad, Integer, AdDto> {
 		this.userAccountService = userAccountService;
 	}
 
-	@PostMapping(value = "/createNew")
+	@PostMapping(value = "/create-new")
 	public ResponseDto createNewAd(@Valid @RequestBody AdDto dto, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return new ResponseDto(INVALID);
@@ -72,8 +72,8 @@ public class AdController extends AbstractController<Ad, Integer, AdDto> {
 	}
 
 	@GetMapping(value = "/filter")
-	public List<AdDto> filterByCategory(@RequestBody AdSearchDto dto) {
-		List<Ad> entities = adService.findAdsByCategory(dto);
+	public List<AdDto> filterAds(@RequestBody AdSearchDto dto) {
+		List<Ad> entities = adService.filterAds(dto);
 		List<AdDto> dtos = new ArrayList<>();
 		for (Ad entity : entities) {
 			dtos.add(mapper.toDto(entity));
@@ -109,13 +109,12 @@ public class AdController extends AbstractController<Ad, Integer, AdDto> {
 		return new ResponseDto(String.format(UPDATED, getEntityClass().getSimpleName(), adId));
 	}
 
-	@GetMapping(value = { "/{sellerId}/sellerAds", "/myAds" })
+	@GetMapping(value = { "/{sellerId}/seller-ads", "/my-ads" })
 	public List<AdDto> myAds(HttpServletRequest request,
 			@PathVariable(name = "sellerId", required = false) Integer sellerId) {
 
 		Integer id;
-
-		if (request.getRequestURI().contains("/myAds")) {
+		if (request.getRequestURI().contains("/my-ads")) {
 			id = getLoggedUserId();
 		} else {
 			id = sellerId;
@@ -145,7 +144,7 @@ public class AdController extends AbstractController<Ad, Integer, AdDto> {
 		return dtos;
 	}
 
-	@PutMapping(value = "/{adId}/wishlistAdd")
+	@PutMapping(value = "/{adId}/wishlist-add")
 	public ResponseDto addToWishList(@PathVariable(name = "adId", required = true) Integer adId) {
 		userAccountService.addToWishList(adId, getLoggedUserId());
 		return new ResponseDto(String.format(ADD_WISHLIST, adId, getLoggedUserId()));

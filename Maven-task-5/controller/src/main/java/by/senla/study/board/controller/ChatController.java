@@ -37,7 +37,7 @@ public class ChatController extends AbstractController<Chat, Integer, ChatDto> {
 		this.userAccountService = userAccountService;
 	}
 
-	@GetMapping(value = "/myChats")
+	@GetMapping(value = "/my-chats")
 	public List<ChatDto> myChats() {
 		Set<Chat> entities = userAccountService.getFullInfo(getLoggedUserId()).getChats();
 		List<ChatDto> dtos = new ArrayList<>();
@@ -50,7 +50,7 @@ public class ChatController extends AbstractController<Chat, Integer, ChatDto> {
 		return dtos;
 	}
 
-	@PostMapping(value = "/{sellerId}/createNew")
+	@PostMapping(value = "/{sellerId}/create-new")
 	public ResponseDto createNewChat(@PathVariable(name = "sellerId", required = true) Integer sellerId) {
 		chatService.createNewChat(sellerId, getLoggedUserId());
 		return new ResponseDto(String.format(CREATED_CHAT, sellerId, getLoggedUserId()));

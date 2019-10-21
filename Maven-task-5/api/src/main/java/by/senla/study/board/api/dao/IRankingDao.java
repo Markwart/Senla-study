@@ -4,6 +4,6 @@ import by.senla.study.board.model.entity.Ranking;
 
 public interface IRankingDao extends GenericDao<Ranking, Integer> {
 
-	Double getRankByUserID(Integer id);
+	Double getTotalRankByUserId(Integer id);
 
 }

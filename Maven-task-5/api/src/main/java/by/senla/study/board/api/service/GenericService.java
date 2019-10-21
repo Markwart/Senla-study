@@ -14,10 +14,6 @@ public interface GenericService<T, PK, D> {
 
 	List<T> selectAll();
 
-	void exportToCSV();
-
-	List<Object> importFromCSV();
-
 	T getFullInfo(PK id);
 
 	void deleteAll();

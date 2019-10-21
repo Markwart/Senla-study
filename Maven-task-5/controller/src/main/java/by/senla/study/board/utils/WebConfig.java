@@ -21,11 +21,11 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 
 		AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
 		rootContext.register(SecurityConfig.class);
-		
+
 		servletContext.addListener(new ContextLoaderListener(rootContext));
 		
 		AnnotationConfigWebApplicationContext dispatcherContext = new AnnotationConfigWebApplicationContext();
-		dispatcherContext.register(MVCConfig.class);
+		dispatcherContext.register(MvcConfig.class);
 		dispatcherContext.register(ExceptionHandlerController.class);
 
 		DispatcherServlet dispatcherServlet = new DispatcherServlet(dispatcherContext);
@@ -45,7 +45,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class<?>[0];
+		return new Class<?>[] { SecurityConfig.class };
 	}
 
 	@Override
