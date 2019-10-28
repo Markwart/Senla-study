@@ -1,0 +1,11 @@
+by\senla\study\model\entity\Ad.class
+by\senla\study\model\entity\Comment.class
+by\senla\study\model\entity\Ranking.class
+by\senla\study\model\entity\UserAccount.class
+by\senla\study\model\entity\PersonalData.class
+by\senla\study\model\entity\BaseEntity.class
+by\senla\study\model\enums\Roles.class
+by\senla\study\model\entity\Chat.class
+by\senla\study\model\entity\Category.class
+by\senla\study\model\enums\Status.class
+by\senla\study\model\entity\Message.class

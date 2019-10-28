@@ -5,6 +5,7 @@ service/logs/
 .metadata/
 web/logs/
 <<<<<<< HEAD
+<<<<<<< HEAD
 *.class
 =======
 *.class
@@ -12,3 +13,16 @@ web/logs/
 target/
 data/
 >>>>>>> Spring-Message-Board
+=======
+*.class
+/target
+Maven-task-5/service/target/classes/log4j2.xml
+Maven-task-5/dao/target/classes/META-INF/maven/by.senla.study/dao/pom.properties
+Maven-task-5/service/target/classes/META-INF/maven/by.senla.study/service/pom.properties
+Maven-task-5/dao/target/classes/META-INF/MANIFEST.MF
+Maven-task-5/service/target/classes/META-INF/maven/by.senla.study/service/pom.xml
+Maven-task-5/dao/target/classes/META-INF/persistence.xml
+Maven-task-5/dao/target/classes/hibernate.properties
+Maven-task-5/dao/target/classes/META-INF/maven/by.senla.study/dao/pom.xml
+Maven-task-5/service/target/classes/META-INF/MANIFEST.MF
+>>>>>>> Reflection-task-3
