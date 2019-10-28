@@ -4,4 +4,11 @@
 service/logs/
 .metadata/
 web/logs/
+<<<<<<< HEAD
 *.class
+=======
+*.class
+
+target/
+data/
+>>>>>>> Spring-Message-Board
