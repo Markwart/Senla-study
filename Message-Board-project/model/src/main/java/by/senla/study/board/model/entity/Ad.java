@@ -40,7 +40,7 @@ public class Ad extends BaseEntity {
 
 	@Column(name = "price")
 	private BigDecimal price;
-	
+
 	@Column(name = "image")
 	private String image;
 
@@ -61,7 +61,7 @@ public class Ad extends BaseEntity {
 	private Category category;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "ad")
-	private Set<Comment> comments = new HashSet<>(); 
+	private Set<Comment> comments = new HashSet<>();
 
 	public String getTheme() {
 		return theme;
@@ -126,5 +126,4 @@ public class Ad extends BaseEntity {
 	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
 	}
-
 }

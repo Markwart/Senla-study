@@ -47,5 +47,4 @@ public class Comment extends BaseEntity {
 	public void setUserFrom(UserAccount userFrom) {
 		this.userFrom = userFrom;
 	}
-
 }
